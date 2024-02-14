@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www/thymeleaf.org" th:fragment="mainLayout(title)">
+<head>
+    <title th:text="${title}"></title>
+    <th:block th:replace="base/base :: base-head"></th:block>
+    <th:block th:replace=":: css"></th:block>
+</head>
+
+<body class="loading">
+<!-- Begin page -->
+<div class="wrapper">
+    <!-- ========== Left Sidebar Start ========== -->
+    <div th:replace="base/sidebar :: left-menu"></div>
+    <!-- Left Sidebar End -->
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+    <div id="contentPage" class="content-page">
+        <!-- Content Start-->
+        <div class="content">
+            <!-- Topbar Start -->
+            <div th:replace="base/header :: top-bar"></div>
+            <!-- end Topbar -->
+
+            <!-- Start Content-->
+            <div th:replace=":: content"></div>
+            <!-- container -->
+        </div>
+        <!-- Content End-->
+
+        <!-- Footer Start -->
+        <!--                <footer th:replace="base/footer :: footer"></footer>-->
+        <!-- end Footer -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page content -->
+    <!-- ============================================================== -->
+</div>
+<!-- END wrapper -->
+
+<th:block th:replace="base/base :: base-scripts"></th:block>
+<th:block th:replace=":: scripts"></th:block>
+</body>
+</html>

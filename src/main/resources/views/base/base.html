@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www/thymeleaf.org">
+
+<th:block th:fragment="base-head">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
+    <meta http-equiv="Cache-Control" content="No-Cache">
+    <meta http-equiv="Pragma" content="No-Cache">
+
+    <!-- Favicon -->
+    <link th:href="@{/assets/images/favicon.png}" rel="icon" type="image/png">
+
+    <!-- title and description-->
+    <title>Up to U</title>
+    <meta name="description" content="Up to U - Make feel you better Mailbox">
+
+    <!-- css files -->
+    <link rel="stylesheet" th:href="@{/assets/css/tailwind.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+    <!-- google font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+</th:block>
+
+
+<th:block th:fragment="base-scripts">
+    <!-- Javascript  -->
+    <script th:src="@{/assets/js/uikit.min.js}"></script>
+    <script th:src="@{/assets/js/simplebar.js}"></script>
+    <script th:src="@{/assets/js/script.js}"></script>
+
+    <!-- Ion icon -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+        } else {
+        document.documentElement.classList.remove('dark')
+        }
+
+        // Whenever the user explicitly chooses light mode
+        localStorage.theme = 'light'
+
+        // Whenever the user explicitly chooses dark mode
+        localStorage.theme = 'dark'
+
+        // Whenever the user explicitly chooses to respect the OS preference
+        localStorage.removeItem('theme')
+
+
+
+
+
+    </script>
+</th:block>
+</html>
