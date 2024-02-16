@@ -3,17 +3,19 @@ package com.onetwo.webservice.utils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onetwo.webservice.common.GlobalStatus;
 import com.onetwo.webservice.exception.NotExpectResultException;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
@@ -21,7 +23,6 @@ import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
@@ -36,12 +37,25 @@ import java.util.function.Consumer;
  */
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class SenderUtils {
 
     private final WebClient.Builder webClientBuilder;
 
     private final ObjectMapper objectMapper;
+
+    private final String accessId;
+
+    private final String accessKey;
+
+    public SenderUtils(WebClient.Builder webClientBuilder,
+                       ObjectMapper objectMapper,
+                       @Value("${" + GlobalStatus.PROPERTY_ACCESS_ID_LOCATION + "}") String accessId,
+                       @Value("${" + GlobalStatus.PROPERTY_ACCESS_KEY_LOCATION + "}") String accessKey) {
+        this.webClientBuilder = webClientBuilder;
+        this.objectMapper = objectMapper;
+        this.accessId = accessId;
+        this.accessKey = accessKey;
+    }
 
     /**
      * 내부 서버 통신
@@ -53,8 +67,7 @@ public class SenderUtils {
      * @param <T>
      * @return
      */
-    public <T> T send(HttpMethod method, String uri, Map<String, String> header, Object jsonData, ParameterizedTypeReference<T> responseClass) {
-        WebClient client = webClientBuilder.build();
+    public <T> ResponseEntity<T> send(HttpMethod method, String uri, Map<String, String> header, Object jsonData, ParameterizedTypeReference<T> responseClass) {
         return retrieve(method, uri, jsonData, makeHeader(header), responseClass);
     }
 
@@ -65,19 +78,20 @@ public class SenderUtils {
      * @return
      */
     private Consumer<HttpHeaders> makeHeader(Map<String, String> headerMap) {
-        Consumer<HttpHeaders> headers = new Consumer<HttpHeaders>() {
-            @Override
-            public void accept(HttpHeaders t) {
+        return headers -> {
+            headers.add(GlobalStatus.ACCESS_ID, accessId);
+            headers.add(GlobalStatus.ACCESS_KEY, accessKey);
+
+            if (headerMap != null) {
                 for (String key : headerMap.keySet()) {
-                    t.add(key, headerMap.get(key));
+                    headers.add(key, headerMap.get(key));
                 }
             }
         };
-        return headers;
     }
 
-    private <T> T retrieve(HttpMethod method, String uri, Object jsonData, Consumer<HttpHeaders> headers,
-                           ParameterizedTypeReference<T> responseClass) {
+    private <T> ResponseEntity<T> retrieve(HttpMethod method, String uri, Object jsonData, Consumer<HttpHeaders> headers,
+                                           ParameterizedTypeReference<T> responseClass) {
 
         long beforeTime = System.currentTimeMillis();
         long afterTime = 0;
@@ -97,20 +111,20 @@ public class SenderUtils {
                 request.headers(headers);
             }
 
-            log.info("WebClient Request Start - Request Time : " + beforeTime + " Request Data [" + objectMapper.writeValueAsString(jsonData) + "]");
+            log.info("WebClient Request Start - Request Time : {}, Request Uri = {}, Request Data [{}]", beforeTime, uri, objectMapper.writeValueAsString(jsonData));
 
-            Mono<T> mono = request.retrieve().bodyToMono(responseClass);
-
-            T response = mono.block();
+            ResponseEntity<T> responseEntity = request.retrieve().toEntity(responseClass).block();
 
             afterTime = System.currentTimeMillis();
             theSec = (afterTime - beforeTime) / 1000;
 
             log.info("WebClient Response [ Processing time : " + theSec + " End Time : " + afterTime + " ]");
 
-            log.info("response = [" + objectMapper.writeValueAsString(response) + "]");
+            if (responseEntity.getBody() != null) {
+                log.info("response = [" + objectMapper.writeValueAsString(responseEntity.getBody()) + "]");
+            }
 
-            return response;
+            return responseEntity;
 
         } catch (WebClientResponseException wre) {
             log.warn("WebClientResponseException", wre);
@@ -118,6 +132,7 @@ public class SenderUtils {
              * Get Type
              */
             TypeReference<T> tr = new TypeReference<T>() {
+                @Override
                 public Type getType() {
                     return responseClass.getType();
                 }
@@ -132,7 +147,7 @@ public class SenderUtils {
 
             log.info("WebClient Exception Response [ Processing time : " + theSec + " End Time : " + afterTime + " ]");
 
-            return errorResponse;
+            return ResponseEntity.status(wre.getStatusCode()).body(errorResponse);
         } catch (Exception e) {
             log.error("<ALARM_ERROR>" + "WebClient Exception - [ Request time : " + beforeTime + " ]" + e);
 

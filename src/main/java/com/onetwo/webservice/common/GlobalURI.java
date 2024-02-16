@@ -16,4 +16,8 @@ public class GlobalURI {
     public static final String ERROR_URI_ETC = ERROR_URI_ROOT + "/error";
 
     public static final String FEED_ROOT = ROOT_URI + "feed";
+
+    public static final String LOGIN_ROOT = ROOT_URI + "login";
+
+    public static final String REGISTER_ROOT = ROOT_URI + "register";
 }

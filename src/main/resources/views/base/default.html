@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www/thymeleaf.org" th:fragment="defaultLayout(title)">
+<head>
+    <title th:text="${title}"></title>
+    <th:block th:replace="base/base :: base-head"></th:block>
+    <th:block th:replace=":: css"></th:block>
+</head>
+
+<body class="loading">
+<!-- Begin page -->
+<div class="wrapper">
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+    <div id="contentPage" class="content-page">
+        <!-- Content Start-->
+        <div class="content">
+            <div class="lg:p-20 p-10" id="errorModal" uk-modal>
+
+                <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+
+                    <div class="p-6">
+                        <h2 class="text-xl font-semibold">Error</h2>
+                    </div>
+
+                    <div class="p-6 py-0">
+
+                        <p>There was a problem, Please try again later.</p><br>
+                        <p>If it doesn't work even if you keep trying again pls let me know</p><br>
+                        <p>jji042842@gmail.com</p>
+
+                    </div>
+
+                    <div class="flex justify-end p-6 text-sm font-medium">
+                        <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">
+                            Cancel
+                        </button>
+                    </div>
+
+                    <!-- close button -->
+                    <button type="button"
+                            class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+
+                </div>
+            </div>
+            <!-- Start Content-->
+            <div th:replace=":: content"></div>
+            <!-- container -->
+        </div>
+        <!-- Content End-->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page content -->
+    <!-- ============================================================== -->
+</div>
+<!-- END wrapper -->
+
+<th:block th:replace="base/base :: base-scripts"></th:block>
+<th:block th:replace=":: scripts"></th:block>
+</body>
+</html>

@@ -2,18 +2,18 @@ server:
   servlet:
     session:
       timeout: 3600
-  shutdown: graceful # graceful shutdown ??
+  shutdown: graceful
   tomcat:
     threads:
-      max: 1000 # ??? ? ?? thread? ? ??
-      min-spare: 100 # ?? ??? ????(idle) thread? ??
-    max-connections: 8192 # ????? connection? ? ??
-    accept-count: 200 # ???? ???
-    connection-timeout: 300000 # timeout ?? ?? ??
-  port: 8080 # ??? ?? ????
+      max: 1000
+      min-spare: 100
+    max-connections: 8192
+    accept-count: 200
+    connection-timeout: 300000
+  port: 8080
   error:
-    include-exception: true # ?? ??? exception? ??? ???? ??
-    include-stacktrace: always # ?? ??? stacktrace ??? ??? ? ??
+    include-exception: true
+    include-stacktrace: always
 
 spring:
   application:
@@ -23,3 +23,8 @@ spring:
     cache: false
     prefix: classpath:views/
     suffix: .html
+
+api-gateway:
+  host: localhost:8000
+  access-id: server-access-id
+  access-key: server-access-key

@@ -10,8 +10,6 @@ public class FeedController {
 
     @GetMapping(GlobalURI.FEED_ROOT)
     public ModelAndView getView() {
-        ModelAndView viewModel = new ModelAndView("main/feed");
-
-        return viewModel;
+        return new ModelAndView("main/feed");
     }
 }
