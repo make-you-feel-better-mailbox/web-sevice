@@ -1,5 +1,6 @@
 package com.onetwo.webservice.service;
 
+import com.onetwo.webservice.common.PropertiesInfo;
 import com.onetwo.webservice.common.UserServiceUri;
 import com.onetwo.webservice.dto.user.RegisterUserRequest;
 import com.onetwo.webservice.dto.user.RegisterUserResponse;
@@ -18,13 +19,13 @@ import org.springframework.util.StringUtils;
 public class UserServiceImpl implements UserService {
 
     private final SenderUtils senderUtils;
-//    private final PropertiesInfo propertiesInfo;
+    private final PropertiesInfo propertiesInfo;
 
     @Override
     public UserRegisterResponse userRegister(RegisterUserRequest registerUserRequest) {
-        String requestUri = "http://localhost:8000";
+//        String requestUri = "http://localhost:8000";
 
-//        String requestUri = propertiesInfo.getApiGateway().getHost();
+        String requestUri = propertiesInfo.getApiGateway().getHost();
 
         requestUri += UserServiceUri.USER_ROOT;
 
