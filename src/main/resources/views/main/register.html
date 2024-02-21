@@ -40,9 +40,10 @@
                             <div>
                                 <label for="userId" class="">ID</label>
                                 <div class="mt-2.5">
-                                    <input id="userId" name="userId" type="text" autofocus="" placeholder="ID"
+                                    <input id="userId" name="userId" type="text" autofocus="" placeholder="ID" pattern="^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,13}$"
                                            class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5" required>
                                 </div>
+                                <p id="idExistOrNotText"></p>
                             </div>
 
                             <!-- Nickname -->
@@ -58,7 +59,7 @@
                             <div class="col-span-2">
                                 <label for="email" class="">Email address</label>
                                 <div class="mt-2.5">
-                                    <input id="email" name="email" type="email" placeholder="Email"
+                                    <input id="email" name="email" type="email" placeholder="Email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                                            class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5" required>
                                 </div>
                             </div>
@@ -70,6 +71,7 @@
                                     <input id="password" name="password" type="password" placeholder="*****"
                                            class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5" required>
                                 </div>
+                                <p id="passwordCheckText"></p>
                             </div>
 
                             <!-- Confirm Password -->
@@ -101,10 +103,8 @@
 
                             </div>
 
-
-                            <!-- submit button -->
                             <div class="col-span-2">
-                                <button type="" id="userRegisterActionBtn" class="button bg-primary text-white w-full">Get Started</button>
+                                <button id="userRegisterActionBtn" class="button bg-primary text-white w-full" type="button">Get Started</button>
                             </div>
                     </div>
 
@@ -231,6 +231,12 @@
 <th:block th:fragment="scripts">
 
     <script th:inline="javascript" th:fragment="scripts">
+        var timer;
+        var passwordTimer;
+
+        var idCheckStart = false;
+        var idExist = false;
+
         $(document).ready(function(){
 			$('#userId').val('');
 			$('#nickname').val('');
@@ -238,13 +244,107 @@
 			$('#password').val('');
 			$('#password-confirm').val('');
 			$('#phone').val('');
+			idCheckStart = false;
+			idExist = false;
 		});
+
+        $('#userId').on('input', function() {
+            clearTimeout(timer); // 타이머 초기화
+            timer = setTimeout(sendIdExistCheck, 1500); // 5초 후에 AJAX 요청 보내기
+        });
+
+        function sendIdExistCheck(){
+            let requestUri = /*[[@{${GlobalURI.USER_ID}}]]*/;
+
+            let requestUserId = $('#userId').val();
+
+            if(requestUserId == null || requestUserId == ""){
+                return;
+            }
+
+            idCheckStart = true;
+
+            if (checkValidation(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,13}$/, requestUserId)){
+                $('#idExistOrNotText').css("color", "rgb(255 0 0 / var(--tw-text-opacity))");
+                $('#idExistOrNotText').text(" * You need at least one letter, at least one number, and a minimum of 6 to a maximum of 13 characters. ");
+                return;
+            }
+
+            requestUri += "/" + requestUserId;
+
+            $.ajax({
+                url: requestUri,
+                method: "GET",
+                dataType: "JSON",
+                contentType: 'application/json',
+                beforeSend: function(request) {
+                },
+                success: function(response){
+                    idExist = response.userIdExist;
+
+                    if(idExist){
+                        $('#idExistOrNotText').css("color", "rgb(255 0 0 / var(--tw-text-opacity))");
+                        $('#idExistOrNotText').text(" * ID already used");
+                    } else {
+                        $('#idExistOrNotText').css("color", "rgb(29 78 216 / var(--tw-text-opacity))");
+                        $('#idExistOrNotText').text(" * You can use this ID");
+                    }
+                },
+                complete: function(response){
+                },
+                error: function(response){
+                    let errorModal = $("#errorModal");
+
+                    UIkit.modal(errorModal).show();
+                }
+            });
+        };
+
+        $('#password').on('input', function() {
+            clearTimeout(passwordTimer); // 타이머 초기화
+            passwordTimer = setTimeout(passwordCheck, 1500);
+        });
+
+        $('#password-confirm').on('input', function() {
+            clearTimeout(passwordTimer); // 타이머 초기화
+            passwordTimer = setTimeout(passwordCheck, 1500);
+        });
+
+        function passwordCheck(){
+            let inputPassword = $('#password').val();
+
+            if (checkValidation(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9!@#$%^&*()-_=+~`[\]{}|;:'",<.>/?]{8,20}$/, inputPassword)){
+                $('#passwordCheckText').css("color", "rgb(255 0 0 / var(--tw-text-opacity))");
+                $('#passwordCheckText').text(" * You need at least one letter, at least one number, and a minimum of 8 to a maximum of 20 characters.");
+                return;
+            } else {
+                $('#passwordCheckText').css("color", "rgb(29 78 216 / var(--tw-text-opacity))");
+                $('#passwordCheckText').text(" * You can use this Password");
+            }
+
+            let inputPasswordConfirm = $('#password-confirm').val();
+
+            if (inputPasswordConfirm != null && inputPasswordConfirm != "" && inputPassword != inputPasswordConfirm){
+                $('#passwordCheckText').css("color", "rgb(255 0 0 / var(--tw-text-opacity))");
+                $('#passwordCheckText').text(" * Password incorrect");
+            }
+        }
 
         $('#userRegisterActionBtn').on('click', function(){
             let inputUserId = $('#userId').val();
 
-            if (checkEmpty(inputUserId)) {
+            if (!idCheckStart || checkEmpty(inputUserId)) {
                 alert("아이디를 확인해주세요");
+                return ;
+            }
+
+            if (idExist) {
+                alert("아이디가 이미 존재합니다.");
+                return ;
+            }
+
+            if (checkValidation(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,13}$/, inputUserId)){
+                alert("아이디는 최소 한개의 영문자, 최소 한개의 숫자, 최소 6자리 최대 13자리를 넘을 수 없습니다.");
                 return ;
             }
 
@@ -256,8 +356,9 @@
             }
 
             let inputEmail = $('#email').val();
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            if (checkEmpty(inputEmail)) {
+            if (checkEmpty(inputEmail) || !emailPattern.test(inputEmail)) {
                 alert("Email을 확인해주세요");
                 return ;
             }
@@ -267,6 +368,7 @@
             let inputPasswordConfirm = $('#password-confirm').val();
 
             if (checkEmpty(inputPassword) || checkEmpty(inputPasswordConfirm)
+                || checkValidation(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9!@#$%^&*()-_=+~`[\]{}|;:'",<.>/?]{8,20}$/, inputPassword)
                 || inputPassword != inputPasswordConfirm) {
                 alert("비밀번호를 확인해주세요");
                 return ;
@@ -279,6 +381,10 @@
 
         function checkEmpty(value){
             return value == null || value == "";
+        }
+
+        function checkValidation(pattern, value){
+            return !pattern.test(value);
         }
 
         function registerUserRequest(){
@@ -298,9 +404,11 @@
                 beforeSend: function(request) {
                 },
                 success: function(response){
-                    let successModal = $("#successModal");
+                    if(response.isRegisterSuccess){
+                        let successModal = $("#successModal");
 
-                    UIkit.modal(successModal).show();
+                        UIkit.modal(successModal).show();
+                    }
                 },
                 complete: function(response){
                 },

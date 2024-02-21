@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 
@@ -54,6 +55,12 @@ public class GlobalExceptionHandler {
     public ModelAndView methodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.info("MethodArgumentNotValidException", e);
         return handleView(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(WebClientResponseException.class)
+    public ModelAndView webClientResponseException(WebClientResponseException e) {
+        log.info("WebClientResponseException", e);
+        return handleView(e.getMessage(), HttpStatus.valueOf(e.getStatusCode().value()));
     }
 
     private ModelAndView handleView(Object response, HttpStatus httpStatus) {
