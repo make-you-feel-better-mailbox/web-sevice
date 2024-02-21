@@ -19,5 +19,8 @@ public class GlobalURI {
 
     public static final String LOGIN_ROOT = ROOT_URI + "login";
 
+    public static final String USER_ROOT = ROOT_URI + "users";
+    public static final String USER_ID = USER_ROOT + "/id";
+
     public static final String REGISTER_ROOT = ROOT_URI + "register";
 }

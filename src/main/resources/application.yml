@@ -25,6 +25,6 @@ spring:
     suffix: .html
 
 api-gateway:
-  host: localhost:8000
-  access-id: server-access-id
-  access-key: server-access-key
+  host: "http://localhost:8000"
+  access-id: "server-access-id"
+  access-key: "server-access-key"

@@ -1,18 +1,17 @@
 package com.onetwo.webservice.controller;
 
 import com.onetwo.webservice.common.GlobalURI;
+import com.onetwo.webservice.dto.token.TokenResponse;
+import com.onetwo.webservice.dto.user.LoginUserRequest;
 import com.onetwo.webservice.dto.user.RegisterUserRequest;
+import com.onetwo.webservice.dto.user.UserIdExistCheckDto;
 import com.onetwo.webservice.dto.user.UserRegisterResponse;
 import com.onetwo.webservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -34,9 +33,18 @@ public class UserController {
     @PostMapping(GlobalURI.REGISTER_ROOT)
     @ResponseBody
     public ResponseEntity<UserRegisterResponse> userRegister(@RequestBody @Valid RegisterUserRequest registerUserRequest) {
-        UserRegisterResponse userRegisterResponse = userService.userRegister(registerUserRequest);
-        if (userRegisterResponse.isRegisterSuccess())
-            return ResponseEntity.status(HttpStatus.CREATED).body(userRegisterResponse);
-        else return ResponseEntity.ok().body(userRegisterResponse);
+        return userService.userRegister(registerUserRequest);
+    }
+
+    @PostMapping(GlobalURI.LOGIN_ROOT)
+    @ResponseBody
+    public ResponseEntity<TokenResponse> loginUser(@RequestBody @Valid LoginUserRequest loginUserRequest) {
+        return userService.loginUser(loginUserRequest);
+    }
+
+    @GetMapping(GlobalURI.USER_ID + "/{user-id}")
+    @ResponseBody
+    public ResponseEntity<UserIdExistCheckDto> userIdExistCheck(@PathVariable("user-id") String userId) {
+        return userService.userIdExistCheck(userId);
     }
 }
