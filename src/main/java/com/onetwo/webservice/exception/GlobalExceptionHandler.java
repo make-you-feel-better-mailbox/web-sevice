@@ -1,6 +1,8 @@
 package com.onetwo.webservice.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onetwo.webservice.common.GlobalStatus;
 import com.onetwo.webservice.common.GlobalURI;
 import com.onetwo.webservice.utils.ServletUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,6 +62,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WebClientResponseException.class)
     public ModelAndView webClientResponseException(WebClientResponseException e) {
         log.info("WebClientResponseException", e);
+        if (e.getHeaders().containsKey(GlobalStatus.TOKEN_VALIDATION_HEADER)) {
+            String tokenValidationResult = e.getHeaders().getFirst(GlobalStatus.TOKEN_VALIDATION_HEADER);
+            log.info("Token validation fail = {}", tokenValidationResult);
+            return handleView(tokenValidationResult, HttpStatus.valueOf(e.getStatusCode().value()));
+        }
         return handleView(e.getMessage(), HttpStatus.valueOf(e.getStatusCode().value()));
     }
 
@@ -101,5 +108,11 @@ public class GlobalExceptionHandler {
             }
         }
 
+    }
+
+    private ObjectMapper getObjectMapper() {
+        ObjectMapper om = new ObjectMapper();
+        om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        return om;
     }
 }

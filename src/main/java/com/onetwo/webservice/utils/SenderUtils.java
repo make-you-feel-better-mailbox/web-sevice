@@ -140,14 +140,12 @@ public class SenderUtils {
             /*
              * make error Json
              */
-            T errorResponse = readExceptionObject(wre, tr);
-
             afterTime = System.currentTimeMillis();
             theSec = (afterTime - beforeTime) / 1000;
 
             log.info("WebClient Exception Response [ Processing time : " + theSec + " End Time : " + afterTime + " ]");
 
-            return ResponseEntity.status(wre.getStatusCode()).body(errorResponse);
+            throw wre;
         } catch (Exception e) {
             log.error("<ALARM_ERROR>" + "WebClient Exception - [ Request time : " + beforeTime + " ]" + e);
 

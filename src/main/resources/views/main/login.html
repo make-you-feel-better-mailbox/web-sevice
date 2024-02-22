@@ -25,27 +25,27 @@
                 <!-- title -->
                 <div>
                     <h2 class="text-2xl font-semibold mb-1.5"> Sign in to your account </h2>
-                    <p class="text-sm text-gray-700 font-normal">If you haven’t signed up yet. <a href="form-register.html"
+                    <p class="text-sm text-gray-700 font-normal">If you haven’t signed up yet. <a th:href="${GlobalURI.REGISTER_ROOT}"
                                                                                                   class="text-blue-700">Register
                         here!</a></p>
                 </div>
 
 
                 <!-- form -->
-                <form method="#" action="#" class="space-y-7 text-sm text-black font-medium dark:text-white"
+                <form class="space-y-7 text-sm text-black font-medium dark:text-white" id="userLoginForm"
                       uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
 
                     <!-- email -->
                     <div>
-                        <label for="email" class="">Email address</label>
+                        <label for="userId" class="">ID</label>
                         <div class="mt-2.5">
-                            <input id="email" name="email" type="email" autofocus="" placeholder="Email" required=""
+                            <input id="userId" name="userId" type="text" autofocus="" placeholder="ID" required=""
                                    class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5">
                         </div>
                     </div>
                     <!-- password -->
                     <div>
-                        <label for="email" class="">Password</label>
+                        <label for="password" class="">Password</label>
                         <div class="mt-2.5">
                             <input id="password" name="password" type="password" placeholder="***"
                                    class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5">
@@ -60,31 +60,32 @@
                         </div>
                         <a href="#" class="text-blue-700">Forgot password </a>
                     </div>
+                    <p id="loginFailText" style="color: rgb(255 0 0 / var(--tw-text-opacity))"></p>
 
                     <!-- submit button -->
                     <div>
-                        <button type="submit" class="button bg-primary text-white w-full">Sign in</button>
+                        <button type="button" id="userLoginActionBtn" class="button bg-primary text-white w-full">Sign in</button>
                     </div>
 
-                    <div class="text-center flex items-center gap-6">
-                        <hr class="flex-1 border-slate-200 dark:border-slate-800">
-                        Or continue with
-                        <hr class="flex-1 border-slate-200 dark:border-slate-800">
-                    </div>
+<!--                    <div class="text-center flex items-center gap-6">-->
+<!--                        <hr class="flex-1 border-slate-200 dark:border-slate-800">-->
+<!--                        Or continue with-->
+<!--                        <hr class="flex-1 border-slate-200 dark:border-slate-800">-->
+<!--                    </div>-->
 
-                    <!-- social login -->
-                    <div class="flex gap-2"
-                         uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 400 ;repeat: true">
-                        <a href="#" class="button flex-1 flex items-center gap-2 bg-primary text-white text-sm">
-                            <ion-icon name="logo-facebook" class="text-lg"></ion-icon>
-                            facebook </a>
-                        <a href="#" class="button flex-1 flex items-center gap-2 bg-sky-600 text-white text-sm">
-                            <ion-icon name="logo-twitter"></ion-icon>
-                            twitter </a>
-                        <a href="#" class="button flex-1 flex items-center gap-2 bg-black text-white text-sm">
-                            <ion-icon name="logo-github"></ion-icon>
-                            github </a>
-                    </div>
+<!--                    &lt;!&ndash; social login &ndash;&gt;-->
+<!--                    <div class="flex gap-2"-->
+<!--                         uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 400 ;repeat: true">-->
+<!--                        <a href="#" class="button flex-1 flex items-center gap-2 bg-primary text-white text-sm">-->
+<!--                            <ion-icon name="logo-facebook" class="text-lg"></ion-icon>-->
+<!--                            facebook </a>-->
+<!--                        <a href="#" class="button flex-1 flex items-center gap-2 bg-sky-600 text-white text-sm">-->
+<!--                            <ion-icon name="logo-twitter"></ion-icon>-->
+<!--                            twitter </a>-->
+<!--                        <a href="#" class="button flex-1 flex items-center gap-2 bg-black text-white text-sm">-->
+<!--                            <ion-icon name="logo-github"></ion-icon>-->
+<!--                            github </a>-->
+<!--                    </div>-->
 
                 </form>
 
@@ -157,7 +158,69 @@
 <th:block th:fragment="scripts">
 
     <script th:inline="javascript" th:fragment="scripts">
+        $(document).ready(function(){
+			$('#password').val('');
+			$('#loginFailText').text("");
+		});
 
+        $('#userLoginActionBtn').on('click', function(){
+            loginUserRequest();
+        });
+
+        function loginUserRequest(){
+            var formData = $("#userLoginForm").serializeArray();
+            var formObj = {};
+
+            $.map(formData, function(n, i){
+                formObj[n['name']] = n['value'];
+            });
+
+            $.ajax({
+                url: /*[[@{${GlobalURI.LOGIN_ROOT}}]]*/ 'url',
+                method: "POST",
+                data: JSON.stringify(formObj),
+                dataType: "JSON",
+                contentType: 'application/json',
+                beforeSend: function(request) {
+                },
+                success: function(response){
+                    if(response == null){
+                        let errorModal = $("#errorModal");
+
+                        UIkit.modal(errorModal).show();
+
+                        return;
+                    }
+
+                    let accessToken = response.accessToken;
+                    let refreshToken = response.refreshToken;
+
+                    if (accessToken == null || accessToken == "" || refreshToken == null || refreshToken == ""){
+                        let errorModal = $("#errorModal");
+
+                        UIkit.modal(errorModal).show();
+
+                        return;
+                    }
+
+                    window.localStorage.setItem(accessTokenString, accessToken);
+                    window.localStorage.setItem(refreshTokenString, refreshToken);
+
+                    location.href = /*[[@{${GlobalURI.ROOT_URI}}]]*/;
+                },
+                complete: function(response){
+                },
+                error: function(response){
+                    if(response.status != null && response.status.toString().startsWith('4')){
+                        $('#loginFailText').text("* Sign in Fail. Check your id and password");
+                    } else {
+                        let errorModal = $("#errorModal");
+
+                        UIkit.modal(errorModal).show();
+                    }
+                }
+            });
+        }
     </script>
 
 </th:block>
