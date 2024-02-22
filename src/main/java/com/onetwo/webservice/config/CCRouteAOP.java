@@ -1,6 +1,7 @@
 package com.onetwo.webservice.config;
 
 import com.onetwo.webservice.common.GlobalURI;
+import com.onetwo.webservice.common.JwtCode;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -20,5 +21,6 @@ public class CCRouteAOP {
 
         // added globalUrls data
         viewModel.addObject("GlobalURI", new GlobalURI());
+        viewModel.addObject("JwtCode", new JwtCode());
     }
 }

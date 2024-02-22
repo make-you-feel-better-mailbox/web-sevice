@@ -1,11 +1,10 @@
 package com.onetwo.webservice.controller;
 
 import com.onetwo.webservice.common.GlobalURI;
+import com.onetwo.webservice.dto.token.ReissueTokenRequest;
+import com.onetwo.webservice.dto.token.ReissuedTokenDto;
 import com.onetwo.webservice.dto.token.TokenResponse;
-import com.onetwo.webservice.dto.user.LoginUserRequest;
-import com.onetwo.webservice.dto.user.RegisterUserRequest;
-import com.onetwo.webservice.dto.user.UserIdExistCheckDto;
-import com.onetwo.webservice.dto.user.UserRegisterResponse;
+import com.onetwo.webservice.dto.user.*;
 import com.onetwo.webservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +45,17 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<UserIdExistCheckDto> userIdExistCheck(@PathVariable("user-id") String userId) {
         return userService.userIdExistCheck(userId);
+    }
+
+    @GetMapping(GlobalURI.USER_ROOT + "/{access-token}")
+    @ResponseBody
+    public ResponseEntity<UserDetailResponse> getUserDetailInfo(@PathVariable("access-token") String accessToken) {
+        return userService.getUserDetailInfo(accessToken);
+    }
+
+    @PostMapping(GlobalURI.TOKEN_ROOT)
+    @ResponseBody
+    public ResponseEntity<ReissuedTokenDto> reissueAccessTokenByRefreshToken(@RequestBody @Valid ReissueTokenRequest reissueTokenRequest) {
+        return userService.reissueAccessTokenByRefreshToken(reissueTokenRequest);
     }
 }

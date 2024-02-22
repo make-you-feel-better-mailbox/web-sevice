@@ -23,4 +23,5 @@ public class GlobalURI {
     public static final String USER_ID = USER_ROOT + "/id";
 
     public static final String REGISTER_ROOT = ROOT_URI + "register";
+    public static final String TOKEN_ROOT = "token";
 }
