@@ -1021,3 +1021,70 @@ input:checked + .switch-button:before {
   unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF;
   font-style: normal;
 }
+
+.uk-notification {
+    position: fixed;
+    top: 10px;
+    left: 15px;
+    z-index: 1040;
+    box-sizing: border-box;
+    width: 350px;
+}
+
+.uk-notification-top-right,
+.uk-notification-bottom-right {
+    left: auto;
+    right: 15px;
+}
+.uk-notification-top-center,
+.uk-notification-bottom-center {
+    left: 50%;
+    margin-left: -175px;
+}
+.uk-notification-bottom-left,
+.uk-notification-bottom-right,
+.uk-notification-bottom-center {
+    top: auto;
+    bottom: 15px;
+}
+
+@media (max-width: 639px) {
+    .uk-notification {
+        left: 15px;
+        right: 15px;
+        width: auto;
+        margin: 0;
+    }
+}
+.uk-notification-message {
+    position: relative;
+    padding: 15px;
+    padding-right: 40px;
+    background-color: #fff;
+    color: #3a3939;
+    font-size: 0.95rem;
+    border-radius: 5px;
+    line-height: 1.5;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+.dark .uk-notification-message {
+    background-color: #334155;
+    color: white;
+}
+
+* + .uk-notification-message {
+margin-top: 10px;
+}
+
+/* Close * Adopts `uk-close` */
+.uk-notification-close {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 15px;
+}
+.uk-notification-message:hover .uk-notification-close {
+    display: block;
+}

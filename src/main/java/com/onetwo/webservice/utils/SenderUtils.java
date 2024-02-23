@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onetwo.webservice.common.GlobalStatus;
+import com.onetwo.webservice.dto.AccessTokenDto;
 import com.onetwo.webservice.exception.NotExpectResultException;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.logging.LogLevel;
@@ -29,6 +30,7 @@ import reactor.netty.transport.logging.AdvancedByteBufFormat;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -186,5 +188,13 @@ public class SenderUtils {
             log.error("readExceptionObject Exception :" + e);
             return null;
         }
+    }
+
+    public Map<String, String> getAccessTokenHeader(AccessTokenDto accessTokenDto) {
+        Map<String, String> headers = new HashMap<>();
+
+        headers.put(GlobalStatus.ACCESS_TOKEN, accessTokenDto.getAccessToken());
+
+        return headers;
     }
 }

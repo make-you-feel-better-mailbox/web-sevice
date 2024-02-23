@@ -24,4 +24,6 @@ public class GlobalURI {
 
     public static final String REGISTER_ROOT = ROOT_URI + "register";
     public static final String TOKEN_ROOT = "token";
+
+    public static final String POSTING_ROOT = ROOT_URI + "postings";
 }
