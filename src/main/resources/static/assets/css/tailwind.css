@@ -1477,6 +1477,26 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgb(var(--color-secondery) / var(--tw-bg-opacity));
 }
 
+.button-icon-heart {
+  display: grid;
+  height: 2rem;
+  width: 2rem;
+  place-items: center;
+  border-radius: 9999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .button-icon-heart:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+  }
+}
+
+.button-icon-heart:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+}
+
 .box {
   border-radius: 0.5rem;
   --tw-bg-opacity: 1;

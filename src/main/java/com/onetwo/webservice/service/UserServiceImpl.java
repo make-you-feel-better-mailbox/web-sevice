@@ -2,7 +2,7 @@ package com.onetwo.webservice.service;
 
 import com.onetwo.webservice.common.GlobalStatus;
 import com.onetwo.webservice.common.PropertiesInfo;
-import com.onetwo.webservice.common.UserServiceURI;
+import com.onetwo.webservice.common.uri.UserServiceURI;
 import com.onetwo.webservice.dto.token.ReissueTokenRequest;
 import com.onetwo.webservice.dto.token.ReissuedTokenDto;
 import com.onetwo.webservice.dto.token.TokenResponse;

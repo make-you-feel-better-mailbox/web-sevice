@@ -57,9 +57,99 @@ if (this.files[0] ) {
 }
 });
 
+function checkTokenExpired(){
+    let accessToken = window.localStorage.getItem(accessTokenString);
 
+    let requestEndPoint = userDetailRequestUri + "/" + accessToken;
 
+    $.ajax({
+        url: requestEndPoint,
+        method: "GET",
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            $('#nicknameText').text(response.nickname);
+            $('#userIdText').text(response.userId);
+            $('#notificationsCount').text(0);
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let responseString = response.responseJSON;
 
+            if(response.status.toString().startsWith('4') && responseString != null && responseString == accessTokenExpired){
+
+                let responseString = response.responseJSON;
+
+                if (responseString == accessTokenExpired) {
+                    reissueAccessToken();
+                }
+
+            } else {
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
+            }
+        }
+    });
+}
+
+function reissueAccessToken(){
+    let accessToken = window.localStorage.getItem(accessTokenString);
+    let refreshToken = window.localStorage.getItem(refreshTokenString);
+
+    let requestObject = {
+        "accessToken" : accessToken,
+        "refreshToken" : refreshToken
+    };
+
+    $.ajax({
+        url: tokenUri,
+        method: "POST",
+        dataType: "JSON",
+        data: JSON.stringify(requestObject),
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            let newAccessToken = response.accessToken;
+            window.localStorage.removeItem(accessTokenString);
+            window.localStorage.setItem(accessTokenString, newAccessToken);
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let responseString = response.responseJSON;
+
+            if(response.status.toString().startsWith('4') && responseString != null && responseString == refreshTokenExpired){
+                allTokenExpired();
+            } else {
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
+            }
+        }
+    });
+}
+
+function allTokenExpired(){
+    alert("로그인 시간이 만료됐습니다. 다시 로그인해주세요.");
+    window.localStorage.removeItem(accessTokenString);
+    window.localStorage.removeItem(refreshTokenString);
+    location.href = rootUri;
+}
+
+function isElementInViewport(elem) {
+    var $elem = $(elem);
+    var windowTop = $(window).scrollTop();
+    var windowBottom = windowTop + $(window).height();
+    var elemTop = $elem.offset().top;
+    var elemBottom = elemTop + $elem.height();
+
+    return ((elemBottom <= windowBottom) && (elemTop >= windowTop));
+}
 
 
 
