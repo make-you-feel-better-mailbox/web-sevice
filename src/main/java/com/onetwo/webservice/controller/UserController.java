@@ -1,5 +1,6 @@
 package com.onetwo.webservice.controller;
 
+import com.onetwo.webservice.common.GlobalStatus;
 import com.onetwo.webservice.common.GlobalURI;
 import com.onetwo.webservice.dto.token.ReissueTokenRequest;
 import com.onetwo.webservice.dto.token.ReissuedTokenDto;
@@ -47,9 +48,9 @@ public class UserController {
         return userService.userIdExistCheck(userId);
     }
 
-    @GetMapping(GlobalURI.USER_ROOT + "/{access-token}")
+    @GetMapping(GlobalURI.USER_ROOT + GlobalURI.PATH_VARIABLE_ACCESS_TOKEN_WITH_BRACE)
     @ResponseBody
-    public ResponseEntity<UserDetailResponse> getUserDetailInfo(@PathVariable("access-token") String accessToken) {
+    public ResponseEntity<UserDetailResponse> getUserDetailInfo(@PathVariable(GlobalStatus.ACCESS_TOKEN) String accessToken) {
         return userService.getUserDetailInfo(accessToken);
     }
 

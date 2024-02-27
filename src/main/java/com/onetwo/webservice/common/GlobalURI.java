@@ -6,6 +6,8 @@ public class GlobalURI {
 
     public static final String ROOT_URI = "/";
 
+    public static final String PATH_VARIABLE_ACCESS_TOKEN_WITH_BRACE = "/{" + GlobalStatus.ACCESS_TOKEN + "}";
+
     /*
      * error
      */
@@ -26,4 +28,13 @@ public class GlobalURI {
     public static final String TOKEN_ROOT = "token";
 
     public static final String POSTING_ROOT = ROOT_URI + "postings";
+    public static final String POSTING_FILTER = POSTING_ROOT + "/filter";
+
+    public static final String LIKE_ROOT = ROOT_URI + "likes";
+
+    public static final String PATH_VARIABLE_CATEGORY = "category";
+    public static final String PATH_VARIABLE_CATEGORY_WITH_BRACE = "/{" + PATH_VARIABLE_CATEGORY + "}";
+
+    public static final String PATH_VARIABLE_TARGET_ID = "target-id";
+    public static final String PATH_VARIABLE_TARGET_ID_WITH_BRACE = "/{" + PATH_VARIABLE_TARGET_ID + "}";
 }

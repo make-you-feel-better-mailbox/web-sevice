@@ -1,11 +1,11 @@
 package com.onetwo.webservice.service;
 
-import com.onetwo.webservice.common.PostingServiceURI;
 import com.onetwo.webservice.common.PropertiesInfo;
-import com.onetwo.webservice.dto.posting.PostPostingRequest;
-import com.onetwo.webservice.dto.posting.PostPostingRequestDto;
-import com.onetwo.webservice.dto.posting.PostPostingResponse;
+import com.onetwo.webservice.common.uri.PostingServiceURI;
+import com.onetwo.webservice.dto.Slice;
+import com.onetwo.webservice.dto.posting.*;
 import com.onetwo.webservice.utils.SenderUtils;
+import com.onetwo.webservice.utils.UriBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -37,5 +37,25 @@ public class PostingServiceImpl implements PostingService {
                         });
 
         return response;
+    }
+
+    @Override
+    public Slice<FilteredPostingResponse> postingFilter(PostingFilterSliceRequest filterSliceRequest) {
+        String requestUri = propertiesInfo.getApiGateway().getHost();
+
+        requestUri += PostingServiceURI.POSTING_FILTER;
+
+        requestUri += UriBuilder.getQueryStringUri(filterSliceRequest);
+
+        ResponseEntity<Slice<FilteredPostingResponse>> response =
+                senderUtils.send(
+                        HttpMethod.GET,
+                        requestUri,
+                        null,
+                        null,
+                        new ParameterizedTypeReference<Slice<FilteredPostingResponse>>() {
+                        });
+
+        return response.getBody();
     }
 }

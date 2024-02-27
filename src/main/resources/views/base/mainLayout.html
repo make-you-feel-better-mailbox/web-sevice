@@ -71,58 +71,28 @@
 <th:block th:replace=":: scripts"></th:block>
 <th:block>
     <script th:inline="javascript">
+        let userDetailRequestUri = /*[[@{${GlobalURI.USER_ROOT}}]]*/;
+        let accessTokenExpired = /*[[@{${JwtCode.ACCESS_TOKEN_EXPIRED}}]]*/;
+        let refreshTokenExpired = /*[[@{${JwtCode.REFRESH_TOKEN_EXPIRED}}]]*/;
+        let rootUri = /*[[@{${GlobalURI.ROOT_URI}}]]*/;
+        let loginUri = /*[[@{${GlobalURI.LOGIN_ROOT}}]]*/;
+        let registerUri = /*[[@{${GlobalURI.REGISTER_ROOT}}]]*/;
+        let tokenUri = /*[[@{${GlobalURI.TOKEN_ROOT}}]]*/;
+
         $(document).ready(function(){
             let accessToken = window.localStorage.getItem(accessTokenString);
             let refreshToken = window.localStorage.getItem(refreshTokenString);
 
             if(accessToken == null || accessToken == ""){
-                let loginUri = /*[[@{${GlobalURI.LOGIN_ROOT}}]]*/;
-                let registerUri = /*[[@{${GlobalURI.REGISTER_ROOT}}]]*/;
 
                 $('#headerIcons').empty();
 
                 $('#headerIcons').append('<button class="button bg-secondery dark:text-white" onclick="redirectToUri(\'' + registerUri + '\')">Sign Up</button>');
                 $('#headerIcons').append('<button class="button bg-primary-soft text-primary dark:text-white" onclick="redirectToUri(\'' + loginUri + '\')">Sign in</button>');
             } else {
-                let userDetailRequestUri = /*[[@{${GlobalURI.USER_ROOT}}]]*/;
+                let requestEndPoint = userDetailRequestUri + "/" + accessToken;
 
-                userDetailRequestUri += "/" + accessToken;
-
-                $.ajax({
-                    url: userDetailRequestUri,
-                    method: "GET",
-                    dataType: "JSON",
-                    contentType: 'application/json',
-                    beforeSend: function(request) {
-                    },
-                    success: function(response){
-                        $('#nicknameText').text(response.nickname);
-                        $('#userIdText').text(response.userId);
-                        $('#notificationsCount').text(0);
-                    },
-                    complete: function(response){
-                    },
-                    error: function(response){
-                        let responseString = response.responseJSON;
-
-                        let accessTokenExpired = /*[[@{${JwtCode.ACCESS_TOKEN_EXPIRED}}]]*/;
-
-                        if(response.status.toString().startsWith('4') && responseString != null && responseString == accessTokenExpired){
-
-                            let responseString = response.responseJSON;
-
-                            if (responseString == accessTokenExpired) {
-                                reissueAccessToken();
-                            }
-
-                        } else {
-                            let errorModal = $("#errorModal");
-
-                            UIkit.modal(errorModal).show();
-                        }
-                    }
-                });
-
+                checkTokenExpired();
             }
 		});
 
@@ -133,56 +103,8 @@
         function logout(){
             window.localStorage.removeItem(accessTokenString);
             window.localStorage.removeItem(refreshTokenString);
-            location.href = /*[[@{${GlobalURI.ROOT_URI}}]]*/;
+            location.href = rootUri;
         }
-
-        function reissueAccessToken(){
-            let accessToken = window.localStorage.getItem(accessTokenString);
-            let refreshToken = window.localStorage.getItem(refreshTokenString);
-
-            let requestObject = {
-                "accessToken" : accessToken,
-                "refreshToken" : refreshToken
-            };
-
-            $.ajax({
-                url: /*[[@{${GlobalURI.TOKEN_ROOT}}]]*/ 'url',
-                method: "POST",
-                dataType: "JSON",
-                data: JSON.stringify(requestObject),
-                contentType: 'application/json',
-                beforeSend: function(request) {
-                },
-                success: function(response){
-                    let newAccessToken = response.accessToken;
-                    window.localStorage.removeItem(accessTokenString);
-                    window.localStorage.setItem(accessTokenString, newAccessToken);
-                },
-                complete: function(response){
-                },
-                error: function(response){
-                    let responseString = response.responseJSON;
-
-                    let refreshTokenExpired = /*[[@{${JwtCode.REFRESH_TOKEN_EXPIRED}}]]*/;
-
-                    if(response.status.toString().startsWith('4') && responseString != null && responseString == refreshTokenExpired){
-                        allTokenExpired();
-                    } else {
-                        let errorModal = $("#errorModal");
-
-                        UIkit.modal(errorModal).show();
-                    }
-                }
-            });
-        }
-
-        function allTokenExpired(){
-            alert("로그인 시간이 만료됐습니다. 다시 로그인해주세요.");
-            window.localStorage.removeItem(accessTokenString);
-            window.localStorage.removeItem(refreshTokenString);
-            location.href = /*[[@{${GlobalURI.ROOT_URI}}]]*/;
-        }
-
 
     </script>
 </th:block>

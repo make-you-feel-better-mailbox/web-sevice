@@ -10,9 +10,9 @@ import java.util.Objects;
 public class PostPostingRequestDto extends AccessTokenDto {
 
     @NotEmpty
-    private String content;
+    private final String content;
 
-    private Boolean mediaExist;
+    private final Boolean mediaExist;
 
     public PostPostingRequestDto(String accessToken, String content, Boolean mediaExist) {
         super(accessToken);
