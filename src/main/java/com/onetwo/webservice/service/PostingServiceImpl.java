@@ -2,6 +2,7 @@ package com.onetwo.webservice.service;
 
 import com.onetwo.webservice.common.PropertiesInfo;
 import com.onetwo.webservice.common.uri.PostingServiceURI;
+import com.onetwo.webservice.dto.AccessTokenDto;
 import com.onetwo.webservice.dto.Slice;
 import com.onetwo.webservice.dto.posting.*;
 import com.onetwo.webservice.utils.SenderUtils;
@@ -57,5 +58,67 @@ public class PostingServiceImpl implements PostingService {
                         });
 
         return response.getBody();
+    }
+
+    @Override
+    public ResponseEntity<UpdatePostingResponse> updatePosting(Long postingId, UpdatePostingRequestDto updatePostingRequestDto) {
+        String requestUri = propertiesInfo.getApiGateway().getHost();
+
+        requestUri += PostingServiceURI.POSTING_ROOT;
+
+        requestUri += "/" + postingId;
+
+        UpdatePostingRequest updatePostingRequest = new UpdatePostingRequest(updatePostingRequestDto.getContent(), updatePostingRequestDto.getMediaExist());
+
+        ResponseEntity<UpdatePostingResponse> response =
+                senderUtils.send(
+                        HttpMethod.PUT,
+                        requestUri,
+                        senderUtils.getAccessTokenHeader(updatePostingRequestDto),
+                        updatePostingRequest,
+                        new ParameterizedTypeReference<UpdatePostingResponse>() {
+                        });
+
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<DeletePostingResponse> deletePosting(Long postingId, AccessTokenDto accessTokenDto) {
+        String requestUri = propertiesInfo.getApiGateway().getHost();
+
+        requestUri += PostingServiceURI.POSTING_ROOT;
+
+        requestUri += "/" + postingId;
+
+        ResponseEntity<DeletePostingResponse> response =
+                senderUtils.send(
+                        HttpMethod.DELETE,
+                        requestUri,
+                        senderUtils.getAccessTokenHeader(accessTokenDto),
+                        null,
+                        new ParameterizedTypeReference<DeletePostingResponse>() {
+                        });
+
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<PostingDetailResponse> findPostingDetail(Long postingId) {
+        String requestUri = propertiesInfo.getApiGateway().getHost();
+
+        requestUri += PostingServiceURI.POSTING_ROOT;
+
+        requestUri += "/" + postingId;
+
+        ResponseEntity<PostingDetailResponse> response =
+                senderUtils.send(
+                        HttpMethod.GET,
+                        requestUri,
+                        null,
+                        null,
+                        new ParameterizedTypeReference<PostingDetailResponse>() {
+                        });
+
+        return response;
     }
 }
