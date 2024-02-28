@@ -32,6 +32,12 @@ public class GlobalURI {
 
     public static final String LIKE_ROOT = ROOT_URI + "likes";
 
+    public static final String COMMENT_ROOT = ROOT_URI + "comments";
+
+    public static final String COMMENT_COUNT = COMMENT_ROOT + "/count";
+
+    public static final String COMMENT_FILTER = COMMENT_ROOT + "/filter";
+
     public static final String PATH_VARIABLE_CATEGORY = "category";
     public static final String PATH_VARIABLE_CATEGORY_WITH_BRACE = "/{" + PATH_VARIABLE_CATEGORY + "}";
 
