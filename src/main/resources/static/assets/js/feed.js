@@ -1,12 +1,11 @@
+const postingCategory = 1;
+
 function getPosting(){
-    if(isLastPage) {
-        $('#postingPlaceHolder').remove();
-        return;
-    }
+    let pageSize = 5;
 
     let formObject = {
         "pageNumber" : postPageNumber,
-        "pageSize" : 5
+        "pageSize" : pageSize
     }
 
     $.ajax({
@@ -22,17 +21,19 @@ function getPosting(){
 
             if(response != null && response.content != null && response.content.length > 0){
                 response.content.forEach(function(element, index){
-                    let postingTemplate = getPostingTemplate(element.userId,
-                                                             element.content,
-                                                             element.postedDate,
-                                                             element.postingId);
+                    if($("#postingId" + element.postingId).length === 0){
+                        let postingTemplate = getPostingTemplate(element.userId,
+                            element.content,
+                            element.postedDate,
+                            element.postingId);
 
-                    $('#feed').append(postingTemplate);
+                        $('#feed').append(postingTemplate);
+                    }
                 })
 
                 isLastPage = response.last;
 
-                postPageNumber = postPageNumber + 1;
+                if(response.content.length === pageSize) postPageNumber = postPageNumber + 1;
 
                 if (!isLastPage) $('#feed').append(getPlaceHolder());
             }
@@ -52,7 +53,7 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
 
     const localDatetime = moment(dateString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm');
 
-    let template = '<div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2">'
+    let template = '<div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2" id="postingId'+ postingId +'">'
                       + '<div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">'
                       +     '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="w-9 h-9 rounded-full"> </a>'
                       +     '<div class="flex-1">'
@@ -85,44 +86,21 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
                       +             '<p class="postingLikeCountText">0</p>'
                       +         '</div>'
                       +     '</div>'
-                      +     '<div class="flex items-center gap-3">'
+                      +     '<div class="flex items-center gap-3" id="postingCommentCountTarget'+ postingId +'">'
                       +         '<button type="button" class="button-icon bg-slate-200/70 dark:bg-slate-700"> <ion-icon class="text-lg" name="chatbubble-ellipses"></ion-icon> </button>'
-                      +         '<span>260</span>'
+                      +         '<span class="postingCommentCountText">0</span>'
                       +     '</div>'
                       +     '<button type="button" class="button-icon ml-auto"> <ion-icon class="text-xl" name="paper-plane-outline"></ion-icon> </button>'
                       +     '<button type="button" class="button-icon"> <ion-icon class="text-xl" name="share-outline"></ion-icon> </button>'
                       + '</div>'
-                      + '<div class="sm:p-4 p-2.5 border-t border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40">'
-                      +     '<div class="flex items-start gap-3 relative">'
-                      +         '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
-                      +         '<div class="flex-1">'
-                      +             '<a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Steeve </a>'
-                      +             '<p class="mt-0.5"> I love taking photos of nature and animals. 🌳🐶</p>'
-                      +         '</div>'
-                      +     '</div>'
-                      +     '<div class="flex items-start gap-3 relative">'
-                      +         '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
-                      +         '<div class="flex-1">'
-                      +             '<a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Monroe </a>'
-                      +             '<p class="mt-0.5">  I enjoy people and emotions. 😊😢 </p>'
-                      +         '</div>'
-                      +     '</div>'
-                      +     '<div class="flex items-start gap-3 relative">'
-                      +         '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
-                      +         '<div class="flex-1">'
-                      +             '<a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Jesse </a>'
-                      +             '<p class="mt-0.5">  Photography is my passion. 🎨📸   </p>'
-                      +         '</div>'
-                      +     '</div>'
-                      +    '<button type="button" class="flex items-center gap-1.5 text-gray-500 hover:text-blue-500 mt-2">'
-                      +        '<ion-icon name="chevron-down-outline" class="ml-auto duration-200 group-aria-expanded:rotate-180"></ion-icon>'
-                      +        'More Comment'
-                      +    '</button>'
+                      + '<div class="sm:p-4 p-2.5 border-t border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40" id="commentArea'+ postingId +'">'
+                      +     '<input type="hidden" id="commentPageNumber'+ postingId +'" value="0">'
+                      +     getMoreCommentBtn(postingId)
                       + '</div>'
                       + '<div class="sm:px-4 sm:py-3 p-2.5 border-t border-gray-100 flex items-center gap-1 dark:border-slate-700/40">'
                       +     '<img th:src="@{/assets/images/avatars/avatar-7.jpg}" alt="" class="w-6 h-6 rounded-full">'
                       +     '<div class="flex-1 relative overflow-hidden h-10">'
-                      +         '<textarea placeholder="Add Comment...." rows="1" class="w-full resize-none !bg-transparent px-4 py-2 focus:!border-transparent focus:!ring-transparent" aria-haspopup="true" aria-expanded="false"></textarea>'
+                      +         '<textarea id="commentContent'+ postingId +'" placeholder="Add Comment...." rows="1" class="w-full resize-none !bg-transparent px-4 py-2 focus:!border-transparent focus:!ring-transparent" aria-haspopup="true" aria-expanded="false"></textarea>'
                       +         '<div class="!top-2 pr-2 uk-drop" uk-drop="pos: bottom-right; mode: click">'
                       +             '<div class="flex items-center gap-2" uk-scrollspy="target: > svg; cls: uk-animation-slide-right-small; delay: 100 ;repeat: true">'
                       +                 '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 fill-sky-600" style="opacity: 0;">'
@@ -134,11 +112,15 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
                       +             '</div>'
                       +         '</div>'
                       +     '</div>'
-                      +     '<button type="submit" class="text-sm rounded-full py-1.5 px-3.5 bg-secondery"> Replay</button>'
+                      +     '<button type="button" onclick="registerComment('+ postingId +')" class="text-sm rounded-full py-1.5 px-3.5 bg-secondery"> Replay</button>'
                       + '</div>'
                    + '</div>';
 
     getPostingLikeCount(postingId);
+
+    getPostingCommentCount(postingId);
+
+    getCommentList(postingId);
 
     let accessToken = window.localStorage.getItem(accessTokenString);
 
@@ -148,6 +130,15 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
 }
 
 function likePosting(postingId){
+    let accessToken = window.localStorage.getItem(accessTokenString);
+
+    if (accessToken == null || accessToken == ""){
+        alert("You can like it after sign in");
+        return;
+    }
+
+    checkTokenExpired();
+
     let isLiked = $('#postingLikeCountTarget'+postingId).find('.userLikeIt').val();
 
     if (isLiked == "true"){
@@ -159,8 +150,6 @@ function likePosting(postingId){
 
 function likePostingRequest(postingId){
     let accessToken = window.localStorage.getItem(accessTokenString);
-
-    let postingCategory = 1;
 
     let formObject = {
         "accessToken" : accessToken,
@@ -212,8 +201,6 @@ function likePostingRequest(postingId){
 function deleteLikeRequest(postingId){
     let accessToken = window.localStorage.getItem(accessTokenString);
 
-    let postingCategory = 1;
-
     let formObject = {
         "accessToken" : accessToken,
         "category" : postingCategory,
@@ -263,8 +250,6 @@ function deleteLikeRequest(postingId){
 
 function checkPostingUserLike(postingId){
     let accessToken = window.localStorage.getItem(accessTokenString);
-
-    let postingCategory = 1;
 
     let formObject = {
         "accessToken" : accessToken,
@@ -325,8 +310,6 @@ function getPlaceHolder(){
 }
 
 function getPostingLikeCount(postingId){
-    let postingCategory = 1;
-
     $.ajax({
         url: likeUri + "/" + postingCategory + "/" + postingId,
         method: "GET",
@@ -351,6 +334,31 @@ function getPostingLikeCount(postingId){
     });
 }
 
+function getPostingCommentCount(postingId){
+    $.ajax({
+        url: commentCountUri + "/" + postingCategory + "/" + postingId,
+        method: "GET",
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            $('#postingCommentCountTarget'+postingId).find('.postingCommentCountText').remove();
+
+            let countText = '<span class="postingCommentCountText">'+ response.commentCount.toLocaleString() +'</span>';
+
+            $('#postingCommentCountTarget'+postingId).append(countText);
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
+}
+
 // 화면에 보이는지 여부를 확인하고 AJAX 요청을 보내는 함수
 function sendAjaxRequestIfVisible() {
     let visibleDivs = [];
@@ -364,5 +372,138 @@ function sendAjaxRequestIfVisible() {
 
     visibleDivs.forEach(function (element){
         getPostingLikeCount(element.find('.postingId').val());
+        getPostingCommentCount(element.find('.postingId').val());
+    });
+}
+
+function getCommentList(postingId){
+    let pageSize = 3;
+
+    let commentPageNumber = $("#commentPageNumber"+postingId).val();
+
+    if(commentPageNumber === 0 || commentPageNumber === "0" || commentPageNumber == null) commentPageNumber = 0;
+    else commentPageNumber = commentPageNumber * 1;
+
+    let formObject = {
+        "pageNumber" : commentPageNumber,
+        "pageSize" : pageSize,
+        "category" : postingCategory,
+        "targetId" : postingId
+    }
+
+    $.ajax({
+        url: commentFilterUri,
+        method: "GET",
+        data: formObject,
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            $('#moreCommentBtn'+postingId).remove();
+
+            if(response != null && response.content != null && response.content.length > 0){
+                response.content.forEach(function(element, index){
+                    if($("#commentId" + element.commentId).length === 0){
+                        let commentTemplate = getCommentContent(element.commentId,
+                            element.userId,
+                            element.content);
+
+                        $('#commentArea'+postingId).append(commentTemplate);
+                    }
+                })
+
+                if(response.content.length === pageSize) {
+                    commentPageNumber = commentPageNumber + 1;
+
+                    $("#commentPageNumber"+postingId).val(commentPageNumber);
+                }
+            }
+
+            $('#commentArea'+postingId).append(getMoreCommentBtn(postingId));
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
+}
+
+function getCommentContent(commentId,userId, content){
+    let commentContent = '<div class="flex items-start gap-3 relative" id="commentId'+ commentId +'">'
+                            +         '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
+                            +         '<div class="flex-1">'
+                            +             '<a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> '+ userId +' </a>'
+                            +             '<p class="mt-0.5">'+ content +'</p>'
+                            +         '</div>'
+                            +     '</div>';
+    return commentContent;
+}
+
+function getMoreCommentBtn(postingId){
+    let moreCommentBtn = '<button type="button" id="moreCommentBtn'+ postingId +'"  onclick="getCommentList('+ postingId+ ')" class="flex items-center gap-1.5 text-gray-500 hover:text-blue-500 mt-2">'
+                            +        '<ion-icon name="chevron-down-outline" class="ml-auto duration-200 group-aria-expanded:rotate-180"></ion-icon>'
+                            +        'More Comment'
+                            +    '</button>';
+    return moreCommentBtn;
+}
+
+function registerComment(postingId){
+    checkTokenExpired();
+
+    let commentContent = $('#commentContent'+postingId).val();
+
+    if (commentContent == null || commentContent === ""){
+        alert("댓글을 입력해주세요");
+        return null;
+    }
+
+    var formObj = {
+        "content" : commentContent,
+        "targetId" : postingId,
+        "category" : postingCategory
+    };
+
+    formObj[accessTokenString] = window.localStorage.getItem(accessTokenString);
+
+    let successNotification = {
+        message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="checkmark-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> Comment successfully done! </div> </div>',
+        pos: 'top-center',
+        timeout: '6000'
+    }
+
+    $.ajax({
+        url: commentUri,
+        method: "POST",
+        data: JSON.stringify(formObj),
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            if(response.isRegisterSuccess){
+                $('#commentContent'+postingId).val('');
+
+                UIkit.notification(successNotification);
+
+                if($("#commentId" + response.commentId).length === 0){
+                    let commentTemplate = getCommentContent(response.commentId,
+                        $('#userIdText').text(),
+                        commentContent);
+
+                    $('#commentArea'+postingId).prepend(commentTemplate);
+                }
+            }
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
     });
 }

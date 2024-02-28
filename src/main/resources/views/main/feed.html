@@ -729,6 +729,9 @@
     <script th:inline="javascript" th:fragment="scripts">
         let postingFilterUri = /*[[@{${GlobalURI.POSTING_FILTER}}]]*/;
         let likeUri = /*[[@{${GlobalURI.LIKE_ROOT}}]]*/;
+        let commentUri = /*[[@{${GlobalURI.COMMENT_ROOT}}]]*/;
+        let commentFilterUri = /*[[@{${GlobalURI.COMMENT_FILTER}}]]*/;
+        let commentCountUri = /*[[@{${GlobalURI.COMMENT_COUNT}}]]*/;
 
         let lastRequestTime = 0;
 
@@ -751,6 +754,13 @@
         }
 
         $('#postingActionBtn').on('click', function(){
+            let postingContent = $('#content').val();
+
+            if (postingContent == null || postingContent === ""){
+                alert("내용을 입력해주세요");
+                return;
+            }
+
             postingRequest();
         });
 
@@ -785,6 +795,15 @@
                         UIkit.modal(createStatusModal).hide();
 
                         UIkit.notification(successNotification);
+
+                        if($("#postingId" + response.postingId).length === 0){
+                            let postingTemplate = getPostingTemplate($('#userIdText').text(),
+                                $('#content').val(),
+                                new Date().toISOString(),
+                                response.postingId);
+
+                            $('#feed').prepend(postingTemplate);
+                        }
                     }
                 },
                 complete: function(response){
