@@ -52,6 +52,39 @@
 
                 </div>
             </div>
+
+            <div class="lg:p-20 p-10" id="confirmModal" uk-modal>
+
+                <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+
+                    <div class="p-6">
+                        <h2 class="text-xl font-semibold">Confirm</h2>
+                    </div>
+
+                    <div class="p-6 py-0">
+
+                        <p id="confirmModalText"></p>
+
+                    </div>
+
+                    <div class="flex justify-end p-6 text-sm font-medium">
+                        <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button" id="confirmModalCancelBtn">Cancel</button>
+                        <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button" id="confirmModalOkBtn">
+                            Ok
+                        </button>
+                    </div>
+
+                    <!-- close button -->
+                    <button type="button"
+                            class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+
+                </div>
+            </div>
             <!-- Topbar Start -->
             <div th:replace="base/header :: top-bar"></div>
             <!-- end Topbar -->
@@ -103,6 +136,7 @@
         function logout(){
             window.localStorage.removeItem(accessTokenString);
             window.localStorage.removeItem(refreshTokenString);
+            window.localStorage.removeItem(userIdString)
             location.href = rootUri;
         }
 

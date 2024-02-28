@@ -1,5 +1,6 @@
-let accessTokenString = "accessToken";
-let refreshTokenString = "refreshToken";
+const accessTokenString = "accessToken";
+const refreshTokenString = "refreshToken";
+const userIdString = "userId";
 
 // On page load or when changing themes, best to add inline in `head` to avoid FOUC
 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -72,6 +73,7 @@ function checkTokenExpired(){
         success: function(response){
             $('#nicknameText').text(response.nickname);
             $('#userIdText').text(response.userId);
+            window.localStorage.setItem(userIdString, response.userId);
             $('#notificationsCount').text(0);
         },
         complete: function(response){
@@ -151,6 +153,22 @@ function isElementInViewport(elem) {
     return ((elemBottom <= windowBottom) && (elemTop >= windowTop));
 }
 
+function myConfirm(content, callbackFunction){
+    $("#confirmModalText").text(content);
 
+    let confirmModal = $("#confirmModal");
 
-    
+    UIkit.modal(confirmModal).show();
+
+    $('#confirmModalOkBtn').click(function() {
+        console.log("나 실행");
+
+        callbackFunction();
+    });
+}
+
+$("#confirmModalCancelBtn").on("click", function (){
+    let confirmModal = $("#confirmModal");
+
+    UIkit.modal(confirmModal).hide();
+});

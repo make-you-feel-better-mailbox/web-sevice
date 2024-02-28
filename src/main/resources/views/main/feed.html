@@ -120,7 +120,7 @@
                 <div class="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3" id="feed">
 
                     <!-- add story -->
-                    <div class="bg-white rounded-xl shadow-sm md:p-4 p-2 space-y-4 text-sm font-medium border1 dark:bg-dark2">
+                    <div class="bg-white rounded-xl shadow-sm md:p-4 p-2 space-y-4 text-sm font-medium border1 dark:bg-dark2" id="postPostingBox">
 
                         <div class="flex items-center md:gap-3 gap-1">
                             <div onclick="resetCreateStatus()" class="flex-1 bg-slate-100 hover:bg-opacity-80 transition-all rounded-lg cursor-pointer dark:bg-dark3" uk-toggle="target: #create-status">
@@ -586,6 +586,7 @@
             </div>
 
             <div class="space-y-5 mt-3 p-2">
+                <input type="hidden" id="postPostingContentId" value="0">
                 <textarea class="w-full !text-black placeholder:!text-black !bg-white !border-transparent focus:!border-transparent focus:!ring-transparent !font-normal !text-xl   dark:!text-white dark:placeholder:!text-white dark:!bg-slate-800" name="content" id="content"  rows="6" placeholder="What do you have in mind?"></textarea>
             </div>
 
@@ -715,6 +716,7 @@
         </div>
 
     </div>
+
 </div>
 
 <!-- css -->
@@ -732,6 +734,7 @@
         let commentUri = /*[[@{${GlobalURI.COMMENT_ROOT}}]]*/;
         let commentFilterUri = /*[[@{${GlobalURI.COMMENT_FILTER}}]]*/;
         let commentCountUri = /*[[@{${GlobalURI.COMMENT_COUNT}}]]*/;
+        let postingUri = /*[[@{${GlobalURI.POSTING_ROOT}}]]*/;
 
         let lastRequestTime = 0;
 
@@ -751,6 +754,7 @@
 
         function resetCreateStatus(){
             $('#content').val('');
+            $("#postPostingContentId").val(0);
         }
 
         $('#postingActionBtn').on('click', function(){
@@ -761,13 +765,19 @@
                 return;
             }
 
-            postingRequest();
+            let isUpdate = $("#postPostingContentId").val() === 0 || $("#postPostingContentId").val() === "0" ? false : true;
+
+            if(isUpdate){
+                updatePostingRequest();
+            } else {
+                postingRequest();
+            }
         });
 
         function postingRequest(){
             checkTokenExpired();
 
-            var formObj = {
+            let formObj = {
                 "content" : $('#content').val(),
                 "mediaExist" : false
             };
@@ -781,7 +791,7 @@
             }
 
             $.ajax({
-                url: /*[[@{${GlobalURI.POSTING_ROOT}}]]*/ 'url',
+                url: postingUri,
                 method: "POST",
                 data: JSON.stringify(formObj),
                 dataType: "JSON",
@@ -797,12 +807,16 @@
                         UIkit.notification(successNotification);
 
                         if($("#postingId" + response.postingId).length === 0){
-                            let postingTemplate = getPostingTemplate($('#userIdText').text(),
+                            let postingTemplate = getPostingTemplate(window.localStorage.getItem(userIdString),
                                 $('#content').val(),
                                 new Date().toISOString(),
                                 response.postingId);
 
                             $('#feed').prepend(postingTemplate);
+
+                            $("#postPostingBox").remove();
+
+                            $('#feed').prepend(getPostPostingTemplate());
                         }
                     }
                 },

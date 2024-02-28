@@ -53,6 +53,12 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
 
     const localDatetime = moment(dateString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm');
 
+    const writerControlBox = '<hr>'
+                    +                 '<a onclick="updatePosting('+ postingId +')" class="notWorkA"> <ion-icon class="text-xl shrink-0 md hydrated" name="pencil-outline" role="img" aria-label="bookmark outline"></ion-icon> Update Posting </a>'
+                    +                 '<a onclick="deletePosting('+ postingId +')"  class="text-red-400 hover:!bg-red-50 dark:hover:!bg-red-500/50 notWorkA"> <ion-icon class="text-xl shrink-0 md hydrated" name="trash-outline" role="img" aria-label="stop circle outline"></ion-icon> Delete </a>';
+
+    const isUserPostingWriter = window.localStorage.getItem(userIdString) === postingUserId;
+
     let template = '<div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2" id="postingId'+ postingId +'">'
                       + '<div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">'
                       +     '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="w-9 h-9 rounded-full"> </a>'
@@ -62,20 +68,25 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
                       +     '</div>'
                       +     '<div class="-mr-1">'
                       +         '<button type="button" class="button__ico w-8 h-8" aria-haspopup="true" aria-expanded="false"> <ion-icon class="text-xl md hydrated" name="ellipsis-horizontal" role="img" aria-label="ellipsis horizontal"></ion-icon> </button>'
-                      +         '<div class="w-[245px] uk-dropdown" uk-dropdown="pos: bottom-right; animation: uk-animation-scale-up uk-transform-origin-top-right; animate-out: true; mode: click">'
+                      +         '<div class="w-[245px] uk-dropdown" id="ukDropDownPosting'+ postingId +'" uk-dropdown="pos: bottom-right; animation: uk-animation-scale-up uk-transform-origin-top-right; animate-out: true; mode: click">'
                       +             '<nav>'
                       +                 '<a href="#"> <ion-icon class="text-xl shrink-0 md hydrated" name="bookmark-outline" role="img" aria-label="bookmark outline"></ion-icon>  Add to favorites </a>'
                       +                 '<a href="#"> <ion-icon class="text-xl shrink-0 md hydrated" name="notifications-off-outline" role="img" aria-label="notifications off outline"></ion-icon> Mute Notification </a>'
                       +                 '<a href="#"> <ion-icon class="text-xl shrink-0 md hydrated" name="flag-outline" role="img" aria-label="flag outline"></ion-icon>  Report this post </a>'
                       +                 '<a href="#"> <ion-icon class="text-xl shrink-0 md hydrated" name="share-outline" role="img" aria-label="share outline"></ion-icon>  Share your profile </a>'
                       +                 '<hr>'
-                      +                 '<a href="#" class="text-red-400 hover:!bg-red-50 dark:hover:!bg-red-500/50"> <ion-icon class="text-xl shrink-0 md hydrated" name="stop-circle-outline" role="img" aria-label="stop circle outline"></ion-icon>  Unfollow </a>'
-                      +             '</nav>'
+                      +                 '<a href="#" class="text-red-400 hover:!bg-red-50 dark:hover:!bg-red-500/50"> <ion-icon class="text-xl shrink-0 md hydrated" name="stop-circle-outline" role="img" aria-label="stop circle outline"></ion-icon> Unfollow </a>';
+
+    template += isUserPostingWriter ? writerControlBox : '';
+
+    let realContent = content.replace(/\n/g, "<br>");
+
+    template +=             '</nav>'
                       +         '</div>'
                       +     '</div>'
                       + '</div>'
-                      + '<div class="sm:px-4 p-2.5 pt-0">'
-                      +     '<p class="font-normal"> '+ content +' </p>'
+                      + '<div class="sm:px-4 p-2.5 pt-0" id="contentDiv'+ postingId +'">'
+                      +     '<p class="font-normal"> '+ realContent +' </p>'
                       + '</div>'
                       + '<div class="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">'
                       +     '<div>'
@@ -101,16 +112,6 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
                       +     '<img th:src="@{/assets/images/avatars/avatar-7.jpg}" alt="" class="w-6 h-6 rounded-full">'
                       +     '<div class="flex-1 relative overflow-hidden h-10">'
                       +         '<textarea id="commentContent'+ postingId +'" placeholder="Add Comment...." rows="1" class="w-full resize-none !bg-transparent px-4 py-2 focus:!border-transparent focus:!ring-transparent" aria-haspopup="true" aria-expanded="false"></textarea>'
-                      +         '<div class="!top-2 pr-2 uk-drop" uk-drop="pos: bottom-right; mode: click">'
-                      +             '<div class="flex items-center gap-2" uk-scrollspy="target: > svg; cls: uk-animation-slide-right-small; delay: 100 ;repeat: true">'
-                      +                 '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 fill-sky-600" style="opacity: 0;">'
-                      +                     '<path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd"></path>'
-                      +                 '</svg>'
-                      +                 '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 fill-pink-600" style="opacity: 0;">'
-                      +                     '<path d="M3.25 4A2.25 2.25 0 001 6.25v7.5A2.25 2.25 0 003.25 16h7.5A2.25 2.25 0 0013 13.75v-7.5A2.25 2.25 0 0010.75 4h-7.5zM19 4.75a.75.75 0 00-1.28-.53l-3 3a.75.75 0 00-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 001.28-.53V4.75z"></path>'
-                      +                 '</svg>'
-                      +             '</div>'
-                      +         '</div>'
                       +     '</div>'
                       +     '<button type="button" onclick="registerComment('+ postingId +')" class="text-sm rounded-full py-1.5 px-3.5 bg-secondery"> Replay</button>'
                       + '</div>'
@@ -433,11 +434,13 @@ function getCommentList(postingId){
 }
 
 function getCommentContent(commentId,userId, content){
+    let realContent = content.replace(/\n/g, "<br>");
+
     let commentContent = '<div class="flex items-start gap-3 relative" id="commentId'+ commentId +'">'
                             +         '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
                             +         '<div class="flex-1">'
                             +             '<a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> '+ userId +' </a>'
-                            +             '<p class="mt-0.5">'+ content +'</p>'
+                            +             '<p class="mt-0.5">'+ realContent +'</p>'
                             +         '</div>'
                             +     '</div>';
     return commentContent;
@@ -505,5 +508,149 @@ function registerComment(postingId){
 
             UIkit.modal(errorModal).show();
         }
+    });
+}
+
+function getPostPostingTemplate(){
+    const postPostingTemplate = '<div class="bg-white rounded-xl shadow-sm md:p-4 p-2 space-y-4 text-sm font-medium border1 dark:bg-dark2" id="postPostingBox">'
+                                        +    '<div class="flex items-center md:gap-3 gap-1">'
+                                        +        '<div onclick="resetCreateStatus()" class="flex-1 bg-slate-100 hover:bg-opacity-80 transition-all rounded-lg cursor-pointer dark:bg-dark3" uk-toggle="target: #create-status">'
+                                        +            '<div class="py-2.5 text-center dark:text-white"> What do you have in mind? </div>'
+                                        +        '</div>'
+                                        +        '<div onclick="resetCreateStatus()" class="cursor-pointer hover:bg-opacity-80 p-1 px-1.5 rounded-xl transition-all bg-pink-100/60 hover:bg-pink-100 dark:bg-white/10 dark:hover:bg-white/20" uk-toggle="target: #create-status">'
+                                        +            '<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-pink-600 fill-pink-200/70" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">'
+                                        +                '<path stroke="none" d="M0 0h24v24H0z" fill="none"/>'
+                                        +                '<path d="M15 8h.01" />'
+                                        +                '<path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />'
+                                        +                '<path d="M3.5 15.5l4.5 -4.5c.928 -.893 2.072 -.893 3 0l5 5" />'
+                                        +                '<path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2.5 2.5" />'
+                                        +            '</svg>'
+                                        +        '</div>'
+                                        +    '</div>'
+                                        +'</div>';
+    return postPostingTemplate;
+}
+
+function updatePosting(postingId){
+    UIkit.dropdown($("#ukDropDownPosting"+postingId)).hide(0);
+
+    $.ajax({
+        url: postingUri + "/" + postingId,
+        method: "GET",
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            if(response != null){
+                $('#content').val(response.content);
+                $("#postPostingContentId").val(response.postingId);
+
+                let createStatusModal = $("#create-status");
+
+                UIkit.modal(createStatusModal).show();
+            }
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
+}
+
+function updatePostingRequest(){
+    let requestContent = $('#content').val();
+
+    let formObj = {
+        "accessToken" : window.localStorage.getItem(accessTokenString),
+        "content" : requestContent,
+        "mediaExist" : false
+    };
+
+    let postingId = $("#postPostingContentId").val();
+
+    let successNotification = {
+        message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="checkmark-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> Update Posting successfully done! </div> </div>',
+        pos: 'top-center',
+        timeout: '6000'
+    }
+
+    $.ajax({
+        url: postingUri + "/" + postingId,
+        method: "PUT",
+        data: JSON.stringify(formObj),
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            if(response.isUpdateSuccess){
+                UIkit.notification(successNotification);
+
+                $("#contentDiv" + postingId).empty();
+
+                let content = '<p class="font-normal"> '+ requestContent.replace(/\n/g, "<br>") +' </p>'
+
+                $("#contentDiv" + postingId).append(content);
+
+                $("#postPostingContentId").val(0);
+
+                let createStatusModal = $("#create-status");
+
+                UIkit.modal(createStatusModal).hide();
+            }
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
+}
+
+function deletePosting(postingId){
+    UIkit.dropdown($("#ukDropDownPosting"+postingId)).hide(0);
+
+    myConfirm("정말 삭제하시겠습니까?", function(){
+        checkTokenExpired();
+
+        let formObj = {
+            "accessToken" : window.localStorage.getItem(accessTokenString)
+        };
+
+        let successNotification = {
+            message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="checkmark-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> Delete Posting successfully done! </div> </div>',
+            pos: 'top-center',
+            timeout: '6000'
+        }
+
+        $.ajax({
+            url: postingUri + "/" + postingId,
+            method: "DELETE",
+            data: JSON.stringify(formObj),
+            dataType: "JSON",
+            contentType: 'application/json',
+            beforeSend: function(request) {
+            },
+            success: function(response){
+                if(response.isDeleteSuccess){
+                    $("#postingId" + postingId).remove();
+
+                    UIkit.notification(successNotification);
+                }
+            },
+            complete: function(response){
+            },
+            error: function(response){
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
+            }
+        });
     });
 }
