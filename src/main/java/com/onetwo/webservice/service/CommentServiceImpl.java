@@ -2,6 +2,7 @@ package com.onetwo.webservice.service;
 
 import com.onetwo.webservice.common.PropertiesInfo;
 import com.onetwo.webservice.common.uri.CommentServiceURI;
+import com.onetwo.webservice.dto.AccessTokenDto;
 import com.onetwo.webservice.dto.Slice;
 import com.onetwo.webservice.dto.comment.*;
 import com.onetwo.webservice.utils.SenderUtils;
@@ -77,6 +78,68 @@ public class CommentServiceImpl implements CommentService{
                         senderUtils.getAccessTokenHeader(registerCommentRequestDto),
                         registerLikeRequest,
                         new ParameterizedTypeReference<RegisterCommentResponse>() {
+                        });
+
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<DeleteCommentResponse> deleteComment(Long commentId, AccessTokenDto accessTokenDto) {
+        String requestUri = propertiesInfo.getApiGateway().getHost();
+
+        requestUri += CommentServiceURI.COMMENT_ROOT;
+
+        requestUri += "/" + commentId;
+
+        ResponseEntity<DeleteCommentResponse> response =
+                senderUtils.send(
+                        HttpMethod.DELETE,
+                        requestUri,
+                        senderUtils.getAccessTokenHeader(accessTokenDto),
+                        null,
+                        new ParameterizedTypeReference<DeleteCommentResponse>() {
+                        });
+
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<UpdateCommentResponse> updateComment(Long commentId, UpdateCommentRequestDto updateCommentRequestDto) {
+        String requestUri = propertiesInfo.getApiGateway().getHost();
+
+        requestUri += CommentServiceURI.COMMENT_ROOT;
+
+        requestUri += "/" + commentId;
+
+        UpdateCommentRequest updateCommentRequest = new UpdateCommentRequest(updateCommentRequestDto.getContent());
+
+        ResponseEntity<UpdateCommentResponse> response =
+                senderUtils.send(
+                        HttpMethod.PUT,
+                        requestUri,
+                        senderUtils.getAccessTokenHeader(updateCommentRequestDto),
+                        updateCommentRequest,
+                        new ParameterizedTypeReference<UpdateCommentResponse>() {
+                        });
+
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<CommentDetailResponse> findCommentsDetail(Long commentId) {
+        String requestUri = propertiesInfo.getApiGateway().getHost();
+
+        requestUri += CommentServiceURI.COMMENT_ROOT;
+
+        requestUri += "/" + commentId;
+
+        ResponseEntity<CommentDetailResponse> response =
+                senderUtils.send(
+                        HttpMethod.GET,
+                        requestUri,
+                        null,
+                        null,
+                        new ParameterizedTypeReference<CommentDetailResponse>() {
                         });
 
         return response;
