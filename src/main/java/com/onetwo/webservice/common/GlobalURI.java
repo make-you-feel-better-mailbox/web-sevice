@@ -43,4 +43,7 @@ public class GlobalURI {
 
     public static final String PATH_VARIABLE_TARGET_ID = "target-id";
     public static final String PATH_VARIABLE_TARGET_ID_WITH_BRACE = "/{" + PATH_VARIABLE_TARGET_ID + "}";
+
+    public static final String PATH_VARIABLE_COMMENT_ID = "comment-id";
+    public static final String PATH_VARIABLE_COMMENT_ID_WITH_BRACE = "/{" + PATH_VARIABLE_COMMENT_ID + "}";
 }

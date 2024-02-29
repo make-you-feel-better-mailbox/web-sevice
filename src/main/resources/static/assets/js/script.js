@@ -89,6 +89,12 @@ function checkTokenExpired(){
                     reissueAccessToken();
                 }
 
+            } else if (response.status.toString().startsWith('4')) {
+                allTokenExpired();
+
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
             } else {
                 let errorModal = $("#errorModal");
 
@@ -161,8 +167,6 @@ function myConfirm(content, callbackFunction){
     UIkit.modal(confirmModal).show();
 
     $('#confirmModalOkBtn').click(function() {
-        console.log("나 실행");
-
         callbackFunction();
     });
 }

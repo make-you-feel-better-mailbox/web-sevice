@@ -433,16 +433,21 @@ function getCommentList(postingId){
     });
 }
 
-function getCommentContent(commentId,userId, content){
+function getCommentContent(commentId, userId, content){
     let realContent = content.replace(/\n/g, "<br>");
+
+    const isUserCommentWriter = window.localStorage.getItem(userIdString) === userId;
 
     let commentContent = '<div class="flex items-start gap-3 relative" id="commentId'+ commentId +'">'
                             +         '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
-                            +         '<div class="flex-1">'
+                            +         '<div class="flex-1" id="commentContentDiv'+ commentId +'">'
                             +             '<a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> '+ userId +' </a>'
-                            +             '<p class="mt-0.5">'+ realContent +'</p>'
-                            +         '</div>'
-                            +     '</div>';
+                            +             '<p class="mt-0.5" id="commentContentText'+ commentId +'">'+ realContent +'</p>'
+                            +         '</div>';
+
+    commentContent += isUserCommentWriter ? getCommentDropdownTemplate(commentId) : '';
+
+    commentContent += '</div>';
     return commentContent;
 }
 
@@ -640,6 +645,144 @@ function deletePosting(postingId){
             success: function(response){
                 if(response.isDeleteSuccess){
                     $("#postingId" + postingId).remove();
+
+                    UIkit.notification(successNotification);
+                }
+            },
+            complete: function(response){
+            },
+            error: function(response){
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
+            }
+        });
+    });
+}
+
+function getCommentDropdownTemplate(commentId){
+    const dropdownTemplate = '<div class="-mr-1">'
+                                    +'<button type="button" class="button__ico w-8 h-8" aria-haspopup="true" aria-expanded="false"> <ion-icon class="text-xl md hydrated" name="ellipsis-horizontal" role="img" aria-label="ellipsis horizontal"></ion-icon> </button>'
+                                    +     '<div class="w-[245px] uk-dropdown" id="ukDropDownComment'+ commentId +'" uk-dropdown="pos: bottom-right; animation: uk-animation-scale-up uk-transform-origin-top-right; animate-out: true; mode: click">'
+                                    +         '<nav>'
+                                    +             '<a onclick="updateComment('+ commentId +')" class="notWorkA"> <ion-icon class="text-xl shrink-0 md hydrated" name="pencil-outline" role="img" aria-label="bookmark outline"></ion-icon> Update Comment </a>'
+                                    +             '<a onclick="deleteComment('+ commentId +')"  class="text-red-400 hover:!bg-red-50 dark:hover:!bg-red-500/50 notWorkA"> <ion-icon class="text-xl shrink-0 md hydrated" name="trash-outline" role="img" aria-label="stop circle outline"></ion-icon> Delete </a>';
+                                    +         '</nav>'
+                                    +     '</div>'
+                                    + '</div>';
+    return dropdownTemplate;
+}
+
+function updateComment(commentId) {
+    UIkit.dropdown($("#ukDropDownComment" + commentId)).hide(0);
+
+    const updateTextArea = '<div class="flex items-center gap-1 dark:border-slate-700/40" id="updateCommentContentDiv'+ commentId +'">'
+                                 +      '<div class="flex-1 relative overflow-hidden h-10">'
+                                 +      '<textarea id="updateCommentContent'+ commentId +'" placeholder="Update Comment..." rows="1" class="w-full resize-none !bg-transparent px-4 py-2 focus:!border-transparent focus:!ring-transparent" aria-haspopup="true" aria-expanded="false"></textarea></div>'
+                                 +      '<button type="button" onClick="updateCommentRequest('+ commentId +')" class="text-sm rounded-full py-1.5 px-3.5 bg-secondery"> Replay </button>'
+                                 + '</div>';
+
+    $("#commentContentText" + commentId).remove();
+
+    $("#commentContentDiv" + commentId).append(updateTextArea);
+
+    $.ajax({
+        url: commentUri + "/" + commentId,
+        method: "GET",
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            if(response != null){
+                $("#updateCommentContent" + commentId).val(response.content);
+            }
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
+}
+
+function updateCommentRequest(commentId){
+    let requestContent = $("#updateCommentContent" + commentId).val();
+
+    if (requestContent == null || requestContent === ""){
+        alert("내용을 입력해주세요");
+        return null;
+    }
+    
+    let formObj = {
+        "accessToken" : window.localStorage.getItem(accessTokenString),
+        "content" : requestContent
+    };
+
+    let successNotification = {
+        message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="checkmark-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> Update Comment successfully done! </div> </div>',
+        pos: 'top-center',
+        timeout: '6000'
+    }
+
+    $.ajax({
+        url: commentUri + "/" + commentId,
+        method: "PUT",
+        data: JSON.stringify(formObj),
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            if(response.isUpdateSuccess){
+                UIkit.notification(successNotification);
+
+                $("#updateCommentContentDiv" + commentId).remove();
+
+                let content = '<p class="mt-0.5" id="commentContentText'+ commentId +'">'+ requestContent.replace(/\n/g, "<br>") +'</p>'
+
+                $("#commentContentDiv" + commentId).append(content);
+            }
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
+}
+
+function deleteComment(commentId) {
+    UIkit.dropdown($("#ukDropDownComment" + commentId)).hide(0);
+
+    myConfirm("정말 삭제하시겠습니까?", function () {
+        checkTokenExpired();
+
+        let formObj = {
+            "accessToken": window.localStorage.getItem(accessTokenString)
+        };
+
+        let successNotification = {
+            message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="checkmark-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> Delete Comment successfully done! </div> </div>',
+            pos: 'top-center',
+            timeout: '6000'
+        }
+
+        $.ajax({
+            url: commentUri + "/" + commentId,
+            method: "DELETE",
+            data: JSON.stringify(formObj),
+            dataType: "JSON",
+            contentType: 'application/json',
+            beforeSend: function(request) {
+            },
+            success: function(response){
+                if(response.isDeleteSuccess){
+                    $("#commentId" + commentId).remove();
 
                     UIkit.notification(successNotification);
                 }
