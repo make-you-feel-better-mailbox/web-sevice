@@ -27,6 +27,8 @@ public class GlobalURI {
     public static final String REGISTER_ROOT = ROOT_URI + "register";
     public static final String TOKEN_ROOT = "token";
 
+    public static final String USER_PW = USER_ROOT + "/pw";
+
     public static final String POSTING_ROOT = ROOT_URI + "postings";
     public static final String POSTING_FILTER = POSTING_ROOT + "/filter";
 
@@ -46,4 +48,10 @@ public class GlobalURI {
 
     public static final String PATH_VARIABLE_COMMENT_ID = "comment-id";
     public static final String PATH_VARIABLE_COMMENT_ID_WITH_BRACE = "/{" + PATH_VARIABLE_COMMENT_ID + "}";
+
+    public static final String MY_FEED_URI = FEED_ROOT + "/my-feed";
+
+    public static final String MAIL_BOX_URI = ROOT_URI + "mail-boxes";
+
+    public static final String MY_ACCOUNT_URI = ROOT_URI + "my-account";
 }

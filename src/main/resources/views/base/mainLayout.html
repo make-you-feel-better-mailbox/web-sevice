@@ -92,6 +92,7 @@
             <!-- Start Content-->
             <div th:replace=":: content"></div>
             <!-- container -->
+            <div th:replace="base/chatbox :: chat-box"></div>
         </div>
         <!-- Content End-->
     </div>
@@ -104,7 +105,7 @@
 <th:block th:replace=":: scripts"></th:block>
 <th:block>
     <script th:inline="javascript">
-        let userDetailRequestUri = /*[[@{${GlobalURI.USER_ROOT}}]]*/;
+        let userRequestUri = /*[[@{${GlobalURI.USER_ROOT}}]]*/;
         let accessTokenExpired = /*[[@{${JwtCode.ACCESS_TOKEN_EXPIRED}}]]*/;
         let refreshTokenExpired = /*[[@{${JwtCode.REFRESH_TOKEN_EXPIRED}}]]*/;
         let rootUri = /*[[@{${GlobalURI.ROOT_URI}}]]*/;
@@ -123,7 +124,7 @@
                 $('#headerIcons').append('<button class="button bg-secondery dark:text-white" onclick="redirectToUri(\'' + registerUri + '\')">Sign Up</button>');
                 $('#headerIcons').append('<button class="button bg-primary-soft text-primary dark:text-white" onclick="redirectToUri(\'' + loginUri + '\')">Sign in</button>');
             } else {
-                let requestEndPoint = userDetailRequestUri + "/" + accessToken;
+                let requestEndPoint = userRequestUri + "/" + accessToken;
 
                 checkTokenExpired();
             }
@@ -134,9 +135,33 @@
         }
 
         function logout(){
+            let accessToken = window.localStorage.getItem(accessTokenString);
+
             window.localStorage.removeItem(accessTokenString);
             window.localStorage.removeItem(refreshTokenString);
             window.localStorage.removeItem(userIdString)
+
+            $.ajax({
+                url: loginUri + "/" + accessToken,
+                method: "DELETE",
+                dataType: "JSON",
+                contentType: 'application/json',
+                beforeSend: function(request) {
+                },
+                success: function(response){
+                    goRootUri();
+                },
+                complete: function(response){
+                },
+                error: function(response){
+                    let errorModal = $("#errorModal");
+
+                    UIkit.modal(errorModal).show();
+                }
+            });
+        }
+
+        function goRootUri(){
             location.href = rootUri;
         }
 

@@ -9,4 +9,5 @@ public class UserServiceURI {
     public static final String USER_ID = USER_ROOT + "/id";
     public static final String TOKEN = USER_SERVICE_ROOT + "/token";
     public static final String TOKEN_REFRESH = TOKEN + "/refresh";
+    public static final String USER_PW = USER_ROOT + "/pw";
 }

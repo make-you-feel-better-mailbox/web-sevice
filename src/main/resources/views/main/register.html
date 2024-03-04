@@ -379,17 +379,9 @@
             registerUserRequest();
         });
 
-        function checkEmpty(value){
-            return value == null || value == "";
-        }
-
-        function checkValidation(pattern, value){
-            return !pattern.test(value);
-        }
-
         function registerUserRequest(){
-            var formData = $("#userRegisterForm").serializeArray();
-            var formObj = {};
+            let formData = $("#userRegisterForm").serializeArray();
+            let formObj = {};
 
             $.map(formData, function(n, i){
                 formObj[n['name']] = n['value'];

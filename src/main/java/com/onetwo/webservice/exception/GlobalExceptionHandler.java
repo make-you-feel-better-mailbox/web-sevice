@@ -41,6 +41,12 @@ public class GlobalExceptionHandler {
         return handleView(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ModelAndView badRequestException(BadRequestException e) {
+        log.info("BadRequestException", e);
+        return handleView(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(NotExpectResultException.class)
     public ModelAndView notExpectResultException(Exception e) {
         log.error("NotExpectResultException", e);
@@ -67,7 +73,7 @@ public class GlobalExceptionHandler {
             log.info("Token validation fail = {}", tokenValidationResult);
             return handleView(tokenValidationResult, HttpStatus.valueOf(e.getStatusCode().value()));
         }
-        return handleView(e.getMessage(), HttpStatus.valueOf(e.getStatusCode().value()));
+        return handleView(e.getResponseBodyAsString(), HttpStatus.valueOf(e.getStatusCode().value()));
     }
 
     private ModelAndView handleView(Object response, HttpStatus httpStatus) {
