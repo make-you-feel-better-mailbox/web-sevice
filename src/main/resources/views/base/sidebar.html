@@ -14,7 +14,7 @@
             <nav id="side">
                 <ul>
                     <li class="active">
-                        <a href="feed.html">
+                        <a th:href="${GlobalURI.ROOT_URI}">
                             <img th:src="@{/assets/images/icons/home.png}" alt="feeds" class="w-6">
                             <span> Feed </span>
                         </a>
@@ -109,33 +109,6 @@
 
             </nav>
 
-            <div class="font-medium text-sm text-black border-t pt-3 mt-2 dark:text-white dark:border-slate-800">
-                <div class="px-3 pb-2 text-sm font-medium">
-                    <div class="text-black dark:text-white">Shortcut</div>
-                </div>
-                <a href="#">
-                    <div class="flex items-center gap-2 p-3 px-4 rounded-xl hover:bg-secondery">
-                        <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt=""
-                             class="w-6 rounded-full object-cover">
-                        <div> Marin Gray</div>
-                    </div>
-                </a>
-                <a href="#">
-                    <div class="flex items-center gap-2 p-3 px-4 rounded-xl hover:bg-secondery">
-                        <img th:src="@{/assets/images/avatars/avatar-7.jpg}" alt=""
-                             class="w-6 rounded-full object-cover">
-                        <div> Alexa Stella</div>
-                    </div>
-                </a>
-                <a href="#">
-                    <div class="flex items-center gap-2 p-3 px-4 rounded-xl hover:bg-secondery">
-                        <img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt=""
-                             class="w-6 rounded-full object-cover">
-                        <div> Sarah Ali</div>
-                    </div>
-                </a>
-            </div>
-
             <nav id="side"
                  class="font-medium text-sm text-black border-t pt-3 mt-2 dark:text-white dark:border-slate-800">
                 <div class="px-3 pb-2 text-sm font-medium">
@@ -157,44 +130,6 @@
                             <span> Setting </span>
                         </a>
                     </li>
-                    <li>
-                        <a href="upgrade.html">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/>
-                            </svg>
-                            <span> Upgrade </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="form-login.html">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/>
-                            </svg>
-                            <span>   Authentication   </span>
-                        </a>
-                    </li>
-                    <li class="uk-parent">
-                        <a href="#" class="group">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/>
-                            </svg>
-                            <span>  Development   </span>
-                            <ion-icon name="chevron-down"
-                                      class="text-base ml-auto duration-200 group-aria-expanded:rotate-180"></ion-icon>
-                        </a>
-                        <ul class="pl-10 my-1 space-y-0 text-sm">
-                            <li><a href="components.html" class="!py-2 !rounded -md">Elements</a></li>
-                            <li><a href="components.html" class="!py-2 !rounded -md">Components</a></li>
-                            <li><a href="components.html" class="!py-2 !rounded -md">Icons</a></li>
-                        </ul>
-                    </li>
-
                 </ul>
 
             </nav>
@@ -206,7 +141,7 @@
                 <a href="#" class="hover:underline">Careers</a>
                 <a href="#" class="hover:underline">Support</a>
                 <a href="#" class="hover:underline">Contact Us </a>
-                <a href="#" class="hover:underline">Developer</a>
+                <a href="https://github.com/12OneTwo12" class="hover:underline">Developer : 12OneTwo12</a>
             </div>
 
         </div>

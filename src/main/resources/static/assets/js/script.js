@@ -61,7 +61,7 @@ if (this.files[0] ) {
 function checkTokenExpired(){
     let accessToken = window.localStorage.getItem(accessTokenString);
 
-    let requestEndPoint = userDetailRequestUri + "/" + accessToken;
+    let requestEndPoint = userRequestUri + "/" + accessToken;
 
     $.ajax({
         url: requestEndPoint,
@@ -176,3 +176,11 @@ $("#confirmModalCancelBtn").on("click", function (){
 
     UIkit.modal(confirmModal).hide();
 });
+
+function checkEmpty(value){
+    return value == null || value == "";
+}
+
+function checkValidation(pattern, value){
+    return !pattern.test(value);
+}

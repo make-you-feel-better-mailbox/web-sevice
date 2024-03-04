@@ -16,4 +16,10 @@ public interface UserService {
     ResponseEntity<UserDetailResponse> getUserDetailInfo(String accessToken);
 
     ResponseEntity<ReissuedTokenDto> reissueAccessTokenByRefreshToken(ReissueTokenRequest reissueTokenRequest);
+
+    ResponseEntity<UserDetailResponse> updateUser(UpdateUserRequestDto updateUserRequestDto);
+
+    ResponseEntity<LogoutResponse> logoutUser(String accessToken);
+
+    ResponseEntity<UpdateUserPasswordResponse> updatePassword(UpdateUserPasswordRequestDto updateUserPasswordRequestDto);
 }

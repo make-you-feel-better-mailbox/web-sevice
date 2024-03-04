@@ -42,6 +42,12 @@ public class UserController {
         return userService.loginUser(loginUserRequest);
     }
 
+    @DeleteMapping(GlobalURI.LOGIN_ROOT + GlobalURI.PATH_VARIABLE_ACCESS_TOKEN_WITH_BRACE)
+    @ResponseBody
+    public ResponseEntity<LogoutResponse> logoutUser(@PathVariable(GlobalStatus.ACCESS_TOKEN) String accessToken) {
+        return userService.logoutUser(accessToken);
+    }
+
     @GetMapping(GlobalURI.USER_ID + "/{user-id}")
     @ResponseBody
     public ResponseEntity<UserIdExistCheckDto> userIdExistCheck(@PathVariable("user-id") String userId) {
@@ -58,5 +64,17 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<ReissuedTokenDto> reissueAccessTokenByRefreshToken(@RequestBody @Valid ReissueTokenRequest reissueTokenRequest) {
         return userService.reissueAccessTokenByRefreshToken(reissueTokenRequest);
+    }
+
+    @PutMapping(GlobalURI.USER_ROOT)
+    @ResponseBody
+    public ResponseEntity<UserDetailResponse> updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto) {
+        return userService.updateUser(updateUserRequestDto);
+    }
+
+    @PutMapping(GlobalURI.USER_PW)
+    @ResponseBody
+    public ResponseEntity<UpdateUserPasswordResponse> updatePassword(@RequestBody UpdateUserPasswordRequestDto updateUserPasswordRequestDto){
+        return userService.updatePassword(updateUserPasswordRequestDto);
     }
 }
