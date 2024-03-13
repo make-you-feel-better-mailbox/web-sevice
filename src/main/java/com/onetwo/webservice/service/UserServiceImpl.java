@@ -77,6 +77,26 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    @Override
+    public UserInfoResponse getUserInfo(String userId) {
+        String requestUri = propertiesInfo.getApiGateway().getHost();
+
+        requestUri += UserServiceURI.USER_ROOT;
+
+        requestUri += "/" + userId;
+
+        ResponseEntity<UserInfoResponse> response =
+                senderUtils.send(
+                        HttpMethod.GET,
+                        requestUri,
+                        null,
+                        null,
+                        new ParameterizedTypeReference<UserInfoResponse>() {
+                        });
+
+        return response.getBody();
+    }
+
     private boolean isNewPasswordNotEqualsWithNewPasswordCheck(UpdateUserPasswordRequestDto updateUserPasswordRequestDto) {
         return !updateUserPasswordRequestDto.getNewPassword().equals(updateUserPasswordRequestDto.getNewPasswordCheck());
     }

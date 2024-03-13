@@ -743,7 +743,7 @@
         let isLastPage = false;
 
         $(document).ready(function(){
-            getPosting(postPageNumber);
+            getPosting();
 
             sendAjaxRequestIfVisible();
 
@@ -837,7 +837,7 @@
             // 마지막 요청 후 3초가 지났고, 스크롤이 80% 이상인 경우에만 요청을 처리
             if (now - lastRequestTime > 3000 && scrollPercent > 80) {
                 lastRequestTime = now; // 마지막 요청 시간 갱신
-                getPosting(postPageNumber);
+                getPosting();
                 sendAjaxRequestIfVisible();
             }
         });

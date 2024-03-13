@@ -48,6 +48,55 @@ function getPosting(){
     });
 }
 
+function getMyPosting(userId){
+    let pageSize = 5;
+
+    let formObject = {
+        "pageNumber" : postPageNumber,
+        "pageSize" : pageSize,
+        "userId" : userId
+    }
+
+    $.ajax({
+        url: postingFilterUri,
+        method: "GET",
+        data: formObject,
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            $('#postingPlaceHolder').remove();
+
+            if(response != null && response.content != null && response.content.length > 0){
+                response.content.forEach(function(element, index){
+                    if($("#postingId" + element.postingId).length === 0){
+                        let postingTemplate = getPostingTemplate(element.userId,
+                            element.content,
+                            element.postedDate,
+                            element.postingId);
+
+                        $('#feed').append(postingTemplate);
+                    }
+                })
+
+                isLastPage = response.last;
+
+                if(response.content.length === pageSize) postPageNumber = postPageNumber + 1;
+
+                if (!isLastPage) $('#feed').append(getPlaceHolder());
+            }
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
+}
+
 function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
     const dateString = insertDateTime;
 
@@ -192,9 +241,11 @@ function likePostingRequest(postingId){
         complete: function(response){
         },
         error: function(response){
-            let errorModal = $("#errorModal");
+            if(!response.status.toString().startsWith('4')){
+                let errorModal = $("#errorModal");
 
-            UIkit.modal(errorModal).show();
+                UIkit.modal(errorModal).show();
+            }
         }
     });
 }
@@ -242,9 +293,11 @@ function deleteLikeRequest(postingId){
         complete: function(response){
         },
         error: function(response){
-            let errorModal = $("#errorModal");
+            if(!response.status.toString().startsWith('4')){
+                let errorModal = $("#errorModal");
 
-            UIkit.modal(errorModal).show();
+                UIkit.modal(errorModal).show();
+            }
         }
     });
 }
