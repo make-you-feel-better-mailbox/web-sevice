@@ -73,6 +73,14 @@ public class SenderUtils {
         return retrieve(method, uri, jsonData, makeHeader(header), responseClass);
     }
 
+    public <T> ResponseEntity<T> sendWithHeader(HttpMethod method, String uri, HttpHeaders header, Object jsonData, ParameterizedTypeReference<T> responseClass) {
+        Consumer<HttpHeaders> headerConsumer = headers -> {};
+
+        headerConsumer.accept(header);
+
+        return retrieve(method, uri, jsonData, headerConsumer, responseClass);
+    }
+
     /**
      * Make http header
      *

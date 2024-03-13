@@ -21,6 +21,10 @@ public class GlobalURI {
 
     public static final String LOGIN_ROOT = ROOT_URI + "login";
 
+    public static final String OAUTH_ROOT = LOGIN_ROOT + "/oauth2";
+
+    public static final String GOOGLE_LOGIN = OAUTH_ROOT + "/code";
+
     public static final String USER_ROOT = ROOT_URI + "users";
     public static final String USER_ID = USER_ROOT + "/id";
 

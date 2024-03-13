@@ -1,6 +1,6 @@
 package com.onetwo.webservice.config;
 
-import com.onetwo.webservice.common.PropertiesInfo;
+import com.onetwo.webservice.common.properties.PropertiesInfo;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @EnableConfigurationProperties(PropertiesInfo.class)

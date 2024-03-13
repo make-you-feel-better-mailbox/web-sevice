@@ -49,7 +49,7 @@
                             uk-switcher="connect: #setting_tab ; animation: uk-animation-slide-right-medium, uk-animation-slide-left-medium">
 
                             <li class="w-auto pr-2.5"> <a href="#"> Description </a> </li>
-                            <li class="w-auto pr-2.5"> <a href="#"> Password </a> </li>
+                            <li class="w-auto pr-2.5" id="changePasswordLi"> <a href="#"> Password </a> </li>
 
                         </ul>
 
@@ -113,7 +113,7 @@
                     </div>
 
                     <!-- tab password-->
-                    <div>
+                    <div id="changePasswordDiv">
 
                         <div>
                             <form id="updatePasswordForm">
@@ -202,6 +202,12 @@
                     $('#nickname').val(response.nickname);
                     $('#email').val(response.email);
                     $('#phoneNumber').val(response.phoneNumber);
+
+                    if (response.oauth){
+                        $("#changePasswordLi").remove();
+                        $("#changePasswordDiv").remove();
+                        $('#email').prop("readonly", true);
+                    }
                 },
                 complete: function(response){
                 },

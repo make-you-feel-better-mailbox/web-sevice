@@ -114,6 +114,17 @@
         let tokenUri = /*[[@{${GlobalURI.TOKEN_ROOT}}]]*/;
 
         $(document).ready(function(){
+            let accessTokenResponse = /*[[@{${accessToken}}]]*/;
+            let refreshTokenResponse = /*[[@{${refreshToken}}]]*/;
+
+            if (accessTokenResponse != null && accessTokenResponse !== ""){
+                window.localStorage.setItem(accessTokenString, accessTokenResponse);
+            }
+
+            if (refreshTokenResponse != null && refreshTokenResponse !== ""){
+                window.localStorage.setItem(refreshTokenString, refreshTokenResponse);
+            }
+
             let accessToken = window.localStorage.getItem(accessTokenString);
             let refreshToken = window.localStorage.getItem(refreshTokenString);
 
