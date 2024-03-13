@@ -1,4 +1,4 @@
-package com.onetwo.webservice.common;
+package com.onetwo.webservice.common.properties;
 
 import lombok.Getter;
 import lombok.Setter;

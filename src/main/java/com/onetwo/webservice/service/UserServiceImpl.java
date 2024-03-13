@@ -1,11 +1,10 @@
 package com.onetwo.webservice.service;
 
 import com.onetwo.webservice.common.GlobalStatus;
-import com.onetwo.webservice.common.PropertiesInfo;
+import com.onetwo.webservice.common.properties.PropertiesInfo;
 import com.onetwo.webservice.common.uri.UserServiceURI;
 import com.onetwo.webservice.dto.token.ReissueTokenRequest;
 import com.onetwo.webservice.dto.token.ReissuedTokenDto;
-import com.onetwo.webservice.dto.token.TokenResponse;
 import com.onetwo.webservice.dto.user.*;
 import com.onetwo.webservice.exception.BadRequestException;
 import com.onetwo.webservice.utils.SenderUtils;
@@ -49,46 +48,6 @@ public class UserServiceImpl implements UserService {
                         && StringUtils.hasText(response.getBody().userId());
 
         return ResponseEntity.status(response.getStatusCode()).body(new UserRegisterResponse(isRegisterSuccess));
-    }
-
-    @Override
-    public ResponseEntity<TokenResponse> loginUser(LoginUserRequest loginUserRequest) {
-        String requestUri = propertiesInfo.getApiGateway().getHost();
-
-        requestUri += UserServiceURI.USER_LOGIN;
-
-        ResponseEntity<TokenResponse> response =
-                senderUtils.send(
-                        HttpMethod.POST,
-                        requestUri,
-                        null,
-                        loginUserRequest,
-                        new ParameterizedTypeReference<TokenResponse>() {
-                        });
-
-        return response;
-    }
-
-    @Override
-    public ResponseEntity<LogoutResponse> logoutUser(String accessToken) {
-        String requestUri = propertiesInfo.getApiGateway().getHost();
-
-        requestUri += UserServiceURI.USER_LOGIN;
-
-        Map<String, String> headers = new HashMap<>();
-
-        headers.put(GlobalStatus.ACCESS_TOKEN, accessToken);
-
-        ResponseEntity<LogoutResponse> response =
-                senderUtils.send(
-                        HttpMethod.DELETE,
-                        requestUri,
-                        headers,
-                        null,
-                        new ParameterizedTypeReference<LogoutResponse>() {
-                        });
-
-        return response;
     }
 
     @Override
@@ -187,7 +146,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<UserDetailResponse> updateUser(UpdateUserRequestDto updateUserRequestDto) {
+    public ResponseEntity<UpdateUserResponse> updateUser(UpdateUserRequestDto updateUserRequestDto) {
         ResponseEntity<UserDetailResponse> userDetailResponse = getUserDetailResponseResponse(updateUserRequestDto.getAccessToken());
 
         UserDetailResponse userDetail = userDetailResponse.getBody();
@@ -201,13 +160,13 @@ public class UserServiceImpl implements UserService {
 
         UpdateUserRequest updateUserRequest = new UpdateUserRequest(newNickName, newEmail, updateUserRequestDto.getPhoneNumber());
 
-        ResponseEntity<UserDetailResponse> response =
+        ResponseEntity<UpdateUserResponse> response =
                 senderUtils.send(
                         HttpMethod.PUT,
                         requestUri,
                         senderUtils.getAccessTokenHeader(updateUserRequestDto),
                         updateUserRequest,
-                        new ParameterizedTypeReference<UserDetailResponse>() {
+                        new ParameterizedTypeReference<UpdateUserResponse>() {
                         });
 
         return response;

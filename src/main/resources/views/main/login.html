@@ -11,9 +11,9 @@
                  uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
 
                 <!-- logo image-->
-                <a href="#"> <img th:src="@{/assets/images/logo.png}" class="w-28 absolute top-10 left-10 dark:hidden"
+                <a th:href="${GlobalURI.ROOT_URI}"> <img th:src="@{/assets/images/logo.png}" class="w-28 absolute top-10 left-10 dark:hidden"
                                   alt=""></a>
-                <a href="#"> <img th:src="@{/assets/images/logo-light.png}"
+                <a th:href="${GlobalURI.ROOT_URI}"> <img th:src="@{/assets/images/logo-light.png}"
                                   class="w-28 absolute top-10 left-10 hidden dark:!block" alt=""></a>
 
                 <!-- logo icon optional -->
@@ -67,25 +67,25 @@
                         <button type="button" id="userLoginActionBtn" class="button bg-primary text-white w-full">Sign in</button>
                     </div>
 
-<!--                    <div class="text-center flex items-center gap-6">-->
-<!--                        <hr class="flex-1 border-slate-200 dark:border-slate-800">-->
-<!--                        Or continue with-->
-<!--                        <hr class="flex-1 border-slate-200 dark:border-slate-800">-->
-<!--                    </div>-->
+                    <div class="text-center flex items-center gap-6">
+                        <hr class="flex-1 border-slate-200 dark:border-slate-800">
+                        Or continue with
+                        <hr class="flex-1 border-slate-200 dark:border-slate-800">
+                    </div>
 
-<!--                    &lt;!&ndash; social login &ndash;&gt;-->
-<!--                    <div class="flex gap-2"-->
-<!--                         uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 400 ;repeat: true">-->
-<!--                        <a href="#" class="button flex-1 flex items-center gap-2 bg-primary text-white text-sm">-->
-<!--                            <ion-icon name="logo-facebook" class="text-lg"></ion-icon>-->
-<!--                            facebook </a>-->
+                    <!-- social login -->
+                    <div class="flex gap-2"
+                         uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 400 ;repeat: true">
+                        <a href="" class="button flex-1 flex items-center gap-2 bg-primary text-white text-sm" onclick="googleLogin()">
+                            <ion-icon name="logo-google" class="text-lg"></ion-icon>
+                            google </a>
 <!--                        <a href="#" class="button flex-1 flex items-center gap-2 bg-sky-600 text-white text-sm">-->
 <!--                            <ion-icon name="logo-twitter"></ion-icon>-->
 <!--                            twitter </a>-->
 <!--                        <a href="#" class="button flex-1 flex items-center gap-2 bg-black text-white text-sm">-->
-<!--                            <ion-icon name="logo-github"></ion-icon>-->
-<!--                            github </a>-->
-<!--                    </div>-->
+<!--                            <ion-icon name="logo-facebook"></ion-icon>-->
+<!--                            facebook </a>-->
+                    </div>
 
                 </form>
 
@@ -157,7 +157,11 @@
 <!-- Scripts -->
 <th:block th:fragment="scripts">
 
+    <script th:src="@{/assets/js/oauth_login.js}"></script>
+
     <script th:inline="javascript" th:fragment="scripts">
+        let oauthUri = /*[[@{${GlobalURI.OAUTH_ROOT}}]]*/;
+
         $(document).ready(function(){
 			$('#password').val('');
 			$('#loginFailText').text("");

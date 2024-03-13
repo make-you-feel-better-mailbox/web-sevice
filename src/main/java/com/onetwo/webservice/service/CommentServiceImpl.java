@@ -1,6 +1,6 @@
 package com.onetwo.webservice.service;
 
-import com.onetwo.webservice.common.PropertiesInfo;
+import com.onetwo.webservice.common.properties.PropertiesInfo;
 import com.onetwo.webservice.common.uri.CommentServiceURI;
 import com.onetwo.webservice.dto.AccessTokenDto;
 import com.onetwo.webservice.dto.Slice;

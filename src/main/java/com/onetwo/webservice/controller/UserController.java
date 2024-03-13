@@ -4,7 +4,6 @@ import com.onetwo.webservice.common.GlobalStatus;
 import com.onetwo.webservice.common.GlobalURI;
 import com.onetwo.webservice.dto.token.ReissueTokenRequest;
 import com.onetwo.webservice.dto.token.ReissuedTokenDto;
-import com.onetwo.webservice.dto.token.TokenResponse;
 import com.onetwo.webservice.dto.user.*;
 import com.onetwo.webservice.service.UserService;
 import jakarta.validation.Valid;
@@ -36,18 +35,6 @@ public class UserController {
         return userService.userRegister(registerUserRequest);
     }
 
-    @PostMapping(GlobalURI.LOGIN_ROOT)
-    @ResponseBody
-    public ResponseEntity<TokenResponse> loginUser(@RequestBody @Valid LoginUserRequest loginUserRequest) {
-        return userService.loginUser(loginUserRequest);
-    }
-
-    @DeleteMapping(GlobalURI.LOGIN_ROOT + GlobalURI.PATH_VARIABLE_ACCESS_TOKEN_WITH_BRACE)
-    @ResponseBody
-    public ResponseEntity<LogoutResponse> logoutUser(@PathVariable(GlobalStatus.ACCESS_TOKEN) String accessToken) {
-        return userService.logoutUser(accessToken);
-    }
-
     @GetMapping(GlobalURI.USER_ID + "/{user-id}")
     @ResponseBody
     public ResponseEntity<UserIdExistCheckDto> userIdExistCheck(@PathVariable("user-id") String userId) {
@@ -68,7 +55,7 @@ public class UserController {
 
     @PutMapping(GlobalURI.USER_ROOT)
     @ResponseBody
-    public ResponseEntity<UserDetailResponse> updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto) {
+    public ResponseEntity<UpdateUserResponse> updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto) {
         return userService.updateUser(updateUserRequestDto);
     }
 
