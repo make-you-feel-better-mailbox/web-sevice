@@ -810,7 +810,9 @@
                             let postingTemplate = getPostingTemplate(window.localStorage.getItem(userIdString),
                                 $('#content').val(),
                                 new Date().toISOString(),
-                                response.postingId);
+                                response.postingId,
+                                window.localStorage.getItem(userNicknameString)
+                            );
 
                             $('#feed').prepend(postingTemplate);
 

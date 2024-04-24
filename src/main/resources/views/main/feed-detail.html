@@ -535,11 +535,11 @@
         $(document).ready(function(){
             getMyPosting(userId);
 
-            let userNickName = /*[[@{${userInfo.nickname}}]]*/;
+            let userNickname = /*[[@{${userInfo.nickname}}]]*/;
 
             $("#nickName").remove();
 
-            let nickNameContent = '<h3 class="md:text-2xl text-lg font-bold text-black dark:text-white" id="nickname">'+ userNickName +'</h3>';
+            let nickNameContent = '<h3 class="md:text-2xl text-lg font-bold text-black dark:text-white" id="nickname">'+ userNickname +'</h3>';
 
             $("#nickNameArea").prepend(nickNameContent);
 
@@ -610,7 +610,9 @@
                             let postingTemplate = getPostingTemplate(window.localStorage.getItem(userIdString),
                                 $('#content').val(),
                                 new Date().toISOString(),
-                                response.postingId);
+                                response.postingId,
+                                window.localStorage.getItem(userNicknameString)
+                            );
 
                             $('#feed').prepend(postingTemplate);
 
