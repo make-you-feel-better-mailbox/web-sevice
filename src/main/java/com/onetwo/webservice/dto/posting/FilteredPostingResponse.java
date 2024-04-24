@@ -13,6 +13,8 @@ public class FilteredPostingResponse {
 
     private String userId;
 
+    private String userNickname;
+
     private String content;
 
     private Boolean mediaExist;

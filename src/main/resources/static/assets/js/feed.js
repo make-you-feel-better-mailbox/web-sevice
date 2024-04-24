@@ -25,7 +25,8 @@ function getPosting(){
                         let postingTemplate = getPostingTemplate(element.userId,
                             element.content,
                             element.postedDate,
-                            element.postingId);
+                            element.postingId,
+                            element.userNickname);
 
                         $('#feed').append(postingTemplate);
                     }
@@ -48,7 +49,57 @@ function getPosting(){
     });
 }
 
-function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
+function getMyPosting(userId){
+    let pageSize = 5;
+
+    let formObject = {
+        "pageNumber" : postPageNumber,
+        "pageSize" : pageSize,
+        "userId" : userId
+    }
+
+    $.ajax({
+        url: postingFilterUri,
+        method: "GET",
+        data: formObject,
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            $('#postingPlaceHolder').remove();
+
+            if(response != null && response.content != null && response.content.length > 0){
+                response.content.forEach(function(element, index){
+                    if($("#postingId" + element.postingId).length === 0){
+                        let postingTemplate = getPostingTemplate(element.userId,
+                            element.content,
+                            element.postedDate,
+                            element.postingId,
+                            element.userNickname);
+
+                        $('#feed').append(postingTemplate);
+                    }
+                })
+
+                isLastPage = response.last;
+
+                if(response.content.length === pageSize) postPageNumber = postPageNumber + 1;
+
+                if (!isLastPage) $('#feed').append(getPlaceHolder());
+            }
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
+}
+
+function getPostingTemplate(postingUserId, content, insertDateTime, postingId, postingUserNickname){
     const dateString = insertDateTime;
 
     const localDatetime = moment(dateString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm');
@@ -63,7 +114,7 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId){
                       + '<div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">'
                       +     '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="w-9 h-9 rounded-full"> </a>'
                       +     '<div class="flex-1">'
-                      +         '<a href="timeline.html"> <h4 class="text-black dark:text-white"> '+ postingUserId +' </h4> </a>'
+                      +         '<a href="timeline.html"> <h4 class="text-black dark:text-white"> '+ postingUserNickname +' </h4> </a>'
                       +         '<div class="text-xs text-gray-500 dark:text-white/80">'+ localDatetime +'</div>'
                       +     '</div>'
                       +     '<div class="-mr-1">'
@@ -192,9 +243,11 @@ function likePostingRequest(postingId){
         complete: function(response){
         },
         error: function(response){
-            let errorModal = $("#errorModal");
+            if(!response.status.toString().startsWith('4')){
+                let errorModal = $("#errorModal");
 
-            UIkit.modal(errorModal).show();
+                UIkit.modal(errorModal).show();
+            }
         }
     });
 }
@@ -242,9 +295,11 @@ function deleteLikeRequest(postingId){
         complete: function(response){
         },
         error: function(response){
-            let errorModal = $("#errorModal");
+            if(!response.status.toString().startsWith('4')){
+                let errorModal = $("#errorModal");
 
-            UIkit.modal(errorModal).show();
+                UIkit.modal(errorModal).show();
+            }
         }
     });
 }
@@ -408,7 +463,8 @@ function getCommentList(postingId){
                     if($("#commentId" + element.commentId).length === 0){
                         let commentTemplate = getCommentContent(element.commentId,
                             element.userId,
-                            element.content);
+                            element.content,
+                            element.userNickname);
 
                         $('#commentArea'+postingId).append(commentTemplate);
                     }
@@ -433,7 +489,7 @@ function getCommentList(postingId){
     });
 }
 
-function getCommentContent(commentId, userId, content){
+function getCommentContent(commentId, userId, content, userNickname){
     let realContent = content.replace(/\n/g, "<br>");
 
     const isUserCommentWriter = window.localStorage.getItem(userIdString) === userId;
@@ -441,7 +497,7 @@ function getCommentContent(commentId, userId, content){
     let commentContent = '<div class="flex items-start gap-3 relative" id="commentId'+ commentId +'">'
                             +         '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
                             +         '<div class="flex-1" id="commentContentDiv'+ commentId +'">'
-                            +             '<a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> '+ userId +' </a>'
+                            +             '<a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> '+ userNickname +' </a>'
                             +             '<p class="mt-0.5" id="commentContentText'+ commentId +'">'+ realContent +'</p>'
                             +         '</div>';
 
@@ -500,7 +556,9 @@ function registerComment(postingId){
                 if($("#commentId" + response.commentId).length === 0){
                     let commentTemplate = getCommentContent(response.commentId,
                         $('#userIdText').text(),
-                        commentContent);
+                        commentContent,
+                        window.localStorage.getItem(userNicknameString)
+                    );
 
                     $('#commentArea'+postingId).prepend(commentTemplate);
                 }

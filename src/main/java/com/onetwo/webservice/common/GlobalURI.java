@@ -19,6 +19,8 @@ public class GlobalURI {
 
     public static final String FEED_ROOT = ROOT_URI + "feed";
 
+    public static final String FEED_DETAIL = FEED_ROOT + "/details";
+
     public static final String LOGIN_ROOT = ROOT_URI + "login";
 
     public static final String OAUTH_ROOT = LOGIN_ROOT + "/oauth2";
@@ -27,6 +29,9 @@ public class GlobalURI {
 
     public static final String USER_ROOT = ROOT_URI + "users";
     public static final String USER_ID = USER_ROOT + "/id";
+
+    public static final String PATH_VARIABLE_USER_ID = "user-id";
+    public static final String PATH_VARIABLE_WITH_USER_ID = "/{" + PATH_VARIABLE_USER_ID + "}";
 
     public static final String REGISTER_ROOT = ROOT_URI + "register";
     public static final String TOKEN_ROOT = "token";
@@ -53,9 +58,11 @@ public class GlobalURI {
     public static final String PATH_VARIABLE_COMMENT_ID = "comment-id";
     public static final String PATH_VARIABLE_COMMENT_ID_WITH_BRACE = "/{" + PATH_VARIABLE_COMMENT_ID + "}";
 
-    public static final String MY_FEED_URI = FEED_ROOT + "/my-feed";
-
     public static final String MAIL_BOX_URI = ROOT_URI + "mail-boxes";
 
     public static final String MY_ACCOUNT_URI = ROOT_URI + "my-account";
+
+    public static final String FOLLOW_ROOT = ROOT_URI + "follow";
+
+    public static final String FOLLOW_COUNT = FOLLOW_ROOT + "/count";
 }

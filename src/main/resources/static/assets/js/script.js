@@ -1,6 +1,7 @@
 const accessTokenString = "accessToken";
 const refreshTokenString = "refreshToken";
 const userIdString = "userId";
+const userNicknameString = "userNicknameString"
 
 // On page load or when changing themes, best to add inline in `head` to avoid FOUC
 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -74,6 +75,7 @@ function checkTokenExpired(){
             $('#nicknameText').text(response.nickname);
             $('#userIdText').text(response.userId);
             window.localStorage.setItem(userIdString, response.userId);
+            window.localStorage.setItem(userNicknameString, response.nickname);
             $('#notificationsCount').text(0);
         },
         complete: function(response){
