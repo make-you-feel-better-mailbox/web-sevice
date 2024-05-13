@@ -736,6 +736,8 @@
         let commentCountUri = /*[[@{${GlobalURI.COMMENT_COUNT}}]]*/;
         let postingUri = /*[[@{${GlobalURI.POSTING_ROOT}}]]*/;
 
+        let accessTokenResponse = /*[[@{${accessToken}}]]*/;
+
         let lastRequestTime = 0;
 
         let postPageNumber = 0;
@@ -743,6 +745,10 @@
         let isLastPage = false;
 
         $(document).ready(function(){
+            if (accessTokenResponse != null && accessTokenResponse !== ""){
+                location.href = rootUri;
+            }
+
             getPosting();
 
             sendAjaxRequestIfVisible();

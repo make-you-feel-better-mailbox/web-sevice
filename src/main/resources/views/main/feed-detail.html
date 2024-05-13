@@ -55,23 +55,23 @@
                                     </svg>
                                     <span class="text-sm"> Chat  </span>
                                 </button>
-                                <button class="button bg-secondery flex items-center gap-2  py-2 px-3.5 max-lg:flex-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                                        <path d="M1 8.25a1.25 1.25 0 112.5 0v7.5a1.25 1.25 0 11-2.5 0v-7.5zM11 3V1.7c0-.268.14-.526.395-.607A2 2 0 0114 3c0 .995-.182 1.948-.514 2.826-.204.54.166 1.174.744 1.174h2.52c1.243 0 2.261 1.01 2.146 2.247a23.864 23.864 0 01-1.341 5.974C17.153 16.323 16.072 17 14.9 17h-3.192a3 3 0 01-1.341-.317l-2.734-1.366A3 3 0 006.292 15H5V8h.963c.685 0 1.258-.483 1.612-1.068a4.011 4.011 0 012.166-1.73c.432-.143.853-.386 1.011-.814.16-.432.248-.9.248-1.388z" />
-                                    </svg>
-                                    <span class="text-sm"> Like  </span>
-                                </button>
-                                <div>
+<!--                                <button class="button bg-secondery flex items-center gap-2  py-2 px-3.5 max-lg:flex-1">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">-->
+<!--                                        <path d="M1 8.25a1.25 1.25 0 112.5 0v7.5a1.25 1.25 0 11-2.5 0v-7.5zM11 3V1.7c0-.268.14-.526.395-.607A2 2 0 0114 3c0 .995-.182 1.948-.514 2.826-.204.54.166 1.174.744 1.174h2.52c1.243 0 2.261 1.01 2.146 2.247a23.864 23.864 0 01-1.341 5.974C17.153 16.323 16.072 17 14.9 17h-3.192a3 3 0 01-1.341-.317l-2.734-1.366A3 3 0 006.292 15H5V8h.963c.685 0 1.258-.483 1.612-1.068a4.011 4.011 0 012.166-1.73c.432-.143.853-.386 1.011-.814.16-.432.248-.9.248-1.388z" />-->
+<!--                                    </svg>-->
+<!--                                    <span class="text-sm"> Like  </span>-->
+<!--                                </button>-->
+                                <div id="moreBtn">
                                     <button type="button" class="rounded-lg bg-secondery flex px-2.5 py-2 dark:bg-dark2">
                                         <ion-icon name="ellipsis-horizontal" class="text-xl">
                                     </button>
                                     <div  class="w-[240px]" uk-dropdown="pos: bottom-right; animation: uk-animation-scale-up uk-transform-origin-top-right; animate-out: true; mode: click;offset:10">
                                         <nav>
-                                            <a href="#"> <ion-icon class="text-xl" name="pricetags-outline"></ion-icon> Unfollow </a>
-                                            <a href="#"> <ion-icon class="text-xl" name="share-outline"></ion-icon> Share  </a>
-                                            <a href="#"> <ion-icon class="text-xl" name="link-outline"></ion-icon>  Copy link </a>
-                                            <a href="#"> <ion-icon class="text-xl" name="chatbubble-ellipses-outline"></ion-icon>  Sort comments </a>
-                                            <a href="#"> <ion-icon class="text-xl" name="flag-outline"></ion-icon>  Report group</a>
+                                            <a href="#"> <ion-icon class="text-xl" name="pricetags-outline"></ion-icon> Follow </a>
+<!--                                            <a href="#"> <ion-icon class="text-xl" name="share-outline"></ion-icon> Share  </a>-->
+<!--                                            <a href="#"> <ion-icon class="text-xl" name="link-outline"></ion-icon>  Copy link </a>-->
+<!--                                            <a href="#"> <ion-icon class="text-xl" name="chatbubble-ellipses-outline"></ion-icon>  Sort comments </a>-->
+<!--                                            <a href="#"> <ion-icon class="text-xl" name="flag-outline"></ion-icon>  Report group</a>-->
                                             <hr>
                                             <a href="#" class="text-red-400 hover:!bg-red-50 dark:hover:!bg-red-500/50"> <ion-icon class="text-xl" name="stop-circle-outline"></ion-icon>  Block </a>
                                         </nav>
@@ -136,7 +136,6 @@
 <!--                                </svg>-->
 <!--                            </div>-->
                         </div>
-
                     </div>
 
                     <!-- placeholder -->
@@ -252,99 +251,6 @@
                             </div>
 
                         </div>
-
-                        <!-- related pages  -->
-                        <div class="box p-5 px-6">
-
-                            <div class="flex items-baseline justify-between text-black dark:text-white">
-                                <h3 class="font-bold text-base"> Pages you manage </h3>
-                                <a href="#" class="text-sm text-blue-500">See all</a>
-                            </div>
-
-                            <div class="side-list">
-
-                                <div class="side-list-item">
-                                    <a href="timeline-page.html">
-                                        <img th:src="@{/assets/images/avatars/avatar-4.jpg}" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline-page.html"><h4 class="side-list-title"> Martin Gray  </h4></a>
-                                        <div class="side-list-info"> 320k Following   </div>
-                                    </div>
-                                    <button class="button bg-secondery">edit</button>
-                                </div>
-                                <div class="side-list-item">
-                                    <a href="timeline-page.html">
-                                        <img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline-page.html"><h4 class="side-list-title"> Monroe Parker  </h4></a>
-                                        <div class="side-list-info"> 125k Following  </div>
-                                    </div>
-                                    <button class="button bg-secondery">edit</button>
-                                </div>
-                                <div class="side-list-item">
-                                    <a href="timeline-page.html">
-                                        <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline-page.html"><h4 class="side-list-title"> John Michael  </h4></a>
-                                        <div class="side-list-info"> 320k Following   </div>
-                                    </div>
-                                    <button class="button bg-secondery">edit</button>
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
-                        <!-- related pages  -->
-                        <div class="box p-5 px-6">
-
-                            <div class="flex items-baseline justify-between text-black dark:text-white">
-                                <h3 class="font-bold text-base"> Suggested pages </h3>
-                                <a href="#" class="text-sm text-blue-500">See all</a>
-                            </div>
-
-                            <div class="side-list">
-
-                                <div class="side-list-item">
-                                    <a href="timeline-page.html">
-                                        <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline-page.html"><h4 class="side-list-title"> James Lewis  </h4></a>
-                                        <div class="side-list-info"> 192k Following   </div>
-                                    </div>
-                                    <button class="button border">Follow</button>
-                                </div>
-                                <div class="side-list-item">
-                                    <a href="timeline-page.html">
-                                        <img th:src="@{/assets/images/avatars/avatar-4.jpg}" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline-page.html"><h4 class="side-list-title"> Martin Gray  </h4></a>
-                                        <div class="side-list-info"> 320k Following   </div>
-                                    </div>
-                                    <button class="button border">Follow</button>
-                                </div>
-                                <div class="side-list-item">
-                                    <a href="timeline-page.html">
-                                        <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline-page.html"><h4 class="side-list-title"> John Michael  </h4></a>
-                                        <div class="side-list-info"> 260k Following </div>
-                                    </div>
-                                    <button class="button border">Follow</button>
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
                     </div>
 
                 </div>
@@ -533,6 +439,11 @@
         let isLastPage = false;
 
         $(document).ready(function(){
+            if (userId !== window.localStorage.getItem(userIdString)) {
+                $("#postPostingBox").remove();
+                $("#moreBtn").remove();
+            }
+
             getMyPosting(userId);
 
             let userNickname = /*[[@{${userInfo.nickname}}]]*/;
