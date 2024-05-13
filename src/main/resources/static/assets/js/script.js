@@ -148,6 +148,8 @@ function allTokenExpired(){
     alert("로그인 시간이 만료됐습니다. 다시 로그인해주세요.");
     window.localStorage.removeItem(accessTokenString);
     window.localStorage.removeItem(refreshTokenString);
+    window.localStorage.removeItem(userIdString);
+    window.localStorage.removeItem(userNicknameString);
     location.href = rootUri;
 }
 

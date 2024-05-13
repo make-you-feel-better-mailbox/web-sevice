@@ -66,8 +66,8 @@
                                         <ion-icon name="ellipsis-horizontal" class="text-xl">
                                     </button>
                                     <div  class="w-[240px]" uk-dropdown="pos: bottom-right; animation: uk-animation-scale-up uk-transform-origin-top-right; animate-out: true; mode: click;offset:10">
-                                        <nav>
-                                            <a href="#"> <ion-icon class="text-xl" name="pricetags-outline"></ion-icon> Follow </a>
+                                        <nav id="moreBtnArea">
+                                            <a href="#" id="followBtn" th:onclick="registerFollow([[${userInfo.userId}]])"> <ion-icon class="text-xl" name="pricetags-outline"></ion-icon> Follow </a>
 <!--                                            <a href="#"> <ion-icon class="text-xl" name="share-outline"></ion-icon> Share  </a>-->
 <!--                                            <a href="#"> <ion-icon class="text-xl" name="link-outline"></ion-icon>  Copy link </a>-->
 <!--                                            <a href="#"> <ion-icon class="text-xl" name="chatbubble-ellipses-outline"></ion-icon>  Sort comments </a>-->
@@ -429,6 +429,7 @@
         let commentCountUri = /*[[@{${GlobalURI.COMMENT_COUNT}}]]*/;
         let postingUri = /*[[@{${GlobalURI.POSTING_ROOT}}]]*/;
         let followCountUri = /*[[@{${GlobalURI.FOLLOW_COUNT}}]]*/;
+        let followUri = /*[[@{${GlobalURI.FOLLOW_ROOT}}]]*/;
 
         let userId = /*[[@{${userInfo.userId}}]]*/;
 
@@ -441,6 +442,8 @@
         $(document).ready(function(){
             if (userId !== window.localStorage.getItem(userIdString)) {
                 $("#postPostingBox").remove();
+                checkUserFollowAndReplaceBtn();
+            } else {
                 $("#moreBtn").remove();
             }
 
@@ -462,6 +465,37 @@
                 sendAjaxRequestIfVisible();
             }, 7000);
         });
+
+        function checkUserFollowAndReplaceBtn(){
+            const accessToken = window.localStorage.getItem(accessTokenString);
+
+            if (accessToken == null || accessToken === "" || accessToken === "null") return null;
+
+            $.ajax({
+                url: followUri + "/" + userId + "/" + accessToken,
+                method: "GET",
+                dataType: "JSON",
+                contentType: 'application/json',
+                beforeSend: function(request) {
+                },
+                success: function(response){
+                    if (response.isUserFollowTargetUser) {
+                        $("#followBtn").remove();
+
+                        const unFollowBt = '<a href="#" id="followBtn" onclick="deleteFollow(\''+ userId +'\')"> <ion-icon class="text-xl" name="pricetags-outline"></ion-icon> Unfollow </a>';
+
+                        $("#moreBtnArea").prepend(unFollowBt);
+                    }
+                },
+                complete: function(response){
+                },
+                error: function(response){
+                    let errorModal = $("#errorModal");
+
+                    UIkit.modal(errorModal).show();
+                }
+            });
+        }
 
         function resetCreateStatus(){
             $('#content').val('');

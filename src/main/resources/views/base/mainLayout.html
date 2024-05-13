@@ -151,7 +151,8 @@
 
             window.localStorage.removeItem(accessTokenString);
             window.localStorage.removeItem(refreshTokenString);
-            window.localStorage.removeItem(userIdString)
+            window.localStorage.removeItem(userIdString);
+            window.localStorage.removeItem(userNicknameString);
 
             $.ajax({
                 url: loginUri + "/" + accessToken,

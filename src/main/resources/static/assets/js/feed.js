@@ -110,11 +110,13 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId, p
 
     const isUserPostingWriter = window.localStorage.getItem(userIdString) === postingUserId;
 
+    const feedDetailRedirectUri = feedDetailUri + '/' + postingUserId
+
     let template = '<div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2" id="postingId'+ postingId +'">'
                       + '<div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">'
-                      +     '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="w-9 h-9 rounded-full"> </a>'
+                      +     '<a href="'+ feedDetailRedirectUri +'"> <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="w-9 h-9 rounded-full"> </a>'
                       +     '<div class="flex-1">'
-                      +         '<a href="timeline.html"> <h4 class="text-black dark:text-white"> '+ postingUserNickname +' </h4> </a>'
+                      +         '<a href="'+ feedDetailRedirectUri +'" > <h4 class="text-black dark:text-white"> '+ postingUserNickname +' </h4> </a>'
                       +         '<div class="text-xs text-gray-500 dark:text-white/80">'+ localDatetime +'</div>'
                       +     '</div>'
                       +     '<div class="-mr-1">'
@@ -494,10 +496,12 @@ function getCommentContent(commentId, userId, content, userNickname){
 
     const isUserCommentWriter = window.localStorage.getItem(userIdString) === userId;
 
+    const feedDetailRedirectUri = feedDetailUri + '/' + userId
+
     let commentContent = '<div class="flex items-start gap-3 relative" id="commentId'+ commentId +'">'
-                            +         '<a href="timeline.html"> <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
+                            +         '<a href="'+ feedDetailRedirectUri +'"> <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
                             +         '<div class="flex-1" id="commentContentDiv'+ commentId +'">'
-                            +             '<a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> '+ userNickname +' </a>'
+                            +             '<a href="'+ feedDetailRedirectUri +'" class="text-black font-medium inline-block dark:text-white"> '+ userNickname +' </a>'
                             +             '<p class="mt-0.5" id="commentContentText'+ commentId +'">'+ realContent +'</p>'
                             +         '</div>';
 
@@ -841,6 +845,123 @@ function deleteComment(commentId) {
             success: function(response){
                 if(response.isDeleteSuccess){
                     $("#commentId" + commentId).remove();
+
+                    UIkit.notification(successNotification);
+                }
+            },
+            complete: function(response){
+            },
+            error: function(response){
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
+            }
+        });
+    });
+}
+
+function registerFollow(targetUserId){
+    const accessToken = window.localStorage.getItem(accessTokenString);
+
+    if (accessToken == null || accessToken === "" || accessToken === "null") {
+        let needLogin = {
+            message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="alert-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> You need Login before follow someone </div> </div>',
+            pos: 'top-center',
+            timeout: '6000'
+        }
+
+        UIkit.notification(needLogin);
+
+        return null;
+    }
+
+    myConfirm("팔로우 하시겠습니까?", function () {
+        checkTokenExpired();
+
+        let formObj = {
+            "accessToken": window.localStorage.getItem(accessTokenString),
+            "targetUserId" : targetUserId
+        };
+
+        let successNotification = {
+            message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="checkmark-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> Follow successfully done! </div> </div>',
+            pos: 'top-center',
+            timeout: '6000'
+        }
+
+        $.ajax({
+            url: followUri,
+            method: "POST",
+            data: JSON.stringify(formObj),
+            dataType: "JSON",
+            contentType: 'application/json',
+            beforeSend: function(request) {
+            },
+            success: function(response){
+                if(response.isRegisterSuccess){
+                    $("#followBtn").remove();
+
+                    const unFollowBt = '<a href="#" id="followBtn" onclick="deleteFollow(\''+ targetUserId +'\')"> <ion-icon class="text-xl" name="pricetags-outline"></ion-icon> Unfollow </a>';
+
+                    $("#moreBtnArea").prepend(unFollowBt);
+
+                    UIkit.notification(successNotification);
+                }
+            },
+            complete: function(response){
+            },
+            error: function(response){
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
+            }
+        });
+    });
+}
+
+function deleteFollow(targetUserId){
+    const accessToken = window.localStorage.getItem(accessTokenString);
+
+    if (accessToken == null || accessToken === "" || accessToken === "null") {
+        let needLogin = {
+            message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="alert-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> You need Login before unfollow someone </div> </div>',
+            pos: 'top-center',
+            timeout: '6000'
+        }
+
+        UIkit.notification(needLogin);
+
+        return null;
+    }
+
+    myConfirm("팔로우를 취소 하시겠습니까?", function () {
+        checkTokenExpired();
+
+        let formObj = {
+            "accessToken": window.localStorage.getItem(accessTokenString)
+        };
+
+        let successNotification = {
+            message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="checkmark-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> Unfollow successfully done! </div> </div>',
+            pos: 'top-center',
+            timeout: '6000'
+        }
+
+        $.ajax({
+            url: followUri + "/" + targetUserId,
+            method: "DELETE",
+            data: JSON.stringify(formObj),
+            dataType: "JSON",
+            contentType: 'application/json',
+            beforeSend: function(request) {
+            },
+            success: function(response){
+                if(response.isDeleteSuccess){
+                    $("#followBtn").remove();
+
+                    const followBt = '<a href="#" id="followBtn" onclick="registerFollow(\''+ targetUserId +'\')"> <ion-icon class="text-xl" name="pricetags-outline"></ion-icon> Follow </a>';
+
+                    $("#moreBtnArea").prepend(followBt);
 
                     UIkit.notification(successNotification);
                 }

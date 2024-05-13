@@ -20,7 +20,7 @@ public class FeedController {
         return new ModelAndView("main/feed");
     }
 
-    @GetMapping(GlobalURI.FEED_DETAIL + GlobalURI.PATH_VARIABLE_WITH_USER_ID)
+    @GetMapping(GlobalURI.FEED_DETAIL + GlobalURI.PATH_VARIABLE_USER_ID_WITH_BRACE)
     public ModelAndView getDetailView(@PathVariable(GlobalURI.PATH_VARIABLE_USER_ID) String userId) {
         ModelAndView modelAndView = new ModelAndView("main/feed-detail");
 
