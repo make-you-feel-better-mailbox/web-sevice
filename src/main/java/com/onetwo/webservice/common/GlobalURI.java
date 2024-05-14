@@ -34,7 +34,7 @@ public class GlobalURI {
     public static final String PATH_VARIABLE_USER_ID_WITH_BRACE = "/{" + PATH_VARIABLE_USER_ID + "}";
 
     public static final String REGISTER_ROOT = ROOT_URI + "register";
-    public static final String TOKEN_ROOT = "token";
+    public static final String TOKEN_ROOT = ROOT_URI + "token";
 
     public static final String USER_PW = USER_ROOT + "/pw";
 

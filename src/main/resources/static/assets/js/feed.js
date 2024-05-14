@@ -307,6 +307,8 @@ function deleteLikeRequest(postingId){
 }
 
 function checkPostingUserLike(postingId){
+    checkTokenExpired()
+
     let accessToken = window.localStorage.getItem(accessTokenString);
 
     let formObject = {

@@ -64,6 +64,15 @@ function checkTokenExpired(){
 
     let requestEndPoint = userRequestUri + "/" + accessToken;
 
+    if(accessToken == null || accessToken === "") {
+        window.localStorage.removeItem(accessTokenString);
+        window.localStorage.removeItem(refreshTokenString);
+        window.localStorage.removeItem(userIdString);
+        window.localStorage.removeItem(userNicknameString);
+
+        return null;
+    }
+
     $.ajax({
         url: requestEndPoint,
         method: "GET",
