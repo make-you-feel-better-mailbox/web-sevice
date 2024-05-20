@@ -28,3 +28,8 @@ api-gateway:
   host: "http://localhost:8000"
   access-id: "server-access-id"
   access-key: "server-access-key"
+
+chatting-service:
+  host: "http://localhost:9000"
+  access-id: "server-access-id"
+  access-key: "server-access-key"

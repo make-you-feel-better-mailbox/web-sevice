@@ -12,4 +12,5 @@ import org.springframework.stereotype.Component;
 public class PropertiesInfo {
 
     private ApiGatewayInfo apiGateway = new ApiGatewayInfo();
+    private ChattingServiceInfo chattingService = new ChattingServiceInfo();
 }

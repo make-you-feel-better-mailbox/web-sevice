@@ -65,4 +65,7 @@ public class GlobalURI {
     public static final String FOLLOW_ROOT = ROOT_URI + "follow";
 
     public static final String FOLLOW_COUNT = FOLLOW_ROOT + "/count";
+
+    public static final String CHAT_ROOT = ROOT_URI + "chat";
+    public static final String CHAT_ROOM = CHAT_ROOT + "/rooms";
 }
