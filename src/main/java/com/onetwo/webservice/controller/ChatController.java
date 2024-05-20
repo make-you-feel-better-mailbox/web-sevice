@@ -2,6 +2,7 @@ package com.onetwo.webservice.controller;
 
 import com.onetwo.webservice.common.GlobalStatus;
 import com.onetwo.webservice.common.GlobalURI;
+import com.onetwo.webservice.dto.chat.ChatMessageDetailsResponse;
 import com.onetwo.webservice.dto.chat.ChatRoomListResponse;
 import com.onetwo.webservice.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,11 @@ public class ChatController {
     @ResponseBody
     public ResponseEntity<ChatRoomListResponse> getChatRoomList(@PathVariable(GlobalStatus.ACCESS_TOKEN) String accessToken){
         return ResponseEntity.ok().body(chatService.getChatRoomList(accessToken));
+    }
+
+    @GetMapping(GlobalURI.CHAT_MESSAGE + GlobalURI.PATH_VARIABLE_CHAT_ROOM_ID_WITH_BRACE)
+    @ResponseBody
+    public ResponseEntity<ChatMessageDetailsResponse> getMessageListByChatRoomId(@PathVariable(GlobalURI.PATH_VARIABLE_CHAT_ROOM_ID) String chatRoomId){
+        return ResponseEntity.ok().body(chatService.getMessageListByChatRoomId(chatRoomId));
     }
 }

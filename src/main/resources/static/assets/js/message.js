@@ -1,14 +1,19 @@
-function getChatRoomHtml(chatRoomId, userId, chatUsers, unreadMessageExist, lastMessage, lastMessageTime) {
+let chatRoomWebSocket = null;
+
+function getChatRoomHtml(chatRoomId, userId, chatUsers, unreadMessageExist, lastChat) {
     const chatRoomTitle = getChatRoomTitle(userId, chatUsers);
 
-    let html = '<a href="#" class="relative flex items-center gap-4 p-2 duration-200 rounded-xl hover:bg-secondery">'
+    const lastMessage = lastChat.chatExist ? lastChat.lastChatMessage : "You haven't started message yet!";
+    const lastChatDate = instantStringToLocalDateTime(lastChat.lastChatDate);
+
+    let html = '<a href="#" onclick="openChatRoom(\''+ chatRoomId +'\', \''+ chatRoomTitle +'\')" class="relative flex items-center gap-4 p-2 duration-200 rounded-xl hover:bg-secondery">'
     +    '<div class="relative w-14 h-14 shrink-0">'
     +        '<img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="object-cover w-full h-full rounded-full"/>'
     +    '</div>'
     +    '<div class="flex-1 min-w-0">'
     +        '<div class="flex items-center gap-2 mb-1.5">'
     +            '<div class="mr-auto text-sm text-black dark:text-white font-medium">'+ chatRoomTitle +'</div>'
-    +            '<div class="text-xs font-light text-gray-500 dark:text-white/70">'+ lastMessageTime +'</div>';
+    +            '<div class="text-xs font-light text-gray-500 dark:text-white/70">'+ lastChatDate +'</div>';
 
     if (unreadMessageExist) html += '<div class="w-2.5 h-2.5 bg-blue-600 rounded-full dark:bg-slate-700"></div>';
 
@@ -43,7 +48,7 @@ function getChatRoomList(){
         },
         success: function(response){
             response.chatRoomDetailResponses.forEach(function (element){
-                const chatRoomHtml = getChatRoomHtml(element.chatRoomId, userId, element.chatUsers, element.unreadMessageExist, null, null);
+                const chatRoomHtml = getChatRoomHtml(element.chatRoomId, userId, element.chatUsers, element.unreadMessageExist, element.lastChatDetail);
 
                 $("#chatRoomList").append(chatRoomHtml);
             });
@@ -56,4 +61,98 @@ function getChatRoomList(){
             UIkit.modal(errorModal).show();
         }
     });
+}
+
+function openChatRoom(chatRoomId, chatRoomTitle){
+    if (chatRoomWebSocket != null) chatRoomWebSocket.close();
+
+    $("#chatRoomTitle").text(chatRoomTitle)
+    $("#chatBoxArea").empty();
+
+    getChatMessages(chatRoomId);
+
+    connectionChatRoomWebSocket(chatRoomId);
+}
+
+function connectionChatRoomWebSocket(chatRoomId){
+    const webSocketUri = 'ws://localhost:9000/chatting-service/message/' + chatRoomId
+
+    const websocket = new WebSocket(webSocketUri);
+
+    if (websocket.readyState === 1) {
+        websocket.close();
+    }
+
+    websocket.onmessage = onMessage;
+    websocket.onopen = onOpen;
+    websocket.onclose = () => onClose(chatRoomId);
+
+    chatRoomWebSocket = websocket;
+}
+
+function send() {
+    let message = document.getElementById("message");
+
+    let messageObject = {
+        "senderId" : window.localStorage.getItem(userIdString),
+        "message" : message.value
+    }
+
+    chatRoomWebSocket.send(JSON.stringify(messageObject));
+    message.value = '';
+}
+
+let retryInterval;
+const retryDelay = 100;
+
+function onClose(chatRoomId) {
+    retryInterval = setInterval(() => {
+        console.log('Reconnecting...');
+        connectionChatRoomWebSocket(chatRoomId); // 이전의 채팅방 ID를 전달하여 다시 연결 시도
+    }, retryDelay);
+}
+
+function onOpen() {
+    clearInterval(retryInterval);
+}
+
+function onMessage(msg) {
+    let data = JSON.parse(msg.data);
+
+    console.log(data);
+
+    let userId = data.senderId;
+    let message = data.message;
+
+    let html = "";
+
+    const isSender = userId === window.localStorage.getItem(userIdString);
+
+    if(isSender) {
+        html = getSentMessageBox(message);
+    } else {
+        html = getReceivedMessageBox(message);
+    }
+
+    addChatBoxArea(html);
+}
+
+function getReceivedMessageBox(message) {
+    let html = '<div className="flex gap-3">'
+    +   '<img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" className="w-9 h-9 rounded-full shadow"/>'
+    +    '<div className="px-4 py-2 rounded-[20px] max-w-sm bg-secondery">' + message
+    +    '</div>'
+    +'</div>';
+}
+
+function getSentMessageBox(message) {
+    let html = '<div class="flex gap-2 flex-row-reverse items-end">'
+    +    '<img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="w-4 h-4 rounded-full shadow">'
+    +        '<div class="px-4 py-2 rounded-[20px] max-w-sm bg-gradient-to-tr from-sky-500 to-blue-500 text-white shadow">' + message
+    +    '</div>'
+    +'</div>';
+}
+
+function getChatMessages(chatRoomId){
+
 }

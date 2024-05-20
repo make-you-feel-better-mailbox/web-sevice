@@ -199,6 +199,6 @@ function checkValidation(pattern, value){
 }
 
 function instantStringToLocalDateTime(instantString){
-    const dateString = insertDateTime;
-    return moment(dateString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm');
+    if (instantString == null || instantString === "") return "";
+    return moment(instantString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm');
 }

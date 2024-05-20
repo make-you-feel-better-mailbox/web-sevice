@@ -3,6 +3,7 @@ package com.onetwo.webservice.service;
 import com.onetwo.webservice.common.GlobalStatus;
 import com.onetwo.webservice.common.properties.PropertiesInfo;
 import com.onetwo.webservice.common.uri.ChatServiceURI;
+import com.onetwo.webservice.dto.chat.ChatMessageDetailsResponse;
 import com.onetwo.webservice.dto.chat.ChatRoomListResponse;
 import com.onetwo.webservice.utils.SenderUtils;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +41,10 @@ public class ChatServiceImpl implements ChatService{
                         });
 
         return response.getBody();
+    }
+
+    @Override
+    public ChatMessageDetailsResponse getMessageListByChatRoomId(String chatRoomId) {
+        return null;
     }
 }
