@@ -400,9 +400,11 @@
         let chatRoomUri = /*[[@{${GlobalURI.CHAT_ROOM}}]]*/;
 
         $(document).ready(function(){
-            checkTokenExpired()
+            $("#chatBox").remove();
 
-            getChatRoomList()
+            checkTokenExpired();
+
+            getChatRoomList();
         });
 
     </script>

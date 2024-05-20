@@ -100,9 +100,7 @@ function getMyPosting(userId){
 }
 
 function getPostingTemplate(postingUserId, content, insertDateTime, postingId, postingUserNickname){
-    const dateString = insertDateTime;
-
-    const localDatetime = moment(dateString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm');
+    const localDatetime = instantStringToLocalDateTime(insertDateTime);
 
     const writerControlBox = '<hr>'
                     +                 '<a onclick="updatePosting('+ postingId +')" class="notWorkA"> <ion-icon class="text-xl shrink-0 md hydrated" name="pencil-outline" role="img" aria-label="bookmark outline"></ion-icon> Update Posting </a>'

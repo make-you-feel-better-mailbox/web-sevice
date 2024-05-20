@@ -197,3 +197,8 @@ function checkEmpty(value){
 function checkValidation(pattern, value){
     return !pattern.test(value);
 }
+
+function instantStringToLocalDateTime(instantString){
+    const dateString = insertDateTime;
+    return moment(dateString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm');
+}
