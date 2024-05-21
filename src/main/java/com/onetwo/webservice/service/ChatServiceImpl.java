@@ -44,7 +44,23 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public ChatMessageDetailsResponse getMessageListByChatRoomId(String chatRoomId) {
-        return null;
+    public ChatMessageDetailsResponse getMessageListByChatRoomId(String chatRoomId, String accessToken) {
+        String requestUri = propertiesInfo.getChattingService().getHost();
+
+        requestUri += ChatServiceURI.CHATTING_MESSAGE + "/" + chatRoomId;
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put(GlobalStatus.ACCESS_TOKEN, accessToken);
+
+        ResponseEntity<ChatMessageDetailsResponse> response =
+                senderUtils.send(
+                        HttpMethod.GET,
+                        requestUri,
+                        headers,
+                        null,
+                        new ParameterizedTypeReference<ChatMessageDetailsResponse>() {
+                        });
+
+        return response.getBody();
     }
 }

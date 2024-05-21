@@ -113,7 +113,7 @@
                     </div>
 
                     <!-- chats bubble -->
-                    <div class="w-full p-5 py-10 overflow-y-auto md:h-[calc(100vh-204px)] h-[calc(100vh-195px)]">
+                    <div class="w-full p-5 py-10 overflow-y-auto md:h-[calc(100vh-204px)] h-[calc(100vh-195px)]" id="chatRoomArea">
 
                         <div class="text-sm font-medium space-y-6" id="chatBoxArea">
 
@@ -268,6 +268,7 @@
     <script th:inline="javascript" th:fragment="scripts">
         let chatUri = /*[[@{${GlobalURI.CHAT_ROOT}}]]*/;
         let chatRoomUri = /*[[@{${GlobalURI.CHAT_ROOM}}]]*/;
+        let chatMessageUri = /*[[@{${GlobalURI.CHAT_MESSAGE}}]]*/;
 
         $(document).ready(function(){
             $("#chatBox").remove();
@@ -287,11 +288,6 @@
         $("#button-send").on("click", (e) => {
             send();
         });
-
-        function addChatBoxArea(html){
-            $("#chatBoxArea").append(html);
-        }
-
     </script>
 
 </th:block>

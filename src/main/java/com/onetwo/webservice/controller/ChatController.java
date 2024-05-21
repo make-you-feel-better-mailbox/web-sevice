@@ -30,9 +30,10 @@ public class ChatController {
         return ResponseEntity.ok().body(chatService.getChatRoomList(accessToken));
     }
 
-    @GetMapping(GlobalURI.CHAT_MESSAGE + GlobalURI.PATH_VARIABLE_CHAT_ROOM_ID_WITH_BRACE)
+    @GetMapping(GlobalURI.CHAT_MESSAGE + GlobalURI.PATH_VARIABLE_CHAT_ROOM_ID_WITH_BRACE + GlobalURI.PATH_VARIABLE_ACCESS_TOKEN_WITH_BRACE)
     @ResponseBody
-    public ResponseEntity<ChatMessageDetailsResponse> getMessageListByChatRoomId(@PathVariable(GlobalURI.PATH_VARIABLE_CHAT_ROOM_ID) String chatRoomId){
-        return ResponseEntity.ok().body(chatService.getMessageListByChatRoomId(chatRoomId));
+    public ResponseEntity<ChatMessageDetailsResponse> getMessageListByChatRoomId(@PathVariable(GlobalURI.PATH_VARIABLE_CHAT_ROOM_ID) String chatRoomId,
+                                                                                 @PathVariable(GlobalStatus.ACCESS_TOKEN) String accessToken){
+        return ResponseEntity.ok().body(chatService.getMessageListByChatRoomId(chatRoomId, accessToken));
     }
 }

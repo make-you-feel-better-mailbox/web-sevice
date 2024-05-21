@@ -63,17 +63,6 @@ function getChatRoomList(){
     });
 }
 
-function openChatRoom(chatRoomId, chatRoomTitle){
-    if (chatRoomWebSocket != null) chatRoomWebSocket.close();
-
-    $("#chatRoomTitle").text(chatRoomTitle)
-    $("#chatBoxArea").empty();
-
-    getChatMessages(chatRoomId);
-
-    connectionChatRoomWebSocket(chatRoomId);
-}
-
 function connectionChatRoomWebSocket(chatRoomId){
     const webSocketUri = 'ws://localhost:9000/chatting-service/message/' + chatRoomId
 
@@ -128,31 +117,95 @@ function onMessage(msg) {
 
     const isSender = userId === window.localStorage.getItem(userIdString);
 
+    let now = new Date();
+
     if(isSender) {
-        html = getSentMessageBox(message);
+        html = getSentMessageBox(message, now.toISOString());
     } else {
-        html = getReceivedMessageBox(message);
+        html = getReceivedMessageBox(message, now.toISOString());
     }
 
-    addChatBoxArea(html);
+    $('#chatBoxArea').append(html);
+
+    $("#chatRoomArea").scrollTop($("#chatRoomArea").prop('scrollHeight'));
 }
 
-function getReceivedMessageBox(message) {
-    let html = '<div className="flex gap-3">'
-    +   '<img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" className="w-9 h-9 rounded-full shadow"/>'
-    +    '<div className="px-4 py-2 rounded-[20px] max-w-sm bg-secondery">' + message
+function getReceivedMessageBox(message, sendDateString) {
+    const sendDate = instantStringToLocalDateTime(sendDateString);
+
+    let html = '<div class="flex gap-3">'
+    +   '<img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-9 h-9 rounded-full shadow"/>'
+    +    '<div class="px-4 py-2 rounded-[20px] max-w-sm bg-secondery">' + message
     +    '</div>'
+    + '<div class="text-xs font-light text-gray-500 dark:text-white/70" style="margin-top: auto;">'+ sendDate +'</div>'
     +'</div>';
+    return html;
 }
 
-function getSentMessageBox(message) {
+function getSentMessageBox(message, sendDateString) {
+    const sendDate = instantStringToLocalDateTime(sendDateString);
+
     let html = '<div class="flex gap-2 flex-row-reverse items-end">'
-    +    '<img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="w-4 h-4 rounded-full shadow">'
-    +        '<div class="px-4 py-2 rounded-[20px] max-w-sm bg-gradient-to-tr from-sky-500 to-blue-500 text-white shadow">' + message
-    +    '</div>'
-    +'</div>';
+        + '<img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="w-4 h-4 rounded-full shadow">'
+        + '<div class="px-4 py-2 rounded-[20px] max-w-sm bg-gradient-to-tr from-sky-500 to-blue-500 text-white shadow">' + message
+        + '</div>'
+        + '<div class="text-xs font-light text-gray-500 dark:text-white/70">'+ sendDate +'</div>'
+        + '</div>';
+    return html;
+}
+
+function openChatRoom(chatRoomId, chatRoomTitle) {
+    checkTokenExpired();
+
+    if (chatRoomWebSocket != null) chatRoomWebSocket.close();
+
+    $("#chatRoomTitle").text(chatRoomTitle)
+    $('#chatBoxArea').empty();
+
+    getChatMessages(chatRoomId);
+
+    connectionChatRoomWebSocket(chatRoomId);
 }
 
 function getChatMessages(chatRoomId){
+    let accessToken = window.localStorage.getItem(accessTokenString);
 
+    $.ajax({
+        url: chatMessageUri + "/" + chatRoomId + "/" + accessToken,
+        method: "GET",
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            response.chatMessageDetails.forEach(function (element){
+                const chatMessageBoxHtml = getChatMessageBoxHtml(element, window.localStorage.getItem(userIdString));
+
+                $('#chatBoxArea').prepend(chatMessageBoxHtml);
+
+                $("#chatRoomArea").scrollTop($("#chatRoomArea").prop('scrollHeight'));
+            });
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
+}
+
+function getChatMessageBoxHtml(chatMessageDetail, userId){
+    const isSender = chatMessageDetail.senderId === userId;
+
+    let html = "";
+
+    if(isSender) {
+        html = getSentMessageBox(chatMessageDetail.message, chatMessageDetail.createdAt);
+    } else {
+        html = getReceivedMessageBox(chatMessageDetail.message, chatMessageDetail.createdAt);
+    }
+
+    return html;
 }
