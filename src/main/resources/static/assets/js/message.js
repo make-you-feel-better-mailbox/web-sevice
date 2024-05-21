@@ -6,7 +6,7 @@ function getChatRoomHtml(chatRoomId, userId, chatUsers, unreadMessageExist, last
     const lastMessage = lastChat.chatExist ? lastChat.lastChatMessage : "You haven't started message yet!";
     const lastChatDate = instantStringToLocalDateTime(lastChat.lastChatDate);
 
-    let html = '<a href="#" onclick="openChatRoom(\''+ chatRoomId +'\', \''+ chatRoomTitle +'\')" class="relative flex items-center gap-4 p-2 duration-200 rounded-xl hover:bg-secondery">'
+    let html = '<a href="#" onclick="openChatRoom(\''+ chatRoomId +'\')" class="relative flex items-center gap-4 p-2 duration-200 rounded-xl hover:bg-secondery">'
     +    '<div class="relative w-14 h-14 shrink-0">'
     +        '<img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="object-cover w-full h-full rounded-full"/>'
     +    '</div>'
@@ -29,6 +29,8 @@ function getChatRoomHtml(chatRoomId, userId, chatUsers, unreadMessageExist, last
 function getChatRoomTitle(userId, chatUsers){
     if (chatUsers.length > 2) {
         return chatUsers.map(chatUser => chatUser.userNickname).join(', ');
+    } else if (chatUsers.length == 1){
+        return "나와의 채팅";
     } else {
         return chatUsers.find(chatUser => chatUser.userId !== userId).userNickname;
     }
@@ -52,6 +54,12 @@ function getChatRoomList(){
 
                 $("#chatRoomList").append(chatRoomHtml);
             });
+
+            if (requestChatRoomId != null && requestChatRoomId !== ""){
+                openChatRoom(requestChatRoomId)
+            } else if (response.chatRoomDetailResponses.length > 0) {
+                openChatRoom(response.chatRoomDetailResponses[0].chatRoomId)
+            }
         },
         complete: function(response){
         },
@@ -122,7 +130,7 @@ function onMessage(msg) {
     if(isSender) {
         html = getSentMessageBox(message, now.toISOString());
     } else {
-        html = getReceivedMessageBox(message, now.toISOString());
+        html = getReceivedMessageBox(message, now.toISOString(), userId);
     }
 
     $('#chatBoxArea').append(html);
@@ -130,11 +138,11 @@ function onMessage(msg) {
     $("#chatRoomArea").scrollTop($("#chatRoomArea").prop('scrollHeight'));
 }
 
-function getReceivedMessageBox(message, sendDateString) {
+function getReceivedMessageBox(message, sendDateString, senderId) {
     const sendDate = instantStringToLocalDateTime(sendDateString);
 
     let html = '<div class="flex gap-3">'
-    +   '<img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-9 h-9 rounded-full shadow"/>'
+    +   '<img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-9 h-9 rounded-full shadow" onclick="moveToFeedDetail(\''+ senderId +'\')"/>'
     +    '<div class="px-4 py-2 rounded-[20px] max-w-sm bg-secondery">' + message
     +    '</div>'
     + '<div class="text-xs font-light text-gray-500 dark:text-white/70" style="margin-top: auto;">'+ sendDate +'</div>'
@@ -154,14 +162,18 @@ function getSentMessageBox(message, sendDateString) {
     return html;
 }
 
-function openChatRoom(chatRoomId, chatRoomTitle) {
+function moveToFeedDetail(userId){
+    location.href = feedDetailUri + '/' + userId
+}
+
+function openChatRoom(chatRoomId) {
     checkTokenExpired();
 
     if (chatRoomWebSocket != null) chatRoomWebSocket.close();
 
-    $("#chatRoomTitle").text(chatRoomTitle)
     $('#chatBoxArea').empty();
 
+    getChatRoomDetail(chatRoomId);
     getChatMessages(chatRoomId);
 
     connectionChatRoomWebSocket(chatRoomId);
@@ -204,8 +216,33 @@ function getChatMessageBoxHtml(chatMessageDetail, userId){
     if(isSender) {
         html = getSentMessageBox(chatMessageDetail.message, chatMessageDetail.createdAt);
     } else {
-        html = getReceivedMessageBox(chatMessageDetail.message, chatMessageDetail.createdAt);
+        html = getReceivedMessageBox(chatMessageDetail.message, chatMessageDetail.createdAt, chatMessageDetail.senderId);
     }
 
     return html;
+}
+
+function getChatRoomDetail(chatRoomId){
+    $.ajax({
+        url: chatRoomDetailUri + "/" + chatRoomId + "/" +window.localStorage.getItem(accessTokenString),
+        method: "GET",
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            let requestUserId = window.localStorage.getItem(userIdString);
+
+            const chatRoomTitle = getChatRoomTitle(requestUserId, response.chatUsers);
+
+            $("#chatRoomTitle").text(chatRoomTitle)
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let errorModal = $("#errorModal");
+
+            UIkit.modal(errorModal).show();
+        }
+    });
 }

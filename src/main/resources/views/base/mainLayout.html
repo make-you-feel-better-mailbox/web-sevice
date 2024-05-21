@@ -19,6 +19,15 @@
     <div id="contentPage" class="content-page">
         <!-- Content Start-->
         <div class="content">
+            <!-- Topbar Start -->
+            <div th:replace="base/header :: top-bar"></div>
+            <!-- end Topbar -->
+
+            <!-- Start Content-->
+            <div th:replace=":: content"></div>
+            <!-- container -->
+            <div th:replace="base/chatbox :: chat-box"></div>
+
             <div class="lg:p-20 p-10" id="errorModal" uk-modal>
 
                 <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
@@ -85,14 +94,6 @@
 
                 </div>
             </div>
-            <!-- Topbar Start -->
-            <div th:replace="base/header :: top-bar"></div>
-            <!-- end Topbar -->
-
-            <!-- Start Content-->
-            <div th:replace=":: content"></div>
-            <!-- container -->
-            <div th:replace="base/chatbox :: chat-box"></div>
         </div>
         <!-- Content End-->
     </div>

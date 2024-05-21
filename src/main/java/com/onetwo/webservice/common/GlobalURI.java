@@ -68,6 +68,7 @@ public class GlobalURI {
 
     public static final String CHAT_ROOT = ROOT_URI + "chat";
     public static final String CHAT_ROOM = CHAT_ROOT + "/rooms";
+    public static final String CHAT_ROOM_DETAIL = CHAT_ROOM + "/details";
     public static final String CHAT_MESSAGE = CHAT_ROOT + "/message";
 
     public static final String PATH_VARIABLE_CHAT_ROOM_ID = "chat-room-id";

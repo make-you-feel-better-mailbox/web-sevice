@@ -117,13 +117,6 @@
 
                         <div class="text-sm font-medium space-y-6" id="chatBoxArea">
 
-                            <!-- time -->
-                            <div class="flex justify-center ">
-                                <div class="font-medium text-gray-500 text-sm dark:text-white/70">
-                                    April 8,2023,6:30 AM
-                                </div>
-                            </div>
-
                         </div>
 
                     </div>
@@ -269,6 +262,9 @@
         let chatUri = /*[[@{${GlobalURI.CHAT_ROOT}}]]*/;
         let chatRoomUri = /*[[@{${GlobalURI.CHAT_ROOM}}]]*/;
         let chatMessageUri = /*[[@{${GlobalURI.CHAT_MESSAGE}}]]*/;
+        let chatRoomDetailUri = /*[[@{${GlobalURI.CHAT_ROOM_DETAIL}}]]*/;
+
+        let requestChatRoomId = /*[[@{${chatRoomId}}]]*/
 
         $(document).ready(function(){
             $("#chatBox").remove();
