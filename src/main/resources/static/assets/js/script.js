@@ -197,3 +197,17 @@ function checkEmpty(value){
 function checkValidation(pattern, value){
     return !pattern.test(value);
 }
+
+function instantStringToLocalDateTime(instantString){
+    if (instantString == null || instantString === "") return "";
+    return moment(instantString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm');
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www/thymeleaf.org" th:replace="base/mainLayout :: mainLayout('message')">
+
+<!-- Start Content-->
+<div class="container-fluid" th:fragment="content">
+    <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
+
+        <div class="relative overflow-hidden border -m-2.5 dark:border-slate-700">
+
+            <div class="flex bg-white dark:bg-dark2">
+
+                <!-- sidebar -->
+                <div class="md:w-[360px] relative border-r dark:border-slate-700">
+
+                    <div id="side-chat" class="top-0 left-0 max-md:fixed max-md:w-5/6 max-md:h-screen bg-white z-50 max-md:shadow max-md:-translate-x-full dark:bg-dark2">
+
+                        <!-- heading title -->
+                        <div class="p-4 border-b dark:border-slate-700">
+
+                            <div class="flex mt-2 items-center justify-between">
+
+                                <h2 class="text-2xl font-bold text-black ml-1 dark:text-white"> Chats </h1>
+
+                                    <!-- right action buttons -->
+                                    <div class="flex items-center gap-2.5">
+
+
+                                        <button class="group">
+                                            <ion-icon name="settings-outline" class="text-2xl flex group-aria-expanded:rotate-180"></ion-icon>
+                                        </button>
+                                        <div  class="md:w-[270px] w-full" uk-dropdown="pos: bottom-left; offset:10; animation: uk-animation-slide-bottom-small">
+                                            <nav>
+                                                <a href="#"> <ion-icon class="text-2xl shrink-0 -ml-1" name="checkmark-outline"></ion-icon> Mark all as read </a>
+                                                <a href="#"> <ion-icon class="text-2xl shrink-0 -ml-1" name="notifications-outline"></ion-icon> notifications setting </a>
+                                                <a href="#"> <ion-icon class="text-xl shrink-0 -ml-1" name="volume-mute-outline"></ion-icon> Mute notifications </a>
+                                            </nav>
+                                        </div>
+
+                                        <button class="">
+                                            <ion-icon name="checkmark-circle-outline" class="text-2xl flex"></ion-icon>
+                                        </button>
+
+                                        <!-- mobile toggle menu -->
+                                        <button type="button" class="md:hidden" uk-toggle="target: #side-chat ; cls: max-md:-translate-x-full">
+                                            <ion-icon name="chevron-down-outline"></ion-icon>
+                                        </button>
+
+                                    </div>
+
+                            </div>
+
+                            <!-- search -->
+                            <div class="relative mt-4">
+                                <div class="absolute left-3 bottom-1/2 translate-y-1/2 flex"><ion-icon name="search" class="text-xl"></ion-icon></div>
+                                <input type="text" placeholder="Search" class="w-full !pl-10 !py-2 !rounded-lg">
+                            </div>
+
+                        </div>
+
+
+                        <!-- users list -->
+                        <div id="chatRoomList" class="space-y-2 p-2 overflow-y-auto md:h-[calc(100vh-204px)] h-[calc(100vh-130px)]">
+
+                        </div>
+
+                    </div>
+
+                    <!-- overly -->
+                    <div id="side-chat" class="bg-slate-100/40 backdrop-blur w-full h-full dark:bg-slate-800/40 z-40 fixed inset-0 max-md:-translate-x-full md:hidden" uk-toggle="target: #side-chat ; cls: max-md:-translate-x-full"></div>
+
+                </div>
+
+                <!-- message center -->
+                <div class="flex-1">
+
+                    <!-- chat heading -->
+                    <div class="flex items-center justify-between gap-2 w- px-6 py-3.5 z-10 border-b dark:border-slate-700 uk-animation-slide-top-medium">
+
+                        <div class="flex items-center sm:gap-4 gap-2">
+
+                            <!-- toggle for mobile -->
+                            <button type="button" class="md:hidden" uk-toggle="target: #side-chat ; cls: max-md:-translate-x-full">
+                                <ion-icon name="chevron-back-outline" class="text-2xl -ml-4"></ion-icon>
+                            </button>
+
+                            <div class="relative cursor-pointer max-md:hidden"  uk-toggle="target: .rightt ; cls: hidden">
+                                <img th:src="@{/assets/images/avatars/avatar-6.jpg}" alt="" class="w-8 h-8 rounded-full shadow">
+                            </div>
+                            <div class="cursor-pointer" uk-toggle="target: .rightt ; cls: hidden">
+                                <div class="text-base font-bold" id="chatRoomTitle"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="button__ico">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+                                    <path fill-rule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 012.43 8.326 13.019 13.019 0 012 5V3.5z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button type="button" class="hover:bg-slate-100 p-1.5 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+                                </svg>
+                            </button>
+                            <button type="button" class="hover:bg-slate-100 p-1.5 rounded-full" uk-toggle="target: .rightt ; cls: hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- chats bubble -->
+                    <div class="w-full p-5 py-10 overflow-y-auto md:h-[calc(100vh-204px)] h-[calc(100vh-195px)]" id="chatRoomArea">
+
+                        <div class="text-sm font-medium space-y-6" id="chatBoxArea">
+
+                        </div>
+
+                    </div>
+
+                    <!-- sending message area -->
+                    <div class="flex items-center md:gap-4 gap-2 md:p-3 p-2 overflow-hidden">
+
+                        <div id="message__wrap" class="flex items-center gap-2 h-full dark:text-white -mt-1.5">
+
+                            <button type="button"  class="shrink-0">
+                                <ion-icon class="text-3xl flex" name="add-circle-outline"></ion-icon>
+                            </button>
+                            <div class="dropbar pt-36 h-60 bg-gradient-to-t via-white from-white via-30% from-30% dark:from-slate-900 dark:via-900" uk-drop="stretch: x; target: #message__wrap ;animation:  slide-bottom ;animate-out: true; pos: top-left; offset:10 ; mode: click ; duration: 200">
+
+                                <div class="sm:w-full p-3 flex justify-center gap-5" uk-scrollspy="target: > button; cls: uk-animation-slide-bottom-small; delay: 100;repeat:true">
+
+                                    <button type="button" class="bg-sky-50 text-sky-600 border border-sky-100 shadow-sm p-2.5 rounded-full shrink-0 duration-100 hover:scale-[1.15] dark:bg-dark3 dark:border-0">
+                                        <ion-icon class="text-3xl flex" name="image"></ion-icon>
+                                    </button>
+                                    <button type="button" class="bg-green-50 text-green-600 border border-green-100 shadow-sm p-2.5 rounded-full shrink-0 duration-100 hover:scale-[1.15] dark:bg-dark3 dark:border-0">
+                                        <ion-icon class="text-3xl flex" name="images"></ion-icon>
+                                    </button>
+                                    <button type="button" class="bg-pink-50 text-pink-600 border border-pink-100 shadow-sm p-2.5 rounded-full shrink-0 duration-100 hover:scale-[1.15] dark:bg-dark3 dark:border-0">
+                                        <ion-icon class="text-3xl flex" name="document-text"></ion-icon>
+                                    </button>
+                                    <button type="button" class="bg-orange-50 text-orange-600 border border-orange-100 shadow-sm p-2.5 rounded-full shrink-0 duration-100 hover:scale-[1.15] dark:bg-dark3 dark:border-0">
+                                        <ion-icon class="text-3xl flex" name="gift"></ion-icon>
+                                    </button>
+
+
+                                </div>
+
+                            </div>
+
+                            <button type="button"  class="shrink-0">
+                                <ion-icon class="text-3xl flex" name="happy-outline"></ion-icon>
+                            </button>
+                            <div class="dropbar p-2" uk-drop="stretch: x; target: #message__wrap ;animation: uk-animation-scale-up uk-transform-origin-bottom-left ;animate-out: true; pos: top-left ; offset:2; mode: click ; duration: 200 ">
+
+                                <div class="sm:w-60 bg-white shadow-lg border rounded-xl  pr-0 dark:border-slate-700 dark:bg-dark3">
+
+                                    <h4 class="text-sm font-semibold p-3 pb-0">Send Imogi</h4>
+
+                                    <div class="grid grid-cols-5 overflow-y-auto max-h-44 p-3 text-center text-xl">
+
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😊 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 🤩 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😎</div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 🥳 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😂 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 🥰 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😡 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😊 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 🤩 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😎</div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 🥳 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😂 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 🥰 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😡 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 🤔 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😊 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 🤩 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😎</div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 🥳 </div>
+                                        <div class="hover:bg-secondery p-1.5 rounded-md hover:scale-125 cursor-pointer duration-200"> 😂 </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="relative flex-1">
+                            <textarea placeholder="Write your message" id="message" rows="1" class="w-full resize-none bg-secondery rounded-full px-4 p-2"></textarea>
+
+                            <button type="button" id="button-send" class="text-3xl shrink-0 p-2 absolute right-0.5 top-0">
+                                <ion-icon class="text-xl flex" name="send-outline"></ion-icon>
+                            </button>
+
+                        </div>
+
+                        <button type="button" class="flex h-full dark:text-white">
+                            <ion-icon class="text-3xl flex -mt-3" name="heart-outline"></ion-icon>
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- user profile right info -->
+                <div class="rightt w-full h-full absolute top-0 right-0 z-10 hidden transition-transform">
+                    <div class="w-[360px] border-l shadow-lg h-screen bg-white absolute right-0 top-0 uk-animation-slide-right-medium delay-200 z-50 dark:bg-dark2 dark:border-slate-700">
+
+                        <div class="w-full h-1.5 bg-gradient-to-r to-purple-500 via-red-500 from-pink-500 -mt-px"></div>
+
+                        <hr class="opacity-80 dark:border-slate-700">
+
+                        <ul class="text-base font-medium p-3">
+                            <li>
+                                <div class="flex items-center gap-5 rounded-md p-3 w-full hover:bg-secondery">
+                                    <ion-icon name="notifications-off-outline" class="text-2xl"></ion-icon> Mute Notification
+                                    <label class="switch cursor-pointer ml-auto"> <input type="checkbox" checked><span class="switch-button !relative"></span></label>
+                                </div>
+                            </li>
+                            <li> <button type="button" class="flex items-center gap-5 rounded-md p-3 w-full hover:bg-secondery"> <ion-icon name="flag-outline" class="text-2xl"></ion-icon> Report     </button></li>
+                            <li> <button type="button" class="flex items-center gap-5 rounded-md p-3 w-full hover:bg-secondery"> <ion-icon name="settings-outline" class="text-2xl"></ion-icon> Ignore messages   </button> </li>
+                            <li> <button type="button" class="flex items-center gap-5 rounded-md p-3 w-full hover:bg-secondery"> <ion-icon name="stop-circle-outline" class="text-2xl"></ion-icon> Block    </button> </li>
+                            <li> <button type="button" class="flex items-center gap-5 rounded-md p-3 w-full hover:bg-red-50 text-red-500"> <ion-icon name="trash-outline" class="text-2xl"></ion-icon> Delete Chat   </button> </li>
+                        </ul>
+
+                        <!-- close button -->
+                        <button type="button" class="absolute top-0 right-0 m-4 p-2 bg-secondery rounded-full" uk-toggle="target: .rightt ; cls: hidden">
+                            <ion-icon name="close" class="text-2xl flex"></ion-icon>
+                        </button>
+
+                    </div>
+
+                    <!-- overly -->
+                    <div class="bg-slate-100/40 backdrop-blur absolute w-full h-full dark:bg-slate-800/40" uk-toggle="target: .rightt ; cls: hidden"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+<!-- css -->
+<th:block th:fragment="css">
+
+</th:block>
+
+<!-- Scripts -->
+<th:block th:fragment="scripts">
+    <script th:src="@{/assets/js/message.js}"></script>
+
+    <script th:inline="javascript" th:fragment="scripts">
+        let chatUri = /*[[@{${GlobalURI.CHAT_ROOT}}]]*/;
+        let chatRoomUri = /*[[@{${GlobalURI.CHAT_ROOM}}]]*/;
+        let chatMessageUri = /*[[@{${GlobalURI.CHAT_MESSAGE}}]]*/;
+        let chatRoomDetailUri = /*[[@{${GlobalURI.CHAT_ROOM_DETAIL}}]]*/;
+
+        let requestChatRoomId = /*[[@{${chatRoomId}}]]*/;
+
+        let isFirstLoadPage = true;
+
+        $(document).ready(function(){
+            $("#chatBox").remove();
+
+            checkTokenExpired();
+
+            setInterval(function() {
+                getChatRoomList();
+            }, 2000);
+        });
+
+        $('#message').on('keypress', function(e) {
+            if (e.which === 13) {  // Enter key is 13
+                e.preventDefault();  // Prevent default action (new line)
+                $('#button-send').click();  // Trigger button click
+            }
+        });
+
+        $("#button-send").on("click", (e) => {
+            send();
+        });
+    </script>
+
+</th:block>
+
+</body>
+</html>

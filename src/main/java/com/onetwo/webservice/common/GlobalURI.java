@@ -65,4 +65,12 @@ public class GlobalURI {
     public static final String FOLLOW_ROOT = ROOT_URI + "follow";
 
     public static final String FOLLOW_COUNT = FOLLOW_ROOT + "/count";
+
+    public static final String CHAT_ROOT = ROOT_URI + "chat";
+    public static final String CHAT_ROOM = CHAT_ROOT + "/rooms";
+    public static final String CHAT_ROOM_DETAIL = CHAT_ROOM + "/details";
+    public static final String CHAT_MESSAGE = CHAT_ROOT + "/message";
+
+    public static final String PATH_VARIABLE_CHAT_ROOM_ID = "chat-room-id";
+    public static final String PATH_VARIABLE_CHAT_ROOM_ID_WITH_BRACE = "/{" + PATH_VARIABLE_CHAT_ROOM_ID + "}";
 }
