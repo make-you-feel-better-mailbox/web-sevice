@@ -264,14 +264,18 @@
         let chatMessageUri = /*[[@{${GlobalURI.CHAT_MESSAGE}}]]*/;
         let chatRoomDetailUri = /*[[@{${GlobalURI.CHAT_ROOM_DETAIL}}]]*/;
 
-        let requestChatRoomId = /*[[@{${chatRoomId}}]]*/
+        let requestChatRoomId = /*[[@{${chatRoomId}}]]*/;
+
+        let isFirstLoadPage = true;
 
         $(document).ready(function(){
             $("#chatBox").remove();
 
             checkTokenExpired();
 
-            getChatRoomList();
+            setInterval(function() {
+                getChatRoomList();
+            }, 2000);
         });
 
         $('#message').on('keypress', function(e) {

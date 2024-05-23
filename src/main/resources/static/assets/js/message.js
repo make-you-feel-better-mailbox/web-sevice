@@ -49,16 +49,22 @@ function getChatRoomList(){
         beforeSend: function(request) {
         },
         success: function(response){
+            $("#chatRoomList").empty();
+
             response.chatRoomDetailResponses.forEach(function (element){
                 const chatRoomHtml = getChatRoomHtml(element.chatRoomId, userId, element.chatUsers, element.unreadMessageExist, element.lastChatDetail);
 
                 $("#chatRoomList").append(chatRoomHtml);
             });
 
-            if (requestChatRoomId != null && requestChatRoomId !== ""){
-                openChatRoom(requestChatRoomId)
-            } else if (response.chatRoomDetailResponses.length > 0) {
-                openChatRoom(response.chatRoomDetailResponses[0].chatRoomId)
+            if(isFirstLoadPage){
+                if (requestChatRoomId != null && requestChatRoomId !== ""){
+                    openChatRoom(requestChatRoomId)
+                } else if (response.chatRoomDetailResponses.length > 0) {
+                    openChatRoom(response.chatRoomDetailResponses[0].chatRoomId)
+                }
+
+                isFirstLoadPage = false;
             }
         },
         complete: function(response){
