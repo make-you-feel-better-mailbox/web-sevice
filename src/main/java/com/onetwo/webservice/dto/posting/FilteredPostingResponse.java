@@ -15,6 +15,8 @@ public class FilteredPostingResponse {
 
     private String userNickname;
 
+    private String userProfileImageEndPoint;
+
     private String content;
 
     private Boolean mediaExist;

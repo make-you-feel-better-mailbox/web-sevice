@@ -2,6 +2,7 @@ package com.onetwo.webservice.dto.user;
 
 public record UserInfoResponse(String userId,
                                String nickname,
+                               String profileImageEndPoint,
                                String email,
                                String phoneNumber,
                                boolean oauth,

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www/thymeleaf.org" th:replace="base/mainLayout :: mainLayout('message')">
+<html xmlns:th="http://www/thymeleaf.org" th:replace="base/mainLayout :: mainLayout('Mail-Box-Message')">
 
 <!-- Start Content-->
 <div class="container-fluid" th:fragment="content">
@@ -84,7 +84,7 @@
                             </button>
 
                             <div class="relative cursor-pointer max-md:hidden"  uk-toggle="target: .rightt ; cls: hidden">
-                                <img th:src="@{/assets/images/avatars/avatar-6.jpg}" alt="" class="w-8 h-8 rounded-full shadow">
+                                <img src="/assets/images/avatars/avatar-1.jpg" id="chatRoomProfileImage" alt="" class="w-8 h-8 rounded-full shadow">
                             </div>
                             <div class="cursor-pointer" uk-toggle="target: .rightt ; cls: hidden">
                                 <div class="text-base font-bold" id="chatRoomTitle"></div>

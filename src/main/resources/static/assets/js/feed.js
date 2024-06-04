@@ -26,7 +26,8 @@ function getPosting(){
                             element.content,
                             element.postedDate,
                             element.postingId,
-                            element.userNickname);
+                            element.userNickname,
+                            element.userProfileImageEndPoint);
 
                         $('#feed').append(postingTemplate);
                     }
@@ -76,7 +77,8 @@ function getMyPosting(userId){
                             element.content,
                             element.postedDate,
                             element.postingId,
-                            element.userNickname);
+                            element.userNickname,
+                            element.userProfileImageEndPoint);
 
                         $('#feed').append(postingTemplate);
                     }
@@ -99,7 +101,7 @@ function getMyPosting(userId){
     });
 }
 
-function getPostingTemplate(postingUserId, content, insertDateTime, postingId, postingUserNickname){
+function getPostingTemplate(postingUserId, content, insertDateTime, postingId, postingUserNickname, postingUserProfileImageEndPoint){
     const localDatetime = instantStringToLocalDateTime(insertDateTime);
 
     const writerControlBox = '<hr>'
@@ -110,9 +112,19 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId, p
 
     const feedDetailRedirectUri = feedDetailUri + '/' + postingUserId
 
+    let profileImageUrl = defaultUserProfileImageEndPoint;
+
+    if( postingUserProfileImageEndPoint != null && postingUserProfileImageEndPoint !== "" ) profileImageUrl = postingUserProfileImageEndPoint
+
+    let userProFileImageUrl = defaultUserProfileImageEndPoint;
+
+    const userProfileImageEndPoint = window.localStorage.getItem(userProfileImageEndPointString)
+
+    if( userProfileImageEndPoint != null && userProfileImageEndPoint !== "" ) userProFileImageUrl = userProfileImageEndPoint
+
     let template = '<div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2" id="postingId'+ postingId +'">'
                       + '<div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">'
-                      +     '<a href="'+ feedDetailRedirectUri +'"> <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="w-9 h-9 rounded-full"> </a>'
+                      +     '<a href="'+ feedDetailRedirectUri +'"> <img src="'+ profileImageUrl +'" alt="" class="w-9 h-9 rounded-full"> </a>'
                       +     '<div class="flex-1">'
                       +         '<a href="'+ feedDetailRedirectUri +'" > <h4 class="text-black dark:text-white"> '+ postingUserNickname +' </h4> </a>'
                       +         '<div class="text-xs text-gray-500 dark:text-white/80">'+ localDatetime +'</div>'
@@ -160,7 +172,7 @@ function getPostingTemplate(postingUserId, content, insertDateTime, postingId, p
                       +     getMoreCommentBtn(postingId)
                       + '</div>'
                       + '<div class="sm:px-4 sm:py-3 p-2.5 border-t border-gray-100 flex items-center gap-1 dark:border-slate-700/40">'
-                      +     '<img th:src="@{/assets/images/avatars/avatar-7.jpg}" alt="" class="w-6 h-6 rounded-full">'
+                      +     '<img src="'+ userProFileImageUrl +'" alt="" class="w-6 h-6 rounded-full">'
                       +     '<div class="flex-1 relative overflow-hidden h-10">'
                       +         '<textarea id="commentContent'+ postingId +'" placeholder="Add Comment...." rows="1" class="w-full resize-none !bg-transparent px-4 py-2 focus:!border-transparent focus:!ring-transparent" aria-haspopup="true" aria-expanded="false"></textarea>'
                       +     '</div>'
@@ -466,7 +478,8 @@ function getCommentList(postingId){
                         let commentTemplate = getCommentContent(element.commentId,
                             element.userId,
                             element.content,
-                            element.userNickname);
+                            element.userNickname,
+                            element.userProfileImageEndPoint);
 
                         $('#commentArea'+postingId).append(commentTemplate);
                     }
@@ -491,15 +504,19 @@ function getCommentList(postingId){
     });
 }
 
-function getCommentContent(commentId, userId, content, userNickname){
+function getCommentContent(commentId, userId, content, userNickname, userProfileImageEndPoint){
     let realContent = content.replace(/\n/g, "<br>");
 
     const isUserCommentWriter = window.localStorage.getItem(userIdString) === userId;
 
     const feedDetailRedirectUri = feedDetailUri + '/' + userId
 
+    let profileImageUrl = "/assets/images/avatars/avatar-1.jpg";
+
+    if( userProfileImageEndPoint != null && userProfileImageEndPoint !== "" ) profileImageUrl = userProfileImageEndPoint
+
     let commentContent = '<div class="flex items-start gap-3 relative" id="commentId'+ commentId +'">'
-                            +         '<a href="'+ feedDetailRedirectUri +'"> <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
+                            +         '<a href="'+ feedDetailRedirectUri +'"> <img src="'+ profileImageUrl +'" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>'
                             +         '<div class="flex-1" id="commentContentDiv'+ commentId +'">'
                             +             '<a href="'+ feedDetailRedirectUri +'" class="text-black font-medium inline-block dark:text-white"> '+ userNickname +' </a>'
                             +             '<p class="mt-0.5" id="commentContentText'+ commentId +'">'+ realContent +'</p>'
@@ -561,7 +578,8 @@ function registerComment(postingId){
                     let commentTemplate = getCommentContent(response.commentId,
                         $('#userIdText').text(),
                         commentContent,
-                        window.localStorage.getItem(userNicknameString)
+                        window.localStorage.getItem(userNicknameString),
+                        window.localStorage.getItem(userProfileImageEndPointString)
                     );
 
                     $('#commentArea'+postingId).prepend(commentTemplate);

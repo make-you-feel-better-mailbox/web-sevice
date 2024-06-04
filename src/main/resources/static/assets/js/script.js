@@ -2,6 +2,8 @@ const accessTokenString = "accessToken";
 const refreshTokenString = "refreshToken";
 const userIdString = "userId";
 const userNicknameString = "userNicknameString"
+const userProfileImageEndPointString = "userProfileImageEndPoint"
+const defaultUserProfileImageEndPoint = "/assets/images/avatars/avatar-1.jpg";
 
 // On page load or when changing themes, best to add inline in `head` to avoid FOUC
 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -69,6 +71,7 @@ function checkTokenExpired(){
         window.localStorage.removeItem(refreshTokenString);
         window.localStorage.removeItem(userIdString);
         window.localStorage.removeItem(userNicknameString);
+        window.localStorage.removeItem(userProfileImageEndPointString);
 
         return null;
     }
@@ -83,8 +86,15 @@ function checkTokenExpired(){
         success: function(response){
             $('#nicknameText').text(response.nickname);
             $('#userIdText').text(response.userId);
+
+            let profileImageUrl = defaultUserProfileImageEndPoint;
+
+            if( response.profileImageEndPoint != null && response.profileImageEndPoint !== "" ) profileImageUrl = response.profileImageEndPoint
+
+            $('.userProfileImage').attr("src", profileImageUrl);
             window.localStorage.setItem(userIdString, response.userId);
             window.localStorage.setItem(userNicknameString, response.nickname);
+            window.localStorage.setItem(userProfileImageEndPointString, profileImageUrl);
             $('#notificationsCount').text(0);
         },
         complete: function(response){
@@ -159,6 +169,7 @@ function allTokenExpired(){
     window.localStorage.removeItem(refreshTokenString);
     window.localStorage.removeItem(userIdString);
     window.localStorage.removeItem(userNicknameString);
+    window.localStorage.removeItem(userProfileImageEndPointString);
     location.href = rootUri;
 }
 
@@ -210,4 +221,9 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(context, args), wait);
     };
+}
+
+function getUserProfileEndPoint(userProfileEndPoint){
+    if (userProfileEndPoint == null || userProfileEndPoint === "") return defaultUserProfileImageEndPoint;
+    else return userProfileEndPoint
 }

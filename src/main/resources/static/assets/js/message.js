@@ -2,13 +2,14 @@ let chatRoomWebSocket = null;
 
 function getChatRoomHtml(chatRoomId, userId, chatUsers, unreadMessageExist, lastChat) {
     const chatRoomTitle = getChatRoomTitle(userId, chatUsers);
+    const chatRoomProfileImageEndPoint = getChatRoomProfileImageEndPoint(userId, chatUsers);
 
     const lastMessage = lastChat.chatExist ? lastChat.lastChatMessage : "You haven't started message yet!";
     const lastChatDate = instantStringToLocalDateTime(lastChat.lastChatDate);
 
     let html = '<a href="#" onclick="openChatRoom(\''+ chatRoomId +'\')" class="relative flex items-center gap-4 p-2 duration-200 rounded-xl hover:bg-secondery">'
     +    '<div class="relative w-14 h-14 shrink-0">'
-    +        '<img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="object-cover w-full h-full rounded-full"/>'
+    +        '<img src="'+ chatRoomProfileImageEndPoint +'" alt="" class="object-cover w-full h-full rounded-full"/>'
     +    '</div>'
     +    '<div class="flex-1 min-w-0">'
     +        '<div class="flex items-center gap-2 mb-1.5">'
@@ -33,6 +34,20 @@ function getChatRoomTitle(userId, chatUsers){
         return "나와의 채팅";
     } else {
         return chatUsers.find(chatUser => chatUser.userId !== userId).userNickname;
+    }
+}
+
+function getChatRoomProfileImageEndPoint(userId, chatUsers) {
+    if (chatUsers.length > 2) {
+        return defaultUserProfileImageEndPoint;
+    } else if (chatUsers.length == 1){
+        let profileEndPoint = chatUsers.find(chatUser => chatUser.userId === userId).userProfileImageEndPoint;
+
+        return getUserProfileEndPoint(profileEndPoint);
+    } else {
+        let profileEndPoint =  chatUsers.find(chatUser => chatUser.userId !== userId).userProfileImageEndPoint;
+
+        return getUserProfileEndPoint(profileEndPoint);
     }
 }
 
@@ -126,6 +141,7 @@ function onMessage(msg) {
 
     let userId = data.senderId;
     let message = data.message;
+    let userProfileEndPoint = data.userProfileImageEndPoint;
 
     let html = "";
 
@@ -134,9 +150,9 @@ function onMessage(msg) {
     let now = new Date();
 
     if(isSender) {
-        html = getSentMessageBox(message, now.toISOString());
+        html = getSentMessageBox(message, now.toISOString(), getUserProfileEndPoint(userProfileEndPoint));
     } else {
-        html = getReceivedMessageBox(message, now.toISOString(), userId);
+        html = getReceivedMessageBox(message, now.toISOString(), userId, getUserProfileEndPoint(userProfileEndPoint));
     }
 
     $('#chatBoxArea').append(html);
@@ -144,11 +160,11 @@ function onMessage(msg) {
     $("#chatRoomArea").scrollTop($("#chatRoomArea").prop('scrollHeight'));
 }
 
-function getReceivedMessageBox(message, sendDateString, senderId) {
+function getReceivedMessageBox(message, sendDateString, senderId, userProfileEndPoint) {
     const sendDate = instantStringToLocalDateTime(sendDateString);
 
     let html = '<div class="flex gap-3">'
-    +   '<img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-9 h-9 rounded-full shadow" onclick="moveToFeedDetail(\''+ senderId +'\')"/>'
+    +   '<img src="'+ userProfileEndPoint +'" alt="" class="w-9 h-9 rounded-full shadow" onclick="moveToFeedDetail(\''+ senderId +'\')"/>'
     +    '<div class="px-4 py-2 rounded-[20px] max-w-sm bg-secondery">' + message
     +    '</div>'
     + '<div class="text-xs font-light text-gray-500 dark:text-white/70" style="margin-top: auto;">'+ sendDate +'</div>'
@@ -156,11 +172,11 @@ function getReceivedMessageBox(message, sendDateString, senderId) {
     return html;
 }
 
-function getSentMessageBox(message, sendDateString) {
+function getSentMessageBox(message, sendDateString, profileImageEndPoint) {
     const sendDate = instantStringToLocalDateTime(sendDateString);
 
     let html = '<div class="flex gap-2 flex-row-reverse items-end">'
-        + '<img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="w-4 h-4 rounded-full shadow">'
+        + '<img src="'+ profileImageEndPoint +'" alt="" class="w-4 h-4 rounded-full shadow">'
         + '<div class="px-4 py-2 rounded-[20px] max-w-sm bg-gradient-to-tr from-sky-500 to-blue-500 text-white shadow">' + message
         + '</div>'
         + '<div class="text-xs font-light text-gray-500 dark:text-white/70">'+ sendDate +'</div>'
@@ -220,9 +236,9 @@ function getChatMessageBoxHtml(chatMessageDetail, userId){
     let html = "";
 
     if(isSender) {
-        html = getSentMessageBox(chatMessageDetail.message, chatMessageDetail.createdAt);
+        html = getSentMessageBox(chatMessageDetail.message, chatMessageDetail.createdAt, getUserProfileEndPoint(chatMessageDetail.userProfileEndPoint));
     } else {
-        html = getReceivedMessageBox(chatMessageDetail.message, chatMessageDetail.createdAt, chatMessageDetail.senderId);
+        html = getReceivedMessageBox(chatMessageDetail.message, chatMessageDetail.createdAt, chatMessageDetail.senderId, getUserProfileEndPoint(chatMessageDetail.userProfileEndPoint));
     }
 
     return html;
@@ -240,8 +256,10 @@ function getChatRoomDetail(chatRoomId){
             let requestUserId = window.localStorage.getItem(userIdString);
 
             const chatRoomTitle = getChatRoomTitle(requestUserId, response.chatUsers);
+            const chatRoomImageFileEndPoint = getChatRoomProfileImageEndPoint(requestUserId, response.chatUsers);
 
             $("#chatRoomTitle").text(chatRoomTitle)
+            $("#chatRoomProfileImage").attr("src", chatRoomImageFileEndPoint);
         },
         complete: function(response){
         },
