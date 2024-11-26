@@ -1,0 +1,35 @@
+server:
+  servlet:
+    session:
+      timeout: 3600
+  shutdown: graceful
+  tomcat:
+    threads:
+      max: 1000
+      min-spare: 100
+    max-connections: 8192
+    accept-count: 200
+    connection-timeout: 300000
+  port: 8080
+  error:
+    include-exception: true
+    include-stacktrace: always
+
+spring:
+  application:
+    name: web-service
+
+  thymeleaf:
+    cache: false
+    prefix: classpath:views/
+    suffix: .html
+
+api-gateway:
+  host: "http://localhost:8000"
+  access-id: "server-access-id"
+  access-key: "server-access-key"
+
+chatting-service:
+  host: "http://localhost:9000"
+  access-id: "server-access-id"
+  access-key: "server-access-key"

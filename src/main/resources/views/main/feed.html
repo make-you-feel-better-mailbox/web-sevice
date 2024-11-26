@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www/thymeleaf.org" th:replace="base/mainLayout :: mainLayout('Mail-Box-Feed')">
+
+<!-- Start Content-->
+<div class="container-fluid" th:fragment="content">
+    <!-- main contents -->
+    <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
+
+        <!-- timeline -->
+        <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto"  id="js-oversized">
+
+            <div class="max-w-[680px] mx-auto">
+
+                <!-- stories -->
+                <div class="mb-8">
+
+                    <h3 class="font-extrabold text-2xl  text-black dark:text-white hidden"> Stories</h3>
+
+                    <div class="relative" tabindex="-1" uk-slider="auto play: true;finite: true" uk-lightbox="">
+
+                        <div class="py-5 uk-slider-container">
+
+                            <ul class="uk-slider-items w-[calc(100%+14px)]" uk-scrollspy="target: > li; cls: uk-animation-scale-up; delay: 20;repeat:true">
+                                <li class="md:pr-3" uk-scrollspy-class="uk-animation-fade">
+                                    <div class="md:w-16 md:h-16 w-12 h-12 rounded-full relative border-2 border-dashed grid place-items-center bg-slate-200 border-slate-300 dark:border-slate-700 dark:bg-dark2 shrink-0"
+                                         uk-toggle="target: #create-story">
+                                        <ion-icon name="camera" class="text-2xl"></ion-icon>
+                                    </div>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-1.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-2.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-4.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-4.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-5.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-1.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-6.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-1.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-7.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-2.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-8.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-4.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-9.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-5.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a th:href="@{/assets/images/avatars/avatar-lg-1.jpg}" data-caption="Caption 1">
+                                        <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
+                                            <img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="absolute w-full h-full object-cover">
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="md:pr-3 pr-2">
+                                    <div class="md:w-16 md:h-16 w-12 h-12 bg-slate-200/60 rounded-full dark:bg-dark2 animate-pulse"></div>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <div class="max-md:hidden">
+
+                            <button type="button" class="absolute -translate-y-1/2 bg-white shadow rounded-full top-1/2 -left-3.5 grid w-8 h-8 place-items-center dark:bg-dark3" uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-2xl"></ion-icon></button>
+                            <button type="button" class="absolute -right-2 -translate-y-1/2 bg-white shadow rounded-full top-1/2 grid w-8 h-8 place-items-center dark:bg-dark3" uk-slider-item="next"> <ion-icon name="chevron-forward" class="text-2xl"></ion-icon> </button>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <!-- feed story -->
+                <div class="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3" id="feed">
+
+                    <!-- add story -->
+                    <div class="bg-white rounded-xl shadow-sm md:p-4 p-2 space-y-4 text-sm font-medium border1 dark:bg-dark2" id="postPostingBox">
+
+                        <div class="flex items-center md:gap-3 gap-1">
+                            <div onclick="resetCreateStatus()" class="flex-1 bg-slate-100 hover:bg-opacity-80 transition-all rounded-lg cursor-pointer dark:bg-dark3" uk-toggle="target: #create-status">
+                                <div class="py-2.5 text-center dark:text-white"> What do you have in mind? </div>
+                            </div>
+                            <div onclick="resetCreateStatus()" class="cursor-pointer hover:bg-opacity-80 p-1 px-1.5 rounded-xl transition-all bg-pink-100/60 hover:bg-pink-100 dark:bg-white/10 dark:hover:bg-white/20" uk-toggle="target: #create-status">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-pink-600 fill-pink-200/70" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M15 8h.01" />
+                                    <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+                                    <path d="M3.5 15.5l4.5 -4.5c.928 -.893 2.072 -.893 3 0l5 5" />
+                                    <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2.5 2.5" />
+                                </svg>
+                            </div>
+<!--                            <div class="cursor-pointer hover:bg-opacity-80 p-1 px-1.5 rounded-xl transition-all bg-sky-100/60 hover:bg-sky-100 dark:bg-white/10 dark:hover:bg-white/20" uk-toggle="target: #create-status">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-sky-600 fill-sky-200/70 " viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">-->
+<!--                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>-->
+<!--                                    <path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" />-->
+<!--                                    <path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />-->
+<!--                                </svg>-->
+<!--                            </div>-->
+                        </div>
+
+                    </div>
+
+                    <!-- placeholder -->
+                    <div class="rounded-xl shadow-sm p-4 space-y-4 bg-slate-200/40 animate-pulse border1 dark:bg-dark2" id="postingPlaceHolder">
+
+                        <div class="flex gap-3">
+                            <div class="w-9 h-9 rounded-full bg-slate-300/20"></div>
+                            <div class="flex-1 space-y-3">
+                                <div class="w-40 h-5 rounded-md bg-slate-300/20"></div>
+                                <div class="w-24 h-4 rounded-md bg-slate-300/20"></div>
+                            </div>
+                            <div class="w-6 h-6 rounded-full bg-slate-300/20"></div>
+                        </div>
+
+                        <div class="w-full h-52 rounded-lg bg-slate-300/10 my-3"> </div>
+
+                        <div class="flex gap-3">
+
+                            <div class="w-16 h-5 rounded-md bg-slate-300/20"></div>
+
+                            <div class="w-14 h-5 rounded-md bg-slate-300/20"></div>
+
+                            <div class="w-6 h-6 rounded-full bg-slate-300/20 ml-auto"></div>
+                            <div class="w-6 h-6 rounded-full bg-slate-300/20  "></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- sidebar -->
+            <div class="flex-1">
+
+                <div class="lg:space-y-4 lg:pb-8 max-lg:grid sm:grid-cols-2 max-lg:gap-6"
+                     uk-sticky="media: 1024; end: #js-oversized; offset: 80">
+
+                    <div class="box p-5 px-6">
+
+                        <div class="flex items-baseline justify-between text-black dark:text-white">
+                            <h3 class="font-bold text-base"> People you may know </h3>
+                            <a href="#" class="text-sm text-blue-500">See all</a>
+                        </div>
+
+                        <div class="side-list">
+
+                            <div class="side-list-item">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-10.jpg}" alt="" class="side-list-image rounded-full">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="side-list-title">  John Michael </h4></a>
+                                    <div class="side-list-info"> 125k Following </div>
+                                </div>
+                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+                            </div>
+
+                            <div class="side-list-item">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-11.jpg}" alt="" class="side-list-image rounded-full">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="side-list-title"> Monroe Parker </h4></a>
+                                    <div class="side-list-info"> 320k Following </div>
+                                </div>
+                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+                            </div>
+
+                            <div class="side-list-item">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-12.jpg}" alt="" class="side-list-image rounded-full">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="side-list-title"> James Lewis</h4></a>
+                                    <div class="side-list-info"> 125k Following </div>
+                                </div>
+                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+                            </div>
+
+                            <div class="side-list-item">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-13.jpg}" alt="" class="side-list-image rounded-full">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="side-list-title">  Alexa stella </h4></a>
+                                    <div class="side-list-info"> 192k Following </div>
+                                </div>
+                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+                            </div>
+
+                            <div class="side-list-item">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-14.jpg}" alt="" class="side-list-image rounded-full">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="side-list-title"> John Michael </h4></a>
+                                    <div class="side-list-info"> 320k Following </div>
+                                </div>
+                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+                            </div>
+
+                            <button class="bg-secondery button w-full mt-2 hidden">See all</button>
+
+                        </div>
+
+                    </div>
+
+                    <!-- peaple you might know -->
+                    <div class="box p-5 px-6 border1 dark:bg-dark2 hidden">
+
+                        <div class="flex justify-between text-black dark:text-white">
+                            <h3 class="font-bold text-base"> Peaple You might know </h3>
+                            <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
+                        </div>
+
+                        <div class="space-y-4 capitalize text-xs font-normal mt-5 mb-2 text-gray-500 dark:text-white/80">
+
+                            <div class="flex items-center gap-3">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-7.jpg}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white">  Johnson smith</h4></a>
+                                    <div class="mt-0.5"> Suggested For You </div>
+                                </div>
+                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white"> James Lewis</h4></a>
+                                    <div class="mt-0.5"> Followed by Johnson </div>
+                                </div>
+                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white"> John Michael</h4></a>
+                                    <div class="mt-0.5"> Followed by Monroe  </div>
+                                </div>
+                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white">  Monroe Parker</h4></a>
+                                    <div class="mt-0.5"> Suggested For You </div>
+                                </div>
+                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <a href="timeline.html">
+                                    <img th:src="@{/assets/images/avatars/avatar-4.jpg}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                </a>
+                                <div class="flex-1">
+                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white">  Martin Gray</h4></a>
+                                    <div class="mt-0.5"> Suggested For You </div>
+                                </div>
+                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- online friends -->
+                    <div class="box p-5 px-6 border1 dark:bg-dark2">
+
+                        <div class="flex justify-between text-black dark:text-white">
+                            <h3 class="font-bold text-base"> Online Friends </h3>
+                            <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
+                        </div>
+
+                        <div class="grid grid-cols-6 gap-3 mt-4">
+
+                            <a href="timeline.html">
+                                <div class="w-10 h-10 relative">
+                                    <img th:src="@{/assets/images/avatars/avatar-2.jpg}" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                </div>
+                            </a>
+                            <a href="timeline.html">
+                                <div class="w-10 h-10 relative">
+                                    <img th:src="@{/assets/images/avatars/avatar-3.jpg}" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                </div>
+                            </a>
+                            <a href="timeline.html">
+                                <div class="w-10 h-10 relative">
+                                    <img th:src="@{/assets/images/avatars/avatar-4.jpg}" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                </div>
+                            </a>
+                            <a href="timeline.html">
+                                <div class="w-10 h-10 relative">
+                                    <img th:src="@{/assets/images/avatars/avatar-5.jpg}" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                </div>
+                            </a>
+                            <a href="timeline.html">
+                                <div class="w-10 h-10 relative">
+                                    <img th:src="@{/assets/images/avatars/avatar-6.jpg}" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                </div>
+                            </a>
+                            <a href="timeline.html">
+                                <div class="w-10 h-10 relative">
+                                    <img th:src="@{/assets/images/avatars/avatar-7.jpg}" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                </div>
+                            </a>
+
+                        </div>
+
+
+                    </div>
+
+                    <!-- Pro Members -->
+                    <div class="box p-5 px-6 border1 dark:bg-dark2">
+
+                        <div class="flex justify-between text-black dark:text-white">
+                            <h3 class="font-bold text-base"> Pro Members </h3>
+                        </div>
+
+                        <div class="relative capitalize font-normal text-sm mt-4 mb-2" tabindex="-1" uk-slider="autoplay: true;finite: true">
+
+                            <div class="overflow-hidden uk-slider-container">
+
+                                <ul class="-ml-2 uk-slider-items w-[calc(100%+0.5rem)]">
+
+                                    <li class="w-1/2 pr-2">
+                                        <a href="timeline.html">
+                                            <div class="flex flex-col items-center shadow-sm p-2 rounded-xl border1">
+                                                <a href="timeline.html">
+                                                    <div class="relative w-16 h-16 mx-auto mt-2">
+                                                        <img th:src="@{/assets/images/avatars/avatar-17.jpg}" alt="" class="h-full object-cover rounded-full shadow w-full">
+                                                    </div>
+                                                </a>
+                                                <div class="mt-5 text-center w-full">
+                                                    <a href="timeline.html"> <h5 class="font-semibold"> Martin Gray</h5> </a>
+                                                    <div class="text-xs text-gray-400 mt-0.5 font-medium"> 12K Followers</div>
+                                                    <button type="button" class="bg-secondery block font-semibold mt-4 py-1.5 rounded-lg text-sm w-full border1"> Follow </button>
+                                                </div>
+                                            </div>
+
+                                    </li>
+                                    <li class="w-1/2 pr-2">
+                                        <div class="flex flex-col items-center shadow-sm p-2 rounded-xl border1">
+                                            <a href="timeline.html">
+                                                <div class="relative w-16 h-16 mx-auto mt-2">
+                                                    <img th:src="@{/assets/images/avatars/avatar-15.jpg}" alt="" class="h-full object-cover rounded-full shadow w-full">
+                                                </div>
+                                            </a>
+                                            <div class="mt-5 text-center w-full">
+                                                <a href="timeline.html"> <h5 class="font-semibold"> Alexa Park</h5> </a>
+                                                <div class="text-xs text-gray-400 mt-0.5 font-medium"> 12K Followers</div>
+                                                <button type="button" class="bg-secondery block font-semibold mt-4 py-1.5 rounded-lg text-sm w-full border1"> Follow </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="w-1/2 pr-2">
+                                        <div class="flex flex-col items-center shadow-sm p-2 rounded-xl border1">
+                                            <a href="timeline.html">
+                                                <div class="relative w-16 h-16 mx-auto mt-2">
+                                                    <img th:src="@{/assets/images/avatars/avatar-16.jpg}" alt="" class="h-full object-cover rounded-full shadow w-full">
+                                                </div>
+                                            </a>
+                                            <div class="mt-5 text-center w-full">
+                                                <a href="timeline.html"> <h5 class="font-semibold"> James Lewis</h5> </a>
+                                                <div class="text-xs text-gray-400 mt-0.5 font-medium"> 15K Followers</div>
+                                                <button type="button" class="bg-secondery block font-semibold mt-4 py-1.5 rounded-lg text-sm w-full border1"> Follow </button>
+                                            </div>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
+
+                                <button type="button" class="absolute -translate-y-1/2 bg-slate-100 rounded-full top-1/2 -left-4 grid w-9 h-9 place-items-center dark:bg-dark3"  uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-2xl"></ion-icon></button>
+                                <button type="button" class="absolute -right-4 -translate-y-1/2 bg-slate-100 rounded-full top-1/2 grid w-9 h-9 place-items-center dark:bg-dark3" uk-slider-item="next"> <ion-icon name="chevron-forward" class="text-2xl"></ion-icon></button>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <!-- Trends -->
+                    <div class="box p-5 px-6 border1 dark:bg-dark2">
+
+                        <div class="flex justify-between text-black dark:text-white">
+                            <h3 class="font-bold text-base"> Trends for you </h3>
+                            <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
+                        </div>
+
+                        <div class="space-y-3.5 capitalize text-xs font-normal mt-5 mb-2 text-gray-600 dark:text-white/80">
+                            <a href="#">
+                                <div class="flex items-center gap-3 p">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
+                                    </svg>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-black dark:text-white text-sm">  artificial intelligence </h4>
+                                        <div class="mt-0.5"> 1,245,62 post </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="block">
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
+                                    </svg>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-black dark:text-white text-sm">  Web developers</h4>
+                                        <div class="mt-0.5"> 1,624 post </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="block">
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
+                                    </svg>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-black dark:text-white text-sm">  Ui Designers</h4>
+                                        <div class="mt-0.5"> 820 post </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="block">
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
+                                    </svg>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
+                                        <div class="mt-0.5"> 480 post </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- create status -->
+    <div class="hidden lg:p-20 uk- open" id="create-status" uk-modal="">
+
+        <div class="uk-modal-dialog tt relative overflow-hidden mx-auto bg-white shadow-xl rounded-lg md:w-[520px] w-full dark:bg-dark2">
+
+            <div class="text-center py-4 border-b mb-0 dark:border-slate-700">
+                <h2 class="text-sm font-medium text-black"> Create Status </h2>
+
+                <!-- close button -->
+                <button type="button" class="button-icon absolute top-0 right-0 m-2.5 uk-modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+            </div>
+
+            <div class="space-y-5 mt-3 p-2">
+                <input type="hidden" id="postPostingContentId" value="0">
+                <textarea class="w-full !text-black placeholder:!text-black !bg-white !border-transparent focus:!border-transparent focus:!ring-transparent !font-normal !text-xl   dark:!text-white dark:placeholder:!text-white dark:!bg-slate-800" name="content" id="content"  rows="6" placeholder="What do you have in mind?"></textarea>
+            </div>
+
+            <div class="flex items-center gap-2 text-sm py-2 px-4 font-medium flex-wrap">
+<!--                <button type="button" class="flex items-center gap-1.5 bg-sky-50 text-sky-600 rounded-full py-1 px-2 border-2 border-sky-100 dark:bg-sky-950 dark:border-sky-900">-->
+<!--                    <ion-icon name="image" class="text-base"></ion-icon>-->
+<!--                    Image-->
+<!--                </button>-->
+<!--                <button type="button" class="flex items-center gap-1.5 bg-teal-50 text-teal-600 rounded-full py-1 px-2 border-2 border-teal-100 dark:bg-teal-950 dark:border-teal-900">-->
+<!--                    <ion-icon name="videocam" class="text-base"></ion-icon>-->
+<!--                    Video-->
+<!--                </button>-->
+<!--                <button type="button" class="flex items-center gap-1.5 bg-orange-50 text-orange-600 rounded-full py-1 px-2 border-2 border-orange-100 dark:bg-yellow-950 dark:border-yellow-900">-->
+<!--                    <ion-icon name="happy" class="text-base"></ion-icon>-->
+<!--                    Feeling-->
+<!--                </button>-->
+<!--                <button type="button" class="flex items-center gap-1.5 bg-red-50 text-red-600 rounded-full py-1 px-2 border-2 border-rose-100 dark:bg-rose-950 dark:border-rose-900">-->
+<!--                    <ion-icon name="location" class="text-base"></ion-icon>-->
+<!--                    Check in-->
+<!--                </button>-->
+<!--                <button type="button" class="grid place-items-center w-8 h-8 text-xl rounded-full bg-secondery">-->
+<!--                    <ion-icon name="ellipsis-horizontal"></ion-icon>-->
+<!--                </button>-->
+            </div>
+
+            <div class="p-5 flex justify-between items-center">
+                <div>
+<!--                    <button class="inline-flex items-center py-1 px-2.5 gap-1 font-medium text-sm rounded-full bg-slate-50 border-2 border-slate-100 group aria-expanded:bg-slate-100 aria-expanded: dark:text-white dark:bg-slate-700 dark:border-slate-600" type="button">-->
+<!--                        Everyone-->
+<!--                        <ion-icon name="chevron-down-outline" class="text-base duration-500 group-aria-expanded:rotate-180"></ion-icon>-->
+<!--                    </button>-->
+
+<!--                    <div  class="p-2 bg-white rounded-lg shadow-lg text-black font-medium border border-slate-100 w-60 dark:bg-slate-700"-->
+<!--                          uk-drop="offset:10;pos: bottom-left; reveal-left;animate-out: true; animation: uk-animation-scale-up uk-transform-origin-bottom-left ; mode:click">-->
+
+<!--                        <form>-->
+<!--                            <label>-->
+<!--                                <input type="radio" name="radio-status" id="monthly1" class="peer appearance-none hidden" checked />-->
+<!--                                <div class=" relative flex items-center justify-between cursor-pointer rounded-md p-2 px-3 hover:bg-secondery peer-checked:[&_.active]:block dark:bg-dark3">-->
+<!--                                    <div class="text-sm">  Everyone </div>-->
+<!--                                    <ion-icon name="checkmark-circle" class="hidden active absolute -translate-y-1/2 right-2 text-2xl text-blue-600 uk-animation-scale-up"></ion-icon>-->
+<!--                                </div>-->
+<!--                            </label>-->
+<!--                            <label>-->
+<!--                                <input type="radio" name="radio-status" id="monthly1" class="peer appearance-none hidden" />-->
+<!--                                <div class=" relative flex items-center justify-between cursor-pointer rounded-md p-2 px-3 hover:bg-secondery peer-checked:[&_.active]:block dark:bg-dark3">-->
+<!--                                    <div class="text-sm"> Friends </div>-->
+<!--                                    <ion-icon name="checkmark-circle" class="hidden active absolute -translate-y-1/2 right-2 text-2xl text-blue-600 uk-animation-scale-up"></ion-icon>-->
+<!--                                </div>-->
+<!--                            </label>-->
+<!--                            <label>-->
+<!--                                <input type="radio" name="radio-status" id="monthly" class="peer appearance-none hidden" />-->
+<!--                                <div class=" relative flex items-center justify-between cursor-pointer rounded-md p-2 px-3 hover:bg-secondery peer-checked:[&_.active]:block dark:bg-dark3">-->
+<!--                                    <div class="text-sm"> Only me </div>-->
+<!--                                    <ion-icon name="checkmark-circle" class="hidden active absolute -translate-y-1/2 right-2 text-2xl text-blue-600 uk-animation-scale-up"></ion-icon>-->
+<!--                                </div>-->
+<!--                            </label>-->
+<!--                        </form>-->
+
+<!--                    </div>-->
+                    <button type="button" class="flex items-center gap-1.5 bg-sky-50 text-sky-600 rounded-full py-1 px-2 border-2 border-sky-100 dark:bg-sky-950 dark:border-sky-900">
+                        <ion-icon name="image" class="text-base md hydrated" role="img" aria-label="image"></ion-icon>
+                        Image
+                    </button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" id="postingActionBtn" class="button bg-blue-500 text-white py-2 px-12 text-[14px]"> Create</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- create story -->
+    <div class="hidden lg:p-20" id="create-story" uk-modal="">
+
+        <div class="uk-modal-dialog tt relative overflow-hidden mx-auto bg-white p-7 shadow-xl rounded-lg md:w-[520px] w-full dark:bg-dark2">
+
+            <div class="text-center py-3 border-b -m-7 mb-0 dark:border-slate-700">
+                <h2 class="text-sm font-medium"> Create Status </h2>
+
+                <!-- close button -->
+                <button type="button" class="button__ico absolute top-0 right-0 m-2.5 uk-modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+            </div>
+
+            <div class="space-y-5 mt-7">
+
+                <div>
+                    <label for="" class="text-base">What do you have in mind? </label>
+                    <input type="text"  class="w-full mt-3">
+                </div>
+
+                <div>
+                    <div class="w-full h-72 relative border1 rounded-lg overflow-hidden bg-[url('../images/ad_pattern.png')] bg-repeat">
+
+                        <label for="createStatusUrl" class="flex flex-col justify-center items-center absolute -translate-x-1/2 left-1/2 bottom-0 z-10 w-full pb-6 pt-10 cursor-pointer bg-gradient-to-t from-gray-700/60">
+                            <input id="createStatusUrl" type="file" class="hidden" />
+                            <ion-icon name="image" class="text-3xl text-teal-600"></ion-icon>
+                            <span class="text-white mt-2">Browse to Upload image </span>
+                        </label>
+
+                        <img id="createStatusImage" src="#" alt="Uploaded Image" accept="image/png, image/jpeg" style="display:none;" class="w-full h-full absolute object-cover">
+
+                    </div>
+
+                </div>
+
+                <div class="flex justify-between items-center">
+
+                    <div class="flex items-start gap-2">
+                        <ion-icon name="time-outline" class="text-3xl text-sky-600  rounded-full bg-blue-50 dark:bg-transparent"></ion-icon>
+                        <p class="text-sm text-gray-500 font-medium"> Your Status will be available <br> for <span class="text-gray-800"> 24 Hours</span> </p>
+                    </div>
+
+                    <button type="button" class="button bg-blue-500 text-white px-8"> Create</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- css -->
+<th:block th:fragment="css">
+
+</th:block>
+
+<!-- Scripts -->
+<th:block th:fragment="scripts">
+    <script th:src="@{/assets/js/feed.js}"></script>
+
+    <script th:inline="javascript" th:fragment="scripts">
+        let postingFilterUri = /*[[@{${GlobalURI.POSTING_FILTER}}]]*/;
+        let likeUri = /*[[@{${GlobalURI.LIKE_ROOT}}]]*/;
+        let commentUri = /*[[@{${GlobalURI.COMMENT_ROOT}}]]*/;
+        let commentFilterUri = /*[[@{${GlobalURI.COMMENT_FILTER}}]]*/;
+        let commentCountUri = /*[[@{${GlobalURI.COMMENT_COUNT}}]]*/;
+        let postingUri = /*[[@{${GlobalURI.POSTING_ROOT}}]]*/;
+
+        let accessTokenResponse = /*[[@{${accessToken}}]]*/;
+
+        let lastRequestTime = 0;
+
+        let postPageNumber = 0;
+
+        let isLastPage = false;
+
+        $(document).ready(function(){
+            if (accessTokenResponse != null && accessTokenResponse !== ""){
+                location.href = rootUri;
+            }
+
+            getPosting();
+
+            sendAjaxRequestIfVisible();
+
+            setInterval(function() {
+                sendAjaxRequestIfVisible();
+            }, 7000);
+        });
+
+        function resetCreateStatus(){
+            $('#content').val('');
+            $("#postPostingContentId").val(0);
+        }
+
+        $('#postingActionBtn').on('click', function(){
+            let postingContent = $('#content').val();
+
+            if (postingContent == null || postingContent === ""){
+                alert("내용을 입력해주세요");
+                return;
+            }
+
+            let isUpdate = $("#postPostingContentId").val() === 0 || $("#postPostingContentId").val() === "0" ? false : true;
+
+            if(isUpdate){
+                updatePostingRequest();
+            } else {
+                postingRequest();
+            }
+        });
+
+        function postingRequest(){
+            checkTokenExpired();
+
+            let formObj = {
+                "content" : $('#content').val(),
+                "mediaExist" : false
+            };
+
+            formObj[accessTokenString] = window.localStorage.getItem(accessTokenString);
+
+            let successNotification = {
+                message: '<div class="flex gap-5 items-center"> <div class="rounded-full bg-slate-200 p-1.5 inline-flex ring ring-slate-100 ring-offset-1"> <ion-icon name="checkmark-circle-outline" class="text-xl text-slate-600 drop-shadow-md"></ion-icon> </div> <div class="flex-1"> Posting successfully done! </div> </div>',
+                pos: 'top-center',
+                timeout: '6000'
+            }
+
+            $.ajax({
+                url: postingUri,
+                method: "POST",
+                data: JSON.stringify(formObj),
+                dataType: "JSON",
+                contentType: 'application/json',
+                beforeSend: function(request) {
+                },
+                success: function(response){
+                    if(response.isPostSuccess){
+                        let createStatusModal = $("#create-status");
+
+                        UIkit.modal(createStatusModal).hide();
+
+                        UIkit.notification(successNotification);
+
+                        if($("#postingId" + response.postingId).length === 0){
+                            let postingTemplate = getPostingTemplate(window.localStorage.getItem(userIdString),
+                                $('#content').val(),
+                                new Date().toISOString(),
+                                response.postingId,
+                                window.localStorage.getItem(userNicknameString),
+                                window.localStorage.getItem(userProfileImageEndPointString)
+                            );
+
+                            $('#feed').prepend(postingTemplate);
+
+                            $("#postPostingBox").remove();
+
+                            $('#feed').prepend(getPostPostingTemplate());
+                        }
+                    }
+                },
+                complete: function(response){
+                },
+                error: function(response){
+                    let errorModal = $("#errorModal");
+
+                    UIkit.modal(errorModal).show();
+                }
+            });
+        }
+
+        $(window).scroll(function() {
+            let now = new Date().getTime();
+            let scrollPercent = ($(window).scrollTop() / ($(document).height() - $(window).height())) * 100;
+
+            // 마지막 요청 후 3초가 지났고, 스크롤이 80% 이상인 경우에만 요청을 처리
+            if (now - lastRequestTime > 3000 && scrollPercent > 80) {
+                lastRequestTime = now; // 마지막 요청 시간 갱신
+                getPosting();
+                sendAjaxRequestIfVisible();
+            }
+        });
+
+    </script>
+
+</th:block>
+
+</body>
+</html>

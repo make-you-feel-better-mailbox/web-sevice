@@ -1,3 +1,10 @@
+const accessTokenString = "accessToken";
+const refreshTokenString = "refreshToken";
+const userIdString = "userId";
+const userNicknameString = "userNicknameString"
+const userProfileImageEndPointString = "userProfileImageEndPoint"
+const defaultUserProfileImageEndPoint = "/assets/images/avatars/avatar-1.jpg";
+
 // On page load or when changing themes, best to add inline in `head` to avoid FOUC
 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark')
@@ -54,10 +61,169 @@ if (this.files[0] ) {
 }
 });
 
+function checkTokenExpired(){
+    let accessToken = window.localStorage.getItem(accessTokenString);
 
+    let requestEndPoint = userRequestUri + "/" + accessToken;
 
+    if(accessToken == null || accessToken === "") {
+        window.localStorage.removeItem(accessTokenString);
+        window.localStorage.removeItem(refreshTokenString);
+        window.localStorage.removeItem(userIdString);
+        window.localStorage.removeItem(userNicknameString);
+        window.localStorage.removeItem(userProfileImageEndPointString);
 
+        return null;
+    }
 
+    $.ajax({
+        url: requestEndPoint,
+        method: "GET",
+        dataType: "JSON",
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            $('#nicknameText').text(response.nickname);
+            $('#userIdText').text(response.userId);
 
+            let profileImageUrl = defaultUserProfileImageEndPoint;
 
-    
+            if( response.profileImageEndPoint != null && response.profileImageEndPoint !== "" ) profileImageUrl = response.profileImageEndPoint
+
+            $('.userProfileImage').attr("src", profileImageUrl);
+            window.localStorage.setItem(userIdString, response.userId);
+            window.localStorage.setItem(userNicknameString, response.nickname);
+            window.localStorage.setItem(userProfileImageEndPointString, profileImageUrl);
+            $('#notificationsCount').text(0);
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let responseString = response.responseJSON;
+
+            if(response.status.toString().startsWith('4') && responseString != null && responseString == accessTokenExpired){
+
+                let responseString = response.responseJSON;
+
+                if (responseString == accessTokenExpired) {
+                    reissueAccessToken();
+                }
+
+            } else if (response.status.toString().startsWith('4')) {
+                allTokenExpired();
+
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
+            } else {
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
+            }
+        }
+    });
+}
+
+function reissueAccessToken(){
+    let accessToken = window.localStorage.getItem(accessTokenString);
+    let refreshToken = window.localStorage.getItem(refreshTokenString);
+
+    let requestObject = {
+        "accessToken" : accessToken,
+        "refreshToken" : refreshToken
+    };
+
+    $.ajax({
+        url: tokenUri,
+        method: "POST",
+        dataType: "JSON",
+        data: JSON.stringify(requestObject),
+        contentType: 'application/json',
+        beforeSend: function(request) {
+        },
+        success: function(response){
+            let newAccessToken = response.accessToken;
+            window.localStorage.removeItem(accessTokenString);
+            window.localStorage.setItem(accessTokenString, newAccessToken);
+        },
+        complete: function(response){
+        },
+        error: function(response){
+            let responseString = response.responseJSON;
+
+            if(response.status.toString().startsWith('4') && responseString != null && responseString == refreshTokenExpired){
+                allTokenExpired();
+            } else {
+                let errorModal = $("#errorModal");
+
+                UIkit.modal(errorModal).show();
+            }
+        }
+    });
+}
+
+function allTokenExpired(){
+    alert("로그인 시간이 만료됐습니다. 다시 로그인해주세요.");
+    window.localStorage.removeItem(accessTokenString);
+    window.localStorage.removeItem(refreshTokenString);
+    window.localStorage.removeItem(userIdString);
+    window.localStorage.removeItem(userNicknameString);
+    window.localStorage.removeItem(userProfileImageEndPointString);
+    location.href = rootUri;
+}
+
+function isElementInViewport(elem) {
+    var $elem = $(elem);
+    var windowTop = $(window).scrollTop();
+    var windowBottom = windowTop + $(window).height();
+    var elemTop = $elem.offset().top;
+    var elemBottom = elemTop + $elem.height();
+
+    return ((elemBottom <= windowBottom) && (elemTop >= windowTop));
+}
+
+function myConfirm(content, callbackFunction){
+    $("#confirmModalText").text(content);
+
+    let confirmModal = $("#confirmModal");
+
+    UIkit.modal(confirmModal).show();
+
+    $('#confirmModalOkBtn').click(function() {
+        callbackFunction();
+    });
+}
+
+$("#confirmModalCancelBtn").on("click", function (){
+    let confirmModal = $("#confirmModal");
+
+    UIkit.modal(confirmModal).hide();
+});
+
+function checkEmpty(value){
+    return value == null || value == "";
+}
+
+function checkValidation(pattern, value){
+    return !pattern.test(value);
+}
+
+function instantStringToLocalDateTime(instantString){
+    if (instantString == null || instantString === "") return "";
+    return moment(instantString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm');
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
+
+function getUserProfileEndPoint(userProfileEndPoint){
+    if (userProfileEndPoint == null || userProfileEndPoint === "") return defaultUserProfileImageEndPoint;
+    else return userProfileEndPoint
+}
