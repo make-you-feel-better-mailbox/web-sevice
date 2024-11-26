@@ -1,0 +1,13 @@
+package com.onetwo.webservice.common.properties;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class ChattingServiceInfo {
+
+    private String host;
+    private String accessId;
+    private String accessKey;
+}

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www/thymeleaf.org" th:replace="base/default :: defaultLayout('feed')">
+
+<!-- Start Content-->
+<div class="container-fluid" th:fragment="content">
+    <div class="sm:flex">
+
+        <div class="relative lg:w-[580px] md:w-96 w-full p-10 min-h-screen bg-white shadow-xl flex items-center pt-10 dark:bg-slate-900 z-10">
+
+            <div class="w-full lg:max-w-sm mx-auto space-y-10"
+                 uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
+
+                <!-- logo image-->
+                <a th:href="${GlobalURI.ROOT_URI}"> <img th:src="@{/assets/images/logo.png}" class="w-28 absolute top-10 left-10 dark:hidden"
+                                  alt=""></a>
+                <a th:href="${GlobalURI.ROOT_URI}"> <img th:src="@{/assets/images/logo-light.png}"
+                                  class="w-28 absolute top-10 left-10 hidden dark:!block" alt=""></a>
+
+                <!-- logo icon optional -->
+                <div class="hidden">
+                    <img class="w-12" th:src="@{/assets/images/logo-icon.png}" alt="Socialite html template">
+                </div>
+
+                <!-- title -->
+                <div>
+                    <h2 class="text-2xl font-semibold mb-1.5"> Sign up to get started </h2>
+                    <p class="text-sm text-gray-700 font-normal">If you already have an account, <a
+                            th:href="${GlobalURI.LOGIN_ROOT}"
+                            class="text-blue-700">Login
+                        here!</a></p>
+                </div>
+
+
+                <!-- form -->
+                <form id="userRegisterForm" class="space-y-7 text-sm text-black font-medium dark:text-white"
+                      uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
+
+                    <div class="grid grid-cols-2 gap-4 gap-y-7">
+                            <!-- ID -->
+                            <div>
+                                <label for="userId" class="">ID</label>
+                                <div class="mt-2.5">
+                                    <input id="userId" name="userId" type="text" autofocus="" placeholder="ID" pattern="^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,13}$"
+                                           class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5" required>
+                                </div>
+                                <p id="idExistOrNotText"></p>
+                            </div>
+
+                            <!-- Nickname -->
+                            <div>
+                                <label for="nickname" class="">Nickname</label>
+                                <div class="mt-2.5">
+                                    <input id="nickname" name="nickname" type="text" placeholder="Nickname"
+                                           class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5" required>
+                                </div>
+                            </div>
+
+                            <!-- email -->
+                            <div class="col-span-2">
+                                <label for="email" class="">Email address</label>
+                                <div class="mt-2.5">
+                                    <input id="email" name="email" type="email" placeholder="Email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                                           class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5" required>
+                                </div>
+                            </div>
+
+                            <!-- password -->
+                            <div>
+                                <label for="password" class="">Password</label>
+                                <div class="mt-2.5">
+                                    <input id="password" name="password" type="password" placeholder="*****"
+                                           class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5" required>
+                                </div>
+                                <p id="passwordCheckText"></p>
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div>
+                                <label for="password-confirm" class="">Confirm Password</label>
+                                <div class="mt-2.5">
+                                    <input id="password-confirm" name="password-confirm" type="password"
+                                           placeholder="*****"
+                                           class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5" required>
+                                </div>
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div class="col-span-2">
+                                <label for="phone" class="">Phone Number</label>
+                                <div class="mt-2.5">
+                                    <input id="phone" name="phone" type="text" placeholder="Phone Number"
+                                           class="!w-full !rounded-lg !bg-transparent !shadow-sm !border-slate-200 dark:!border-slate-800 dark:!bg-white/5">
+                                </div>
+                            </div>
+
+                            <div class="col-span-2">
+
+                                <label class="inline-flex items-center" id="rememberme">
+                                    <input type="checkbox" id="accept-terms" class="!rounded-md accent-red-800"/>
+                                    <span class="ml-2">you agree to our <a href="#"
+                                                                           class="text-blue-700 hover:underline">terms of use </a> </span>
+                                </label>
+
+                            </div>
+
+                            <div class="col-span-2">
+                                <button id="userRegisterActionBtn" class="button bg-primary text-white w-full" type="button">Get Started</button>
+                            </div>
+                    </div>
+
+                    <div class="text-center flex items-center gap-6">
+                        <hr class="flex-1 border-slate-200 dark:border-slate-800">
+                        Or continue with
+                        <hr class="flex-1 border-slate-200 dark:border-slate-800">
+                    </div>
+
+                    <!-- social login -->
+                    <div class="flex gap-2"
+                         uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 400 ;repeat: true">
+                        <a href="#" class="button flex-1 flex items-center gap-2 bg-primary text-white text-sm" onclick="googleLogin()">
+                            <ion-icon name="logo-google" class="text-lg"></ion-icon>
+                            google </a>
+<!--                        <a href="#" class="button flex-1 flex items-center gap-2 bg-sky-600 text-white text-sm">-->
+<!--                            <ion-icon name="logo-twitter"></ion-icon>-->
+<!--                            twitter </a>-->
+<!--                        <a href="#" class="button flex-1 flex items-center gap-2 bg-black text-white text-sm">-->
+<!--                            <ion-icon name="logo-facebook"></ion-icon>-->
+<!--                            facebook </a>-->
+                    </div>
+
+                </form>
+
+
+            </div>
+
+        </div>
+
+        <!-- image slider -->
+        <div class="flex-1 relative bg-primary max-md:hidden">
+
+
+            <div class="relative w-full h-full" tabindex="-1" uk-slideshow="animation: slide; autoplay: true">
+
+                <ul class="uk-slideshow-items w-full h-full">
+                    <li class="w-full">
+                        <img th:src="@{/assets/images/post/img-3.jpg}" alt=""
+                             class="w-full h-full object-cover uk-animation-kenburns uk-animation-reverse uk-transform-origin-center-left">
+                        <div class="absolute bottom-0 w-full uk-tr ansition-slide-bottom-small z-10">
+                            <div class="max-w-xl w-full mx-auto pb-32 px-5 z-30 relative"
+                                 uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
+                                <img class="w-12" th:src="@{/assets/images/logo-icon.png}"
+                                     alt="Socialite html template">
+                                <h4 class="!text-white text-2xl font-semibold mt-7" uk-slideshow-parallax="y: 600,0,0">
+                                    Connect With Friends </h4>
+                                <p class="!text-white text-lg mt-7 leading-8" uk-slideshow-parallax="y: 800,0,0;"> This
+                                    phrase is more casual and playful. It suggests that you are keeping your friends
+                                    updated
+                                    on what’s happening in your life.</p>
+                            </div>
+                        </div>
+                        <div class="w-full h-96 bg-gradient-to-t from-black absolute bottom-0 left-0"></div>
+                    </li>
+                    <li class="w-full">
+                        <img th:src="@{/assets/images/post/img-2.jpg}" alt=""
+                             class="w-full h-full object-cover uk-animation-kenburns uk-animation-reverse uk-transform-origin-center-left">
+                        <div class="absolute bottom-0 w-full uk-tr ansition-slide-bottom-small z-10">
+                            <div class="max-w-xl w-full mx-auto pb-32 px-5 z-30 relative"
+                                 uk-scrollspy="target: > *; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
+                                <img class="w-12" th:src="@{/assets/images/logo-icon.png}"
+                                     alt="Socialite html template">
+                                <h4 class="!text-white text-2xl font-semibold mt-7" uk-slideshow-parallax="y: 800,0,0">
+                                    Connect With Friends </h4>
+                                <p class="!text-white text-lg mt-7 leading-8" uk-slideshow-parallax="y: 800,0,0;"> This
+                                    phrase is more casual and playful. It suggests that you are keeping your friends
+                                    updated
+                                    on what’s happening in your life.</p>
+                            </div>
+                        </div>
+                        <div class="w-full h-96 bg-gradient-to-t from-black absolute bottom-0 left-0"></div>
+                    </li>
+                </ul>
+
+                <!-- slide nav -->
+                <div class="flex justify-center">
+                    <ul class="inline-flex flex-wrap justify-center  absolute bottom-8 gap-1.5 uk-dotnav uk-slideshow-nav"></ul>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="lg:p-20 p-10" id="successModal" uk-modal>
+
+        <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+
+            <div class="p-6">
+                <h2 class="text-xl font-semibold">성공!</h2>
+            </div>
+
+            <div class="p-6 py-0">
+
+                <p>성공적으로 회원가입을 완료했습니다. 이메일 인증 후 로그인을 시도해주세요</p>
+
+            </div>
+
+            <div class="flex justify-end p-6 text-sm font-medium">
+                <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">닫기</button>
+                <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button" th:onclick="'location.href=\'' + @{${GlobalURI.LOGIN_ROOT}} + '\''">이동</button>
+            </div>
+
+            <!-- close button -->
+            <button type="button"
+                    class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+
+        </div>
+    </div>
+</div>
+<!-- css -->
+<th:block th:fragment="css">
+
+</th:block>
+
+<!-- Scripts -->
+<th:block th:fragment="scripts">
+    <script th:src="@{/assets/js/oauth_login.js}"></script>
+
+    <script th:inline="javascript" th:fragment="scripts">
+        let oauthUri = /*[[@{${GlobalURI.OAUTH_ROOT}}]]*/;
+        var timer;
+        var passwordTimer;
+
+        var idCheckStart = false;
+        var idExist = false;
+
+        $(document).ready(function(){
+			$('#userId').val('');
+			$('#nickname').val('');
+			$('#email').val('');
+			$('#password').val('');
+			$('#password-confirm').val('');
+			$('#phone').val('');
+			idCheckStart = false;
+			idExist = false;
+		});
+
+        $('#userId').on('input', function() {
+            clearTimeout(timer); // 타이머 초기화
+            timer = setTimeout(sendIdExistCheck, 1500); // 5초 후에 AJAX 요청 보내기
+        });
+
+        function sendIdExistCheck(){
+            let requestUri = /*[[@{${GlobalURI.USER_ID}}]]*/;
+
+            let requestUserId = $('#userId').val();
+
+            if(requestUserId == null || requestUserId == ""){
+                return;
+            }
+
+            idCheckStart = true;
+
+            if (checkValidation(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,13}$/, requestUserId)){
+                $('#idExistOrNotText').css("color", "rgb(255 0 0 / var(--tw-text-opacity))");
+                $('#idExistOrNotText').text(" * You need at least one letter, at least one number, and a minimum of 6 to a maximum of 13 characters. ");
+                return;
+            }
+
+            requestUri += "/" + requestUserId;
+
+            $.ajax({
+                url: requestUri,
+                method: "GET",
+                dataType: "JSON",
+                contentType: 'application/json',
+                beforeSend: function(request) {
+                },
+                success: function(response){
+                    idExist = response.userIdExist;
+
+                    if(idExist){
+                        $('#idExistOrNotText').css("color", "rgb(255 0 0 / var(--tw-text-opacity))");
+                        $('#idExistOrNotText').text(" * ID already used");
+                    } else {
+                        $('#idExistOrNotText').css("color", "rgb(29 78 216 / var(--tw-text-opacity))");
+                        $('#idExistOrNotText').text(" * You can use this ID");
+                    }
+                },
+                complete: function(response){
+                },
+                error: function(response){
+                    let errorModal = $("#errorModal");
+
+                    UIkit.modal(errorModal).show();
+                }
+            });
+        };
+
+        $('#password').on('input', function() {
+            clearTimeout(passwordTimer); // 타이머 초기화
+            passwordTimer = setTimeout(passwordCheck, 1500);
+        });
+
+        $('#password-confirm').on('input', function() {
+            clearTimeout(passwordTimer); // 타이머 초기화
+            passwordTimer = setTimeout(passwordCheck, 1500);
+        });
+
+        function passwordCheck(){
+            let inputPassword = $('#password').val();
+
+            if (checkValidation(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9!@#$%^&*()-_=+~`[\]{}|;:'",<.>/?]{8,20}$/, inputPassword)){
+                $('#passwordCheckText').css("color", "rgb(255 0 0 / var(--tw-text-opacity))");
+                $('#passwordCheckText').text(" * You need at least one letter, at least one number, and a minimum of 8 to a maximum of 20 characters.");
+                return;
+            } else {
+                $('#passwordCheckText').css("color", "rgb(29 78 216 / var(--tw-text-opacity))");
+                $('#passwordCheckText').text(" * You can use this Password");
+            }
+
+            let inputPasswordConfirm = $('#password-confirm').val();
+
+            if (inputPasswordConfirm != null && inputPasswordConfirm != "" && inputPassword != inputPasswordConfirm){
+                $('#passwordCheckText').css("color", "rgb(255 0 0 / var(--tw-text-opacity))");
+                $('#passwordCheckText').text(" * Password incorrect");
+            }
+        }
+
+        $('#userRegisterActionBtn').on('click', function(){
+            let inputUserId = $('#userId').val();
+
+            if (!idCheckStart || checkEmpty(inputUserId)) {
+                alert("아이디를 확인해주세요");
+                return ;
+            }
+
+            if (idExist) {
+                alert("아이디가 이미 존재합니다.");
+                return ;
+            }
+
+            if (checkValidation(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,13}$/, inputUserId)){
+                alert("아이디는 최소 한개의 영문자, 최소 한개의 숫자, 최소 6자리 최대 13자리를 넘을 수 없습니다.");
+                return ;
+            }
+
+            let inputNickname = $('#nickname').val();
+
+            if (checkEmpty(inputNickname)) {
+                alert("닉네임을 확인해주세요");
+                return ;
+            }
+
+            let inputEmail = $('#email').val();
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (checkEmpty(inputEmail) || !emailPattern.test(inputEmail)) {
+                alert("Email을 확인해주세요");
+                return ;
+            }
+
+            let inputPassword = $('#password').val();
+
+            let inputPasswordConfirm = $('#password-confirm').val();
+
+            if (checkEmpty(inputPassword) || checkEmpty(inputPasswordConfirm)
+                || checkValidation(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9!@#$%^&*()-_=+~`[\]{}|;:'",<.>/?]{8,20}$/, inputPassword)
+                || inputPassword != inputPasswordConfirm) {
+                alert("비밀번호를 확인해주세요");
+                return ;
+            }
+
+            let inputPhone = $('#phone').val();
+
+            registerUserRequest();
+        });
+
+        function registerUserRequest(){
+            let formData = $("#userRegisterForm").serializeArray();
+            let formObj = {};
+
+            $.map(formData, function(n, i){
+                formObj[n['name']] = n['value'];
+            });
+
+            $.ajax({
+                url: /*[[@{${GlobalURI.REGISTER_ROOT}}]]*/ 'url',
+                method: "POST",
+                data: JSON.stringify(formObj),
+                dataType: "JSON",
+                contentType: 'application/json',
+                beforeSend: function(request) {
+                },
+                success: function(response){
+                    if(response.isRegisterSuccess){
+                        let successModal = $("#successModal");
+
+                        UIkit.modal(successModal).show();
+                    }
+                },
+                complete: function(response){
+                },
+                error: function(response){
+                    let errorModal = $("#errorModal");
+
+                    UIkit.modal(errorModal).show();
+                }
+            });
+        }
+
+    </script>
+
+</th:block>
+
+</body>
+</html>

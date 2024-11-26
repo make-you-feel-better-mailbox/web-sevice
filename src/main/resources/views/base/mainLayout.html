@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www/thymeleaf.org" th:fragment="mainLayout(title)">
+<head>
+    <title th:text="${title}"></title>
+    <th:block th:replace="base/base :: base-head"></th:block>
+    <th:block th:replace=":: css"></th:block>
+</head>
+
+<body class="loading">
+<!-- Begin page -->
+<div class="wrapper">
+    <!-- ========== Left Sidebar Start ========== -->
+    <div th:replace="base/sidebar :: left-menu"></div>
+    <!-- Left Sidebar End -->
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+    <div id="contentPage" class="content-page">
+        <!-- Content Start-->
+        <div class="content">
+            <!-- Topbar Start -->
+            <div th:replace="base/header :: top-bar"></div>
+            <!-- end Topbar -->
+
+            <!-- Start Content-->
+            <div th:replace=":: content"></div>
+            <!-- container -->
+            <div th:replace="base/chatbox :: chat-box"></div>
+
+            <div class="lg:p-20 p-10" id="errorModal" uk-modal>
+
+                <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+
+                    <div class="p-6">
+                        <h2 class="text-xl font-semibold">Error</h2>
+                    </div>
+
+                    <div class="p-6 py-0">
+
+                        <p>There was a problem, Please try again later.</p><br>
+                        <p>If it doesn't work even if you keep trying again pls let me know</p><br>
+                        <p>jji042842@gmail.com</p>
+
+                    </div>
+
+                    <div class="flex justify-end p-6 text-sm font-medium">
+                        <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">
+                            Cancel
+                        </button>
+                    </div>
+
+                    <!-- close button -->
+                    <button type="button"
+                            class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="lg:p-20 p-10" id="confirmModal" uk-modal>
+
+                <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+
+                    <div class="p-6">
+                        <h2 class="text-xl font-semibold">Confirm</h2>
+                    </div>
+
+                    <div class="p-6 py-0">
+
+                        <p id="confirmModalText"></p>
+
+                    </div>
+
+                    <div class="flex justify-end p-6 text-sm font-medium">
+                        <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button" id="confirmModalCancelBtn">Cancel</button>
+                        <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button" id="confirmModalOkBtn">
+                            Ok
+                        </button>
+                    </div>
+
+                    <!-- close button -->
+                    <button type="button"
+                            class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+        <!-- Content End-->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page content -->
+    <!-- ============================================================== -->
+</div>
+<!-- END wrapper -->
+<th:block th:replace="base/base :: base-scripts"></th:block>
+<th:block th:replace=":: scripts"></th:block>
+<th:block>
+    <script th:inline="javascript">
+        let userRequestUri = /*[[@{${GlobalURI.USER_ROOT}}]]*/;
+        let accessTokenExpired = /*[[@{${JwtCode.ACCESS_TOKEN_EXPIRED}}]]*/;
+        let refreshTokenExpired = /*[[@{${JwtCode.REFRESH_TOKEN_EXPIRED}}]]*/;
+        let rootUri = /*[[@{${GlobalURI.ROOT_URI}}]]*/;
+        let loginUri = /*[[@{${GlobalURI.LOGIN_ROOT}}]]*/;
+        let registerUri = /*[[@{${GlobalURI.REGISTER_ROOT}}]]*/;
+        let tokenUri = /*[[@{${GlobalURI.TOKEN_ROOT}}]]*/;
+        let feedDetailUri = /*[[@{${GlobalURI.FEED_DETAIL}}]]*/;
+
+        $(document).ready(function(){
+            let accessTokenResponse = /*[[@{${accessToken}}]]*/;
+            let refreshTokenResponse = /*[[@{${refreshToken}}]]*/;
+
+            if (accessTokenResponse != null && accessTokenResponse !== ""){
+                window.localStorage.setItem(accessTokenString, accessTokenResponse);
+            }
+
+            if (refreshTokenResponse != null && refreshTokenResponse !== ""){
+                window.localStorage.setItem(refreshTokenString, refreshTokenResponse);
+            }
+
+            let accessToken = window.localStorage.getItem(accessTokenString);
+            let refreshToken = window.localStorage.getItem(refreshTokenString);
+
+            if(accessToken == null || accessToken == ""){
+
+                $('#headerIcons').empty();
+
+                $('#headerIcons').append('<button class="button bg-secondery dark:text-white" onclick="redirectToUri(\'' + registerUri + '\')">Sign Up</button>');
+                $('#headerIcons').append('<button class="button bg-primary-soft text-primary dark:text-white" onclick="redirectToUri(\'' + loginUri + '\')">Sign in</button>');
+            } else {
+                let requestEndPoint = userRequestUri + "/" + accessToken;
+
+                checkTokenExpired();
+            }
+		});
+
+        function redirectToUri(requestUri){
+            location.href=requestUri;
+        }
+
+        function logout(){
+            let accessToken = window.localStorage.getItem(accessTokenString);
+
+            window.localStorage.removeItem(accessTokenString);
+            window.localStorage.removeItem(refreshTokenString);
+            window.localStorage.removeItem(userIdString);
+            window.localStorage.removeItem(userNicknameString);
+            window.localStorage.removeItem(userProfileImageEndPointString);
+
+            $.ajax({
+                url: loginUri + "/" + accessToken,
+                method: "DELETE",
+                dataType: "JSON",
+                contentType: 'application/json',
+                beforeSend: function(request) {
+                },
+                success: function(response){
+                    goRootUri();
+                },
+                complete: function(response){
+                },
+                error: function(response){
+                    let errorModal = $("#errorModal");
+
+                    UIkit.modal(errorModal).show();
+                }
+            });
+        }
+
+        function goRootUri(){
+            location.href = rootUri;
+        }
+
+    </script>
+</th:block>
+</body>
+</html>
